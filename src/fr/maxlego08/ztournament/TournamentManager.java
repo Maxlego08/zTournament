@@ -1,217 +1,917 @@
 package fr.maxlego08.ztournament;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.maxlego08.ztournament.api.Arena;
 import fr.maxlego08.ztournament.api.Duel;
 import fr.maxlego08.ztournament.api.Team;
 import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.api.TournoisType;
+import fr.maxlego08.ztournament.zcore.ZPlugin;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
+import fr.maxlego08.ztournament.zcore.utils.builder.TimerBuilder;
+import fr.maxlego08.ztournament.zcore.utils.inventory.Pagination;
 import fr.maxlego08.ztournament.zcore.utils.storage.Persist;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ClickEvent.Action;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class TournamentManager extends ZUtils implements Tournament {
 
-	@Override
-	public void save(Persist persist) {
-		// TODO Auto-generated method stub
+	protected static List<Arena> arenas = new ArrayList<Arena>();
+	protected static Location location;
+	protected transient List<Team> teams = new ArrayList<>();
+	protected transient List<Team> eliminatedTeams = new ArrayList<>();
+	protected transient List<Duel> duels = new ArrayList<>();
+	protected transient int maxTeams;
+	protected transient int currentTeams;
 
+	protected transient boolean isStart = false;
+	protected transient boolean isWaiting = false;
+	protected transient TournoisType type;
+	protected transient int wave = 1;
+	protected transient int countTeam;
+	protected transient int timer = 300;
+	protected transient boolean asNewTimer = false;
+
+	protected transient final HashSet<String> substanceChars = new HashSet<String>(Arrays.asList(new String[] { "0",
+			"1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
+			"M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g",
+			"h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" }));
+	protected transient int maxTeamPerArena = 1;
+	protected transient boolean isTimeBetweenWave;
+
+	/**
+	 * Permet de load la class
+	 */
+	@Override
+	public void load(Persist p) {
+		p.loadOrSaveDefault(this, TournamentManager.class, "tournaments");
 	}
 
+	/**
+	 * Permet de save la class
+	 */
 	@Override
-	public void load(Persist persist) {
-		// TODO Auto-generated method stub
-
+	public void save(Persist p) {
+		p.save(this, "tournaments");
 	}
 
 	@Override
 	public Team getByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return teams.stream().filter(team -> team.getName().equals(name) || team.getOwner().getName().equals(name))
+				.findAny().orElse(null);
 	}
 
 	@Override
 	public Team getByPlayer(Player player) {
-		// TODO Auto-generated method stub
-		return null;
+		return teams.stream().filter(team -> team.contains(player)).findAny().orElse(null);
 	}
 
 	@Override
 	public Duel getDuel(Team team) {
-		// TODO Auto-generated method stub
-		return null;
+		return duels.stream().filter(duel -> duel.match(team)).findAny().orElse(null);
 	}
 
 	@Override
 	public Arena getAvaibleArena() {
-		// TODO Auto-generated method stub
-		return null;
+		return arenas.stream().filter(arena -> arena.size() <= maxTeamPerArena - 1).findAny().orElse(null);
 	}
 
 	@Override
 	public int getAvaibleArenaCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return (int) arenas.stream().filter(arena -> arena.size() <= maxTeamPerArena - 1).count();
 	}
 
 	@Override
 	public Team getByPassTeam() {
-		// TODO Auto-generated method stub
-		return null;
+		return teams.stream().filter(team -> !team.isInDuel()).findAny().orElse(null);
 	}
 
 	@Override
 	public void clearPlayer(Player player) {
-		// TODO Auto-generated method stub
-
+		player.getInventory().clear();
+		player.getInventory().setBoots(null);
+		player.getInventory().setChestplate(null);
+		player.getInventory().setLeggings(null);
+		player.getInventory().setHelmet(null);
+		player.getPlayer().setItemOnCursor(null);
+		player.getPlayer().setFireTicks(0);
+		player.getPlayer().getOpenInventory().getTopInventory().clear();
+		player.getPlayer().getActivePotionEffects().clear();
+		player.setGameMode(GameMode.SURVIVAL);
+		player.getPlayer().getActivePotionEffects().forEach(e -> {
+			player.getPlayer().removePotionEffect(e.getType());
+		});
 	}
 
 	@Override
 	public Team getRandomTeam() {
-		// TODO Auto-generated method stub
-		return null;
+		Random random = new Random();
+		int rest = teams.size() % 2;
+		if (rest == 1 && teams.size() - getDuelTeam() == 1)
+			return null;
+		Team team = teams.get(random.nextInt(teams.size()));
+		if (team.isInDuel())
+			return getRandomTeam();
+		else {
+			team.setInDuel(true);
+			return team;
+		}
 	}
 
 	@Override
 	public int getDuelTeam() {
-		// TODO Auto-generated method stub
-		return 0;
+		return (int) teams.stream().filter(team -> team.isInDuel()).count();
 	}
 
 	@Override
 	public void setLobbyLocation(Player sender, Location location) {
-		// TODO Auto-generated method stub
+		if (isStart) {
+			message(sender, "§cUn tournois est en cours, action impossible pour le moment.");
+			return;
+		}
 
+		TournamentManager.location = location;
+		message(sender, "§eVous venez de mettre la location pour le lobby.");
 	}
 
 	@Override
 	public void createRandomDuel() {
-		// TODO Auto-generated method stub
+		Team team = getRandomTeam();
+		Team opponant = getRandomTeam();
 
+		if (team == null || opponant == null)
+			return;
+		duels.add(new DuelObject(team, opponant));
+		countTeam -= 2;
 	}
 
 	@Override
 	public void createArena(CommandSender sender, Location pos1, Location pos2) {
-		// TODO Auto-generated method stub
-
+		if (isStart) {
+			message(sender, "§cUn tournois est en cours, action impossible pour le moment.");
+			return;
+		}
+		Arena arena = new ArenaObject(pos1, pos2);
+		arenas.add(arena);
+		message(sender, "§eVous venez de créer une arène.");
 	}
 
 	@Override
 	public void sendArena(Player player) {
-		// TODO Auto-generated method stub
+		if (isStart) {
+			message(player, "§cUn tournois est en cours, action impossible pour le moment.");
+			return;
+		}
 
+		if (arenas.size() == 0) {
+			message(player, "§cAucune arène de disponible.");
+			return;
+		}
+
+		TextComponent message = buildTextComponent("§eListe des arènes§8: §6");
+		for (int a = 0; a != arenas.size(); a++) {
+			if (a == arenas.size() - 1 && a != 0) {
+				message.addExtra("§7 et §6");
+			} else if (a != 0) {
+				message.addExtra("§7, §6");
+			}
+			Arena arena = arenas.get(a);
+			TextComponent component = new TextComponent("§6" + arena.getId());
+			component.setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/tournament delete " + arena.getId()));
+			component.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
+					new BaseComponent[] { new TextComponent("§f» §7Clique pour supprimer cette arène"),
+							new TextComponent("§f» §7Coordonné 1: " + changeLocationToString(arena.getPos1())),
+							new TextComponent("§f» §7Coordonné 2: " + changeLocationToString(arena.getPos2())) }));
+			message.addExtra(component);
+		}
+		player.spigot().sendMessage(message);
 	}
 
 	@Override
 	public void deleteArena(CommandSender sender, UUID uuid) {
-		// TODO Auto-generated method stub
+		if (isStart) {
+			message(sender, "§cUn tournois est en cours, action impossible pour le moment.");
+			return;
+		}
 
+		Arena a = arenas.stream().filter(arena -> {
+			return arena.getId().equals(uuid);
+		}).findAny().orElse(null);
+
+		if (a == null) {
+			message(sender, "§cImpossible de trouver l'arène.");
+			return;
+		}
+
+		arenas.remove(a);
+		message(sender, "§aVous venez de supprimer une arène.");
 	}
 
 	@Override
 	public boolean canHurt(Player player, Player damager) {
-		// TODO Auto-generated method stub
-		return false;
+		Team teamA = getByPlayer(player);
+		Team teamB = getByPlayer(damager);
+		return teamA == null ? true : teamB == null ? true : teamA.equals(teamB);
 	}
 
 	@Override
 	public boolean inventoryHasItem(Player player) {
-		// TODO Auto-generated method stub
+		ItemStack itemStack = player.getInventory().getBoots();
+		if (itemStack != null)
+			return true;
+
+		itemStack = player.getInventory().getChestplate();
+		if (itemStack != null)
+			return true;
+
+		itemStack = player.getInventory().getLeggings();
+		if (itemStack != null)
+			return true;
+
+		itemStack = player.getInventory().getHelmet();
+		if (itemStack != null)
+			return true;
+
+		for (ItemStack itemStack1 : player.getInventory().getContents())
+			if (itemStack1 != null)
+				return true;
+
 		return false;
 	}
 
 	@Override
 	public void removeTeam(Player player) {
-		// TODO Auto-generated method stub
-
+		Team team = getByPlayer(player);
+		if (team == null)
+			return;
+		team.death(player);
+		if (team.hasLoose())
+			teams.remove(team);
 	}
 
 	@Override
 	public void checkTeam() {
-		// TODO Auto-generated method stub
-
+		Iterator<Team> iterator = teams.iterator();
+		while (iterator.hasNext()) {
+			Team team = iterator.next();
+			if (!team.isValid())
+				iterator.remove();
+		}
 	}
 
 	@Override
 	public void startTournois(CommandSender sender, TournoisType type) {
-		// TODO Auto-generated method stub
 
+		if (isStart || isWaiting) {
+			message(sender, "§cUn tournois est déjà en cours.");
+			return;
+		}
+
+		if (arenas.size() == 0) {
+			message(sender, "§cVous ne pouvez pas lancer de tournois sans aucune arène.");
+			return;
+		}
+
+		if (location == null) {
+			message(sender, "§cVous ne pouvez pas lancer de tournois sans la location de lobby.");
+			return;
+		}
+
+		this.isStart = true;
+		this.isWaiting = true;
+		this.type = type;
+		this.asNewTimer = false;
+
+		this.duels.clear();
+		this.teams.clear();
+
+		this.maxTeams = 0;
+
+		String pvp = type.getMax() + "v" + type.getMax();
+		broadcast("§eDébut d'un tournois PVP en §6%s §edans §65 §eminutes§e.", pvp);
+		broadcast("§eFaire §f/tournois§e pour avoir toutes les commandess");
+
+		/**
+		 * A MODIF
+		 */
+		// Bukkit.getOnlinePlayers().forEach(player -> {
+		//
+		// sendTitle(player.getPlayer(), "§f§kII§e Tournois §f§kII",
+		// "§eUn tournois §f" + pvp + " §evient de commencer !", 10, 20 * 3,
+		// 10);
+		//
+		// });
+
+		timer = 300;
+
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+
+				if (!isWaiting) {
+					cancel();
+					return;
+				}
+
+				if (timer == 120 || timer == 60 || timer == 30 || timer == 10 || timer == 3 || timer == 2 || timer == 1)
+					broadcast("§eEncore §6%s §eavant le début du tournois PVP.", TimerBuilder.getStringTime(timer));
+
+				if (timer == 0) {
+					if (teams.size() <= 1) {
+
+						if (!asNewTimer) {
+
+							asNewTimer = true;
+							timer = 300;
+							broadcast(
+									"§ePas assez de joueur pour commencer le tournois, vous avez encore §65 §eminutes pour créer une équipe.");
+						} else {
+
+							isStart = false;
+							isWaiting = false;
+							asNewTimer = false;
+
+							cancel();
+
+							broadcast("§ePas assez de joueur, event annulé !");
+
+						}
+					} else {
+						cancel();
+						start();
+					}
+				}
+				timer--;
+				if (!isStart) {
+					cancel();
+				}
+
+			}
+		}.runTaskTimer(ZPlugin.z(), 0, 20);
 	}
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
+		if (teams.size() == 0) {
+			broadcast("§cAucune team, le tournois est annulé !");
+			return;
+		}
 
+		this.isWaiting = false;
+		this.isStart = true;
+		this.wave = 1;
+		this.eliminatedTeams.clear();
+
+		checkTeam();
+
+		broadcast("§eDébut du tournois PVP !");
+		broadcast("§eNombre d'équipe dans le tournois§7: §f%s", teams.size());
+		this.maxTeams = this.teams.size();
+		this.currentTeams = this.teams.size();
+
+		startWave();
 	}
 
 	@Override
 	public void startWave() {
-		// TODO Auto-generated method stub
 
+		if (!isStart)
+			return;
+
+		// Check
+		checkTeam();
+
+		int currentWave = wave;
+		this.countTeam = teams.size();
+		this.maxTeamPerArena = 1;
+
+		arenas.forEach(arena -> arena.clear());
+
+		if (countTeam == 1) {
+			end();
+			return;
+		}
+
+		int duel = countTeam >> 1;
+		broadcast("§eNombre de duels§7: §6%s", duel);
+
+		// gestion des duels
+		for (int a = 0; a < duel; a++) {
+			createRandomDuel();
+		}
+
+		// Si il y a un nombre impair d'équipe
+		Team bypassTeam = getByPassTeam();
+		if (bypassTeam != null) {
+			bypassTeam.message("§eVous êtes automatiquement qualifié pour la manche suivante !");
+		}
+
+		broadcast("§eDébut de la manche §6" + currentWave + " §e! Que le meilleur gagne !");
+
+		wave++;
+		duels.forEach(currentDuel -> {
+
+			if (getAvaibleArenaCount() == 0)
+				maxTeamPerArena++;
+
+			Arena arena = getAvaibleArena();
+			arena.addDuel(currentDuel);
+
+			currentDuel.startDuel(arena.getPos1(), arena.getPos2());
+			currentDuel.setArenea(arena);
+
+		});
+
+		broadcast("§eFin de la manche §6" + currentWave + " §e dans §f5 minutes§e.");
+		new BukkitRunnable() {
+
+			int timer = 300;
+
+			@Override
+			public void run() {
+
+				if (isTimeBetweenWave) {
+					cancel();
+					return;
+				}
+
+				if (!isStart) {
+					cancel();
+					return;
+				}
+
+				timer--;
+
+				if (timer == 120 || timer == 60 || timer == 30 || timer == 10 || timer == 3 || timer == 2 || timer == 1)
+					broadcast("§eFin de la manche §6" + currentWave + "§e dans §f%s§e.",
+							TimerBuilder.getStringTime(timer));
+
+				if (timer <= 0) {
+
+					cancel();
+					broadcast("§eLe temps est écoulé, la prochaine manche va débuter... ");
+
+					duels.forEach(duel -> {
+
+						duel.heal();
+
+						Team winner = duel.getTeam();
+						winner.setInDuel(false);
+						winner.clear();
+						winner.reMap();
+						winner.show();
+						winner.heal();
+						winner.teleport(location);
+
+						Team looser = duel.getOpponant();
+						looser.setInDuel(false);
+						looser.clear();
+						looser.heal();
+						looser.show();
+						looser.teleport(location);
+
+					});
+
+					duels.clear();
+
+					canStartNextWave();
+
+				}
+
+			}
+		}.runTaskTimer(ZPlugin.z(), 0, 20);
 	}
 
 	@Override
 	public void end() {
-		// TODO Auto-generated method stub
+		if (teams.size() == 0) {
+			broadcast("§ePersonne n'a gagné l'event tournois !");
+			return;
+		}
 
+		broadcast("§eEvent tournois pvp terminé !");
+
+		Team winner = teams.get(0);
+
+		winner.clear();
+		Bukkit.getOnlinePlayers().forEach(player -> sendTitle(player, "§f§kII§e Event tournois §f§kII",
+				"§eFélicitation à l'équipe §f" + winner.getName() + "§e qui gagne le tournois !", 10, 20 * 5, 10));
+
+		winner.getPlayers().forEach(player -> player.teleport(location));
+		winner.show();
+		winner.setPosition(1);
+		if (!eliminatedTeams.contains(winner))
+			eliminatedTeams.add(winner);
+
+		this.isStart = false;
+		this.isWaiting = false;
+		this.teams.clear();
+		this.duels.clear();
+		this.wave = 0;
+
+		Bukkit.broadcastMessage("");
+		broadcast("§eClassement des équipes§7:");
+		Pagination<Team> pagination = new Pagination<>();
+		pagination.paginateReverse(eliminatedTeams, 3, 1).forEach(team -> {
+
+			String p = team.getPosition() == 1 ? "§4§lpremière"
+					: team.getPosition() == 2 ? "§c§ldeuxième" : "§6§ltroisième";
+			String msg = "§eL'équipe §6" + team.getName() + " §ea terminé §f" + p + " §eau tournois !";
+
+			TextComponent component = buildTextComponent(msg);
+
+			List<String> strings = new ArrayList<>();
+			strings.add("§eJoueurs§7:");
+			team.getRealPlayers().forEach(pp -> {
+				if (pp != null && pp.isOnline())
+					strings.add(" §7- §f" + pp.getName());
+			});
+
+			setHoverMessage(component, strings);
+
+			Bukkit.getOnlinePlayers().forEach(bukkitPlayer -> {
+				bukkitPlayer.spigot().sendMessage(component);
+			});
+
+		});
+
+		this.eliminatedTeams.forEach(team -> {
+
+		});
+
+		this.eliminatedTeams.clear();
 	}
 
 	@Override
 	public void createTeam(Player player, String name) {
-		// TODO Auto-generated method stub
+		if (isStart && !isWaiting) {
+			message(player, "§cVous ne pouvez pas créer de team pour le moment.");
+			return;
+		}
 
+		if (!isWaiting) {
+			message(player, "§cVous ne pouvez pas créer de team pour le moment.");
+			return;
+		}
+
+		// Verif si le mec a déjà une team
+		Team team = getByPlayer(player);
+		if (team != null) {
+			message(player, "§cVous avez déjà une équipe, vous ne pouvez pas en créer une autre.");
+			return;
+		}
+
+		// Verif si la team existe
+		team = getByName(name);
+		if (team != null) {
+			message(player, "§cLe nom §f%s§c est déjà pris pour une team, vous devez en choisir un autre.", name);
+			return;
+		}
+
+		// Verif de la taille maximal
+		if (name.length() > 14) {
+			message(player, "§cLe nom de votre team ne doit pas dépasser les §f14 §ccaractères.");
+			return;
+		}
+
+		// Verif de la taille minimal
+		if (name.length() < 3) {
+			message(player, "§cLe nom de votre team doit avoir au minimum §f3 §ccaractères.");
+			return;
+		}
+
+		// Verif des char
+		for (char c : name.toCharArray()) {
+			if (!substanceChars.contains(String.valueOf(c))) {
+				message(player, "§cLe nom de faction doit être alphanumérique, le caractère §f%s§c n'est pas autorié.",
+						c);
+				return;
+			}
+		}
+
+		// Verif de l'inventaire
+		if (inventoryHasItem(player)) {
+			message(player,
+					"§cVous devez avoir un inventaire vide pour participer au tournois §8(§7Votre inventaire va être supprimer lorsque vous allez créer votre équipe§8)");
+			return;
+		}
+
+		team = new TeamObject(name, type.getMax(), player);
+		this.teams.add(team);
+		player.teleport(location);
+		clearPlayer(player);
+
+		sendTitle(player.getPlayer(), "§f§kII§e Félicitation §f§kII",
+				"§eVous venez de créer une team pour le tournois PVP", 10, 30, 10);
+
+		broadcast("§f%s §evient de créer la team §6%s§e.", player.getName(), name);
 	}
 
 	@Override
 	public void joinTeam(Player player, String name) {
-		// TODO Auto-generated method stub
+		if (isStart && !isWaiting) {
+			message(player, "§cVous ne pouvez pas créer de team pour le moment.");
+			return;
+		}
 
+		Team team = getByPlayer(player);
+		if (team != null) {
+			message(player, "§cVous avez déjà rejoins une équipe. Vous ne pouvez pas rejoindre §f%s§c.", name);
+			return;
+		}
+
+		team = getByName(name);
+		if (team == null) {
+			message(player, "§cAucune team avec le nom §f%s §cexiste.", name);
+			return;
+		}
+
+		if (inventoryHasItem(player)) {
+
+			message(player,
+					"§cVous devez avoir un inventaire vide pour participer au tournois §8(§7Votre inventaire va être supprimer lorsque vous allez rejoindre une équipe§8)");
+
+			return;
+		}
+
+		if (!team.isInvite(player)) {
+
+			message(player, "§cVous n'êtes pas inviter à rejoindre cette équipe.");
+
+			return;
+		}
+
+		if (!team.join(player)) {
+
+			message(player, "§cVous ne pouvez pas rejoindre cette team.");
+
+		} else {
+
+			team.message("§f%s §evient de rejoindre votre team !", player.getName());
+			player.teleport(location);
+			clearPlayer(player);
+			sendTitle(player.getPlayer(), "§f§kII§e Félicitation §f§kII",
+					"§eVous venez de rejoindre la team §6" + name + "§e !", 10, 30, 10);
+
+		}
 	}
 
 	@Override
 	public void invitePlayer(Player player, Player target) {
-		// TODO Auto-generated method stub
+		if (isStart && !isWaiting) {
+			message(player, "§cVous ne pouvez pas inviter de joueur pour le moment.");
+			return;
+		}
 
+		if (!isWaiting) {
+			message(player, "§cVous ne pouvez pas inviter de joueur pour le moment.");
+			return;
+		}
+
+		Team team = getByPlayer(player);
+		if (team == null) {
+			message(player, "§cVous n'avez pas d'équipe, vous ne pouvez pas faire ceci.");
+			return;
+		}
+
+		if (player.getUniqueId().equals(target.getUniqueId())) {
+			message(player, "§cVous ne pouvez pas vous inviter dans votre propre équipe.");
+			return;
+		}
+
+		if (!team.isOwner(player)) {
+			message(player, "§cSeul le chef de votre équipe peut inviter des joueurs.");
+			return;
+		}
+
+		if (type.equals(TournoisType.V1)) {
+			message(player, "§cVous ne pouvez pas inviter de joueur pour un tournois §f1v1§c.");
+			return;
+		}
+
+		if (team.isInvite(target)) {
+			team.removeInvite(target);
+			team.message("§f%s §evient de retirer l'invitation de §6%s §eà rejoindre votre équipe.", player.getName(),
+					target.getName());
+			return;
+		}
+
+		team.invite(target);
+		team.message("§f%s §evient d'inviter §6%s §eà rejoindre votre équipe.", player.getName(), target.getName());
+		message(target, "§eVous venez de reçevoir une inventation de §6%s §epour rejoindre l'équipe §f%s§e.",
+				player.getName(), team.getName());
+
+		TextComponent component = buildTextComponent("§eFaite §f/tournois §fjoin §f" + team.getName()
+				+ " §epour §erejoindre §ecette §eéquipe§e. §8(§bClique §bici§8)");
+		setClickAction(component, Action.RUN_COMMAND, "/tournois join " + team.getName());
+		setHoverMessage(component, "§7Clique pour rejoindre l'équipe §f" + team.getName());
+
+		target.spigot().sendMessage(component);
 	}
 
 	@Override
 	public void leave(Player player, boolean message) {
-		// TODO Auto-generated method stub
+		if (isStart && !isWaiting) {
+			if (message)
+				message(player, "§cVous ne pouvez pas quitter votre équipe durant le combat.");
+			return;
+		}
 
+		Team team = getByPlayer(player);
+		if (team == null) {
+			if (message)
+				message(player, "§cVous n'êtes pas dans une team.");
+			return;
+		}
+
+		if (team.getOwner().equals(player)) {
+
+			team.disband();
+			this.teams.remove(team);
+
+		} else {
+
+			if (message)
+				message(player, "§eVous venez de quitter votre équipe.");
+			team.leave(player);
+			player.teleport(location);
+			clearPlayer(player);
+
+		}
 	}
 
 	@Override
 	public void loose(Team team, Duel duel, Player player) {
-		// TODO Auto-generated method stub
+		duel.onPlayerLoose(player);
+		duel.message("§f" + player.getName() + " §evient d'être éliminé !");
+		player.teleport(location);
 
+		clearPlayer(player);
+
+		if (duel.hasWinner() && duel.isDuel()) {
+
+			duel.heal();
+
+			Team winner = duel.getWinner();
+			winner.message("§eVous venez de gagner votre duel !");
+			winner.setInDuel(false);
+			winner.clear();
+			winner.reMap();
+			winner.show();
+			winner.heal();
+			winner.teleport(location);
+
+			Team looser = duel.getLooser();
+			looser.setInDuel(false);
+			looser.clear();
+			looser.heal();
+			looser.show();
+			looser.teleport(location);
+
+			looser.setPosition(currentTeams--);
+			looser.message("§eVous avez perdu le tournois, votre équipe est donc disqulifiée.");
+			looser.message("§eVous êtes à la position §6" + looser.getPosition() + "§8/§6" + maxTeams);
+
+			if (!eliminatedTeams.contains(looser))
+				eliminatedTeams.add(looser);
+
+			teams.remove(looser);
+			duels.remove(duel);
+
+			canStartNextWave();
+		}
 	}
 
 	@Override
 	public void canStartNextWave() {
-		// TODO Auto-generated method stub
+		/**
+		 * On termine l'event s'il reste qu'une seul team Sinon on commence une
+		 * nouvelle manche
+		 */
 
+		if (teams.size() == 1) {
+
+			teams.forEach(Team::show);
+			arenas.forEach(Arena::clear);
+			end();
+
+		} else if (duels.size() == 0) {
+
+			teams.forEach(Team::show);
+			arenas.forEach(Arena::clear);
+			broadcast("§eDébut de la prochaine manche dans §f10 §esecondes.");
+
+			isTimeBetweenWave = true;
+			new BukkitRunnable() {
+
+				@Override
+				public void run() {
+
+					if (!isStart)
+						return;
+
+					startWave();
+
+					broadcast("§eNombre de team§7: §6%s", teams.size());
+					broadcast("§eNombre d'équipe restante: §6%s", teams.size());
+					isTimeBetweenWave = false;
+
+				}
+			}.runTaskLater(ZPlugin.z(), 20 * 10);
+		}
 	}
 
 	@Override
 	public boolean canUseCommand(CommandSender sender) {
-		// TODO Auto-generated method stub
-		return false;
+		if (!(sender instanceof Player))
+			return true;
+		Player player = (Player) sender;
+		Team team = getByPlayer(player);
+		return team != null && (isStart || isWaiting);
 	}
 
 	@Override
 	public void stopTournois(CommandSender sender) {
-		// TODO Auto-generated method stub
+		if (!isStart && !isWaiting) {
+			message(sender, "§cAucun tournois en cours.");
+			return;
+		}
 
+		if (isWaiting) {
+
+			isStart = false;
+			isWaiting = false;
+			broadcast("§cLe tournois PVP vient d'être annulé.");
+			return;
+
+		}
+
+		if (isStart) {
+
+			isStart = false;
+			isWaiting = false;
+			broadcast("§cLe tournois PVP vient d'être annulé.");
+			teams.forEach(e -> {
+				e.getRealPlayers().forEach(p -> {
+					p.teleport(location);
+					p.teleport(location);
+				});
+			});
+
+			teams.clear();
+			duels.clear();
+		}
 	}
 
 	@Override
 	public void nextWave(CommandSender sender) {
-		// TODO Auto-generated method stub
+		if (!isStart) {
+			message(sender, "§cAucun tournois en cours.");
+			return;
+		}
 
+		duels.forEach(duel -> {
+
+			duel.heal();
+
+			Team winner = duel.getTeam();
+			winner.setInDuel(false);
+			winner.clear();
+			winner.reMap();
+			winner.show();
+			winner.heal();
+			winner.teleport(location);
+
+			Team looser = duel.getOpponant();
+			looser.setInDuel(false);
+			looser.clear();
+			looser.heal();
+			looser.show();
+			looser.teleport(location);
+
+		});
+
+		duels.clear();
+		canStartNextWave();
 	}
 
 }

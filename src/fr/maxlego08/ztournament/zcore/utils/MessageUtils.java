@@ -1,5 +1,6 @@
 package fr.maxlego08.ztournament.zcore.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -73,6 +74,16 @@ public class MessageUtils {
 	 */
 	protected void actionMessage(Player player, Message message, Object... args) {
 		ActionBar.sendActionBar(player, String.format(message.msg(), args));
+	}
+	
+	/**
+	 * 
+	 * @param player
+	 * @param message
+	 * @param args
+	 */
+	protected void broadcast(String message, Object... args) {
+		Bukkit.broadcastMessage(Message.PREFIX.msg() + " " + String.format(message, args));
 	}
 	
 }
