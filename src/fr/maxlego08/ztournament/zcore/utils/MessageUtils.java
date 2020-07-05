@@ -54,6 +54,16 @@ public class MessageUtils {
 	protected void message(CommandSender player, Message message, Object... args) {
 		player.sendMessage(Message.PREFIX.msg() + " " + String.format(message.msg(), args));
 	}
+	
+	/**
+	 * 
+	 * @param player
+	 * @param message
+	 * @param args
+	 */
+	protected void message(CommandSender player, String message, Object... args) {
+		player.sendMessage(Message.PREFIX.msg() + " " + String.format(message, args));
+	}
 
 	/**
 	 * 

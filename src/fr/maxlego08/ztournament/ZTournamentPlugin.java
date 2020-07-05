@@ -1,5 +1,6 @@
 package fr.maxlego08.ztournament;
 
+import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.command.CommandManager;
 import fr.maxlego08.ztournament.inventory.InventoryManager;
 import fr.maxlego08.ztournament.listener.AdapterListener;
@@ -18,6 +19,8 @@ import fr.maxlego08.ztournament.zcore.utils.builder.CooldownBuilder;
  */
 public class ZTournamentPlugin extends ZPlugin {
 
+	private final Tournament tournament = new TournamentManager();
+	
 	@Override
 	public void onEnable() {
 
@@ -35,10 +38,12 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		addListener(new AdapterListener(this));
 		addListener(inventoryManager);
+		addListener(new TournamentListener(tournament));
 
 		/* Add Saver */
 		addSave(Config.getInstance());
 		addSave(new CooldownBuilder());
+		addSave(tournament);
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
