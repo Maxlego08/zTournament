@@ -103,4 +103,8 @@ public abstract class ListenerAdapter extends ZUtils{
 
 	public void onPlayerWalk(PlayerMoveEvent event, Player player, int i) {
 	}
+
+	public void onPlayerDamage(EntityDamageByEntityEvent event, Player entity) {
+		
+	}
 }

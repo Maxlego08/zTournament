@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.maxlego08.ztournament.ZTournamentPlugin;
+import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.commands.Arguments;
@@ -51,6 +52,7 @@ public abstract class VCommand extends Arguments {
 	protected boolean DEBUG = false;
 	protected boolean runAsync = false;
 	protected CommandType tabCompleter = CommandType.DEFAULT;
+	protected Tournament tournament;
 
 	/**
 	 * This is the person who executes the command
@@ -341,6 +343,8 @@ public abstract class VCommand extends Arguments {
 
 		// On met à jour le nombre d'argument en fonction du nombre de parent
 
+		tournament = main.getTournament();
+		
 		parentCount = parentCount(0);
 		argsMaxLength = requireArgs.size() + optionalArgs.size() + parentCount;
 		argsMinLength = requireArgs.size() + parentCount;

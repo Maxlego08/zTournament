@@ -207,4 +207,12 @@ public interface Tournament extends Saveable {
 	 * @param sender
 	 */
 	void nextWave(CommandSender sender);
+
+	boolean isStart();
+
+	boolean isWaiting();
+
+	Location getLocation();
+
+	boolean isTimeBetweenWave();
 }

@@ -914,4 +914,24 @@ public class TournamentManager extends ZUtils implements Tournament {
 		canStartNextWave();
 	}
 
+	@Override
+	public boolean isStart() {
+		return isStart;
+	}
+	
+	@Override
+	public boolean isWaiting() {
+		return isWaiting;
+	}
+	
+	@Override
+	public Location getLocation() {
+		return location;
+	}
+	
+	@Override
+	public boolean isTimeBetweenWave() {
+		return isTimeBetweenWave;
+	}
+
 }

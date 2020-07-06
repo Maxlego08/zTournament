@@ -82,6 +82,16 @@ public class MessageUtils {
 	 * @param message
 	 * @param args
 	 */
+	protected void actionMessage(Player player, String message, Object... args) {
+		ActionBar.sendActionBar(player, String.format(message, args));
+	}
+	
+	/**
+	 * 
+	 * @param player
+	 * @param message
+	 * @param args
+	 */
 	protected void broadcast(String message, Object... args) {
 		Bukkit.broadcastMessage(Message.PREFIX.msg() + " " + String.format(message, args));
 	}

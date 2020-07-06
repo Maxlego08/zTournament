@@ -160,5 +160,10 @@ public class AdapterListener extends ZUtils implements Listener {
 		if (event.getEntity() instanceof Player && event.getDamager() instanceof Projectile)
 			template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamagaByArrow(event, event.getCause(),
 					event.getDamage(), (Projectile) event.getDamager(), (Player) event.getEntity()));
+		if (event.getEntity() instanceof Player) {
+			template.getListenerAdapters().forEach(e -> {
+				e.onPlayerDamage(event, (Player) event.getEntity());
+			});
+		}
 	}
 }
