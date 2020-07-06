@@ -21,6 +21,16 @@ import fr.maxlego08.ztournament.api.Duel;
 import fr.maxlego08.ztournament.api.Team;
 import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.api.TournoisType;
+import fr.maxlego08.ztournament.api.events.TournamentAutoEndWaveEvent;
+import fr.maxlego08.ztournament.api.events.TournamentEvent;
+import fr.maxlego08.ztournament.api.events.TournamentPostWaveEvent;
+import fr.maxlego08.ztournament.api.events.TournamentPreWaveEvent;
+import fr.maxlego08.ztournament.api.events.TournamentStartEvent;
+import fr.maxlego08.ztournament.api.events.TournamentStartNoEnoughEvent;
+import fr.maxlego08.ztournament.api.events.TournamentStartNoEnoughRestartEvent;
+import fr.maxlego08.ztournament.api.events.TournamentStartTickEvent;
+import fr.maxlego08.ztournament.api.events.TournamentStartWaveEvent;
+import fr.maxlego08.ztournament.api.events.TournamentWareArenaEvent;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 import fr.maxlego08.ztournament.zcore.utils.builder.TimerBuilder;
@@ -295,6 +305,12 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
+		TournamentStartEvent event = new TournamentStartEvent(type);
+		event.callEvent();
+
+		if (event.isCancelled())
+			return;
+
 		this.isStart = true;
 		this.isWaiting = true;
 		this.type = type;
@@ -332,6 +348,14 @@ public class TournamentManager extends ZUtils implements Tournament {
 					return;
 				}
 
+				TournamentEvent event = new TournamentStartTickEvent(timer);
+				event.callEvent();
+
+				if (event.isCancelled()) {
+					cancel();
+					return;
+				}
+
 				if (timer == 120 || timer == 60 || timer == 30 || timer == 10 || timer == 3 || timer == 2 || timer == 1)
 					broadcast("§eEncore §6%s §eavant le début du tournois PVP.", TimerBuilder.getStringTime(timer));
 
@@ -340,11 +364,17 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 						if (!asNewTimer) {
 
+							event = new TournamentStartNoEnoughRestartEvent();
+							event.callEvent();
+
 							asNewTimer = true;
 							timer = 300;
 							broadcast(
 									"§ePas assez de joueur pour commencer le tournois, vous avez encore §65 §eminutes pour créer une équipe.");
 						} else {
+
+							event = new TournamentStartNoEnoughEvent();
+							event.callEvent();
 
 							isStart = false;
 							isWaiting = false;
@@ -383,18 +413,29 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		checkTeam();
 
-		broadcast("§eDébut du tournois PVP !");
-		broadcast("§eNombre d'équipe dans le tournois§7: §f%s", teams.size());
 		this.maxTeams = this.teams.size();
 		this.currentTeams = this.teams.size();
 
-		startWave();
+		TournamentStartWaveEvent event = new TournamentStartWaveEvent(new ArrayList<>(teams), type);
+		event.callEvent();
+		if (event.isCancelled())
+			return;
+
+		broadcast("§eDébut du tournois PVP !");
+		broadcast("§eNombre d'équipe dans le tournois§7: §f%s", teams.size());
+
+		this.startWave();
 	}
 
 	@Override
 	public void startWave() {
 
 		if (!isStart)
+			return;
+
+		TournamentEvent event = new TournamentPreWaveEvent(new ArrayList<>(teams), type, true);
+		event.callEvent();
+		if (event.isCancelled())
 			return;
 
 		// Check
@@ -412,19 +453,22 @@ public class TournamentManager extends ZUtils implements Tournament {
 		}
 
 		int duel = countTeam >> 1;
-		broadcast("§eNombre de duels§7: §6%s", duel);
-
-		// gestion des duels
 		for (int a = 0; a < duel; a++) {
 			createRandomDuel();
 		}
 
-		// Si il y a un nombre impair d'équipe
 		Team bypassTeam = getByPassTeam();
-		if (bypassTeam != null) {
+		
+		event = new TournamentPostWaveEvent(new ArrayList<>(teams), new ArrayList<>(duels), new ArrayList<>(arenas), type, bypassTeam);
+		event.callEvent();
+		if (event.isCancelled())
+			return;
+		
+		// Si il y a un nombre impair d'équipe
+		if (bypassTeam != null) 
 			bypassTeam.message("§eVous êtes automatiquement qualifié pour la manche suivante !");
-		}
 
+		broadcast("§eNombre de duels§7: §6%s", duel);
 		broadcast("§eDébut de la manche §6" + currentWave + " §e! Que le meilleur gagne !");
 
 		wave++;
@@ -434,8 +478,11 @@ public class TournamentManager extends ZUtils implements Tournament {
 				maxTeamPerArena++;
 
 			Arena arena = getAvaibleArena();
+			
+			TournamentEvent event2 = new TournamentWareArenaEvent(arena, currentDuel);
+			event2.callEvent();
+			
 			arena.addDuel(currentDuel);
-
 			currentDuel.startDuel(arena.getPos1(), arena.getPos2());
 			currentDuel.setArenea(arena);
 
@@ -467,6 +514,9 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 				if (timer <= 0) {
 
+					TournamentEvent event = new TournamentAutoEndWaveEvent();
+					event.callEvent();
+					
 					cancel();
 					broadcast("§eLe temps est écoulé, la prochaine manche va débuter... ");
 
@@ -918,17 +968,17 @@ public class TournamentManager extends ZUtils implements Tournament {
 	public boolean isStart() {
 		return isStart;
 	}
-	
+
 	@Override
 	public boolean isWaiting() {
 		return isWaiting;
 	}
-	
+
 	@Override
 	public Location getLocation() {
 		return location;
 	}
-	
+
 	@Override
 	public boolean isTimeBetweenWave() {
 		return isTimeBetweenWave;

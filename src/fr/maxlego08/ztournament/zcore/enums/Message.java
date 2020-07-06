@@ -2,7 +2,8 @@ package fr.maxlego08.ztournament.zcore.enums;
 
 public enum Message {
 
-	PREFIX("§7(§bTemplate§7)"),
+	PREFIX("§8(§6zTournament§8)"),
+	PREFIX_END("§8(§6zTournament§8)"),
 	
 	TELEPORT_MOVE("§cVous ne devez pas bouger !"),
 	TELEPORT_MESSAGE("§7Téléportatio dans §3%s §7secondes !"),

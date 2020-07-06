@@ -12,6 +12,7 @@ public class Config implements Saveable {
 	 * static Singleton instance.
 	 */
 	private static volatile Config instance;
+	public static boolean disablePreReleaseMessage;
 
 	/**
 	 * Private constructor for singleton.

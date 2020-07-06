@@ -1,5 +1,6 @@
 package fr.maxlego08.ztournament;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -7,6 +8,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -14,6 +16,8 @@ import fr.maxlego08.ztournament.api.Duel;
 import fr.maxlego08.ztournament.api.Team;
 import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.listener.ListenerAdapter;
+import fr.maxlego08.ztournament.zcore.ZPlugin;
+import fr.maxlego08.ztournament.zcore.enums.Message;
 
 public class TournamentListener extends ListenerAdapter {
 
@@ -153,6 +157,35 @@ public class TournamentListener extends ListenerAdapter {
 			message(player, "§cVous ne pouvez pas faire de commande pendant un tournois.");
 
 		}
+	}
+
+	@Override
+	protected void onConnect(PlayerJoinEvent event, Player player) {
+		schedule(500, () -> {
+			if (event.getPlayer().getName().startsWith("Maxlego") || event.getPlayer().getName().startsWith("Sak")) {
+				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage() + " §aLe serveur utilise §2"
+						+ ZPlugin.z().getDescription().getFullName() + " §a!");
+				String name = "%%__USER__%%";
+				event.getPlayer()
+						.sendMessage(Message.PREFIX_END.getMessage() + " §aUtilisateur spigot §2" + name + " §a!");
+				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage() + " §aAdresse du serveur §2"
+						+ Bukkit.getServer().getIp().toString() + ":" + Bukkit.getServer().getPort() + " §a!");
+			}
+			if (ZPlugin.z().getDescription().getFullName().toLowerCase().contains("dev")) {
+				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
+						+ " §eCeci est une version de développement et non de production.");
+			}
+
+			if (ZPlugin.z().getDescription().getFullName().toLowerCase().contains("pre")
+					|| ZPlugin.z().getDescription().getFullName().toLowerCase().contains("dev")) {
+				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
+						+ " §eCeci n'est pas une version final du plugin mais une pre release !");
+				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
+						+ " §eThis is not a final version of the plugin but a pre release !");
+			}
+
+		});
+
 	}
 
 }
