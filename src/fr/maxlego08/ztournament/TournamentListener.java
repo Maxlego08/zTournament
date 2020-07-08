@@ -176,14 +176,6 @@ public class TournamentListener extends ListenerAdapter {
 						+ " §eCeci est une version de développement et non de production.");
 			}
 
-			if (ZPlugin.z().getDescription().getFullName().toLowerCase().contains("pre")
-					|| ZPlugin.z().getDescription().getFullName().toLowerCase().contains("dev")) {
-				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
-						+ " §eCeci n'est pas une version final du plugin mais une pre release !");
-				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
-						+ " §eThis is not a final version of the plugin but a pre release !");
-			}
-
 		});
 
 	}

@@ -5,6 +5,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import fr.maxlego08.ztournament.zcore.ZPlugin;
+
 public class TournamentEvent extends Event implements Cancellable {
 
 	private final static HandlerList handlers = new HandlerList();
@@ -50,7 +52,7 @@ public class TournamentEvent extends Event implements Cancellable {
 	}
 
 	public void callEvent(){
-		Bukkit.getPluginManager().callEvent(this);
+		Bukkit.getScheduler().runTask(ZPlugin.z(), () -> Bukkit.getPluginManager().callEvent(this));
 	}
 	
 }

@@ -44,28 +44,28 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class TournamentManager extends ZUtils implements Tournament {
 
-	protected static List<Arena> arenas = new ArrayList<Arena>();
-	protected static Location location;
-	protected transient List<Team> teams = new ArrayList<>();
-	protected transient List<Team> eliminatedTeams = new ArrayList<>();
-	protected transient List<Duel> duels = new ArrayList<>();
-	protected transient int maxTeams;
-	protected transient int currentTeams;
+	private static List<Arena> arenas = new ArrayList<Arena>();
+	private static Location location;
+	private transient List<Team> teams = new ArrayList<>();
+	private transient List<Team> eliminatedTeams = new ArrayList<>();
+	private transient List<Duel> duels = new ArrayList<>();
+	private transient int maxTeams;
+	private transient int currentTeams;
 
-	protected transient boolean isStart = false;
-	protected transient boolean isWaiting = false;
-	protected transient TournoisType type;
-	protected transient int wave = 1;
-	protected transient int countTeam;
-	protected transient int timer = 300;
-	protected transient boolean asNewTimer = false;
+	private transient boolean isStart = false;
+	private transient boolean isWaiting = false;
+	private transient TournoisType type;
+	private transient int wave = 1;
+	private transient int countTeam;
+	private transient int timer = 300;
+	private transient boolean asNewTimer = false;
 
-	protected transient final HashSet<String> substanceChars = new HashSet<String>(Arrays.asList(new String[] { "0",
+	private transient final HashSet<String> substanceChars = new HashSet<String>(Arrays.asList(new String[] { "0",
 			"1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
 			"M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g",
 			"h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" }));
-	protected transient int maxTeamPerArena = 1;
-	protected transient boolean isTimeBetweenWave;
+	private transient int maxTeamPerArena = 1;
+	private transient boolean isTimeBetweenWave;
 
 	/**
 	 * Permet de load la class
