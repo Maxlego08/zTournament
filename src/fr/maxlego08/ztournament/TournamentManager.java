@@ -32,6 +32,8 @@ import fr.maxlego08.ztournament.api.events.TournamentStartTickEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartWaveEvent;
 import fr.maxlego08.ztournament.api.events.TournamentWareArenaEvent;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
+import fr.maxlego08.ztournament.zcore.logger.Logger;
+import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 import fr.maxlego08.ztournament.zcore.utils.builder.TimerBuilder;
 import fr.maxlego08.ztournament.zcore.utils.inventory.Pagination;
@@ -73,6 +75,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public void load(Persist p) {
 		p.loadOrSaveDefault(this, TournamentManager.class, "tournaments");
+		Logger.info("Number of arenas available: " + arenas.size(), LogType.SUCCESS);
 	}
 
 	/**

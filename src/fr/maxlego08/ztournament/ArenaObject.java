@@ -29,6 +29,19 @@ public class ArenaObject extends ZUtils implements Arena {
 		this.pos2 = pos2;
 		this.teams = new ArrayList<Duel>();
 	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @param pos1
+	 * @param pos2
+	 */
+	public ArenaObject(UUID uuid, Location pos1, Location pos2) {
+		this.id = uuid;
+		this.pos1 = pos1;
+		this.pos2 = pos2;
+		this.teams = new ArrayList<Duel>();
+	}
 
 	/**
 	 * @return the id
