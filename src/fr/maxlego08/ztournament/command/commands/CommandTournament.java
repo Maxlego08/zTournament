@@ -19,6 +19,8 @@ public class CommandTournament extends VCommand {
 		this.addSubCommand(new CommandTournamentTeamInvite());
 		this.addSubCommand(new CommandTournamentStop());
 		this.addSubCommand(new CommandTournamentWave());
+		this.addSubCommand(new CommandTournamentVersion());
+		this.addSubCommand(new CommandTournamentReload());
 	}
 
 	@Override
@@ -28,6 +30,7 @@ public class CommandTournament extends VCommand {
 		message(sender, "§6» §e/tournois join §f<§bnom de team§f> §8- §7Rejoindre une team.");
 		message(sender, "§6» §e/tournois invite §f<§bplayer§f> §8- §7Inviter un joueur.");
 		message(sender, "§6» §e/tournois leave §8- §7Quitter votre team.");
+		message(sender, "§6» §e/tournois version §8- §7Voir la version du plugin.");
 
 		if (sender.hasPermission("admin.tournamen")) {
 
@@ -37,7 +40,8 @@ public class CommandTournament extends VCommand {
 			message(sender, "§6» §e/tournois lobby §8- §7Mettre la position du lobby.");
 			message(sender, "§6» §e/tournois stop §8- §7Permet de stop un tournois.");
 			message(sender, "§6» §e/tournois wave §8- §7Commencer la prochaine manche.");
-			message(sender, "§6» §e/tournois start §f<§b1/2/3§f> §8- §7Lancer un tournois.");
+			message(sender, "§6» §e/tournois start §f<§btype3§f> §8- §7Lancer un tournois.");
+			message(sender, "§6» §e/tournois reload §8- §7Reload le plugin.");
 		}
 
 		return CommandType.SUCCESS;

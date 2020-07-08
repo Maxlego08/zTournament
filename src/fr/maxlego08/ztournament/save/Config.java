@@ -5,14 +5,15 @@ import fr.maxlego08.ztournament.zcore.utils.storage.Saveable;
 
 public class Config implements Saveable {
 
-	public static String version = "0.0.0.1";
-	public static boolean useItemFallEvent = false;
+	public static boolean sendMessageInTitle = true;
+	public static boolean sendMessageInAction = true;
+	public static int teamNameMinName = 3;
+	public static int teamNameMaxName = 14;
 	
 	/**
 	 * static Singleton instance.
 	 */
 	private static volatile Config instance;
-	public static boolean disablePreReleaseMessage;
 
 	/**
 	 * Private constructor for singleton.
@@ -41,6 +42,12 @@ public class Config implements Saveable {
 
 	public void load(Persist persist) {
 		persist.loadOrSaveDefault(getInstance(), Config.class);
+		
+		if (teamNameMinName < 0)
+			teamNameMinName = 1;
+		if (teamNameMaxName > 64)
+			teamNameMaxName = 64;
+		
 	}
 
 }

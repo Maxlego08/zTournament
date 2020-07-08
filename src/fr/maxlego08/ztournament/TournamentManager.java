@@ -42,6 +42,7 @@ import fr.maxlego08.ztournament.nms.NMS_1_16;
 import fr.maxlego08.ztournament.nms.NMS_1_7;
 import fr.maxlego08.ztournament.nms.NMS_1_8;
 import fr.maxlego08.ztournament.nms.NMS_1_9;
+import fr.maxlego08.ztournament.save.Config;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
@@ -75,17 +76,17 @@ public class TournamentManager extends ZUtils implements Tournament {
 	private transient boolean asNewTimer = false;
 	private transient NMS nms;
 
-	private transient final HashSet<String> substanceChars = new HashSet<String>(Arrays.asList(new String[] { "0",
-			"1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
-			"M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g",
-			"h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" }));
+	private transient final HashSet<String> substanceChars = new HashSet<String>(Arrays.asList(new String[] { "0", "1",
+			"2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+			"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h",
+			"i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" }));
 	private transient int maxTeamPerArena = 1;
 	private transient boolean isTimeBetweenWave;
 
 	public TournamentManager() {
-		
+
 		double nms = ItemDecoder.getNMSVersion();
-		
+
 		if (nms == 1.7)
 			this.nms = new NMS_1_7();
 		if (nms == 1.8)
@@ -106,12 +107,11 @@ public class TournamentManager extends ZUtils implements Tournament {
 			this.nms = new NMS_1_15();
 		if (nms == 1.16)
 			this.nms = new NMS_1_16();
-		
-		Logger.info("Loaded NMS " + nms +" !", LogType.INFO);
-		
-		
+
+		Logger.info("Loaded NMS " + nms + " !", LogType.INFO);
+
 	}
-	
+
 	/**
 	 * Permet de load la class
 	 */
@@ -374,13 +374,13 @@ public class TournamentManager extends ZUtils implements Tournament {
 		/**
 		 * A MODIF
 		 */
-		// Bukkit.getOnlinePlayers().forEach(player -> {
-		//
-		// sendTitle(player.getPlayer(), "§f§kII§e Tournois §f§kII",
-		// "§eUn tournois §f" + pvp + " §evient de commencer !", 10, 20 * 3,
-		// 10);
-		//
-		// });
+		Bukkit.getOnlinePlayers().forEach(player -> {
+
+			if (Config.sendMessageInTitle)
+				nms.sendTitle(player.getPlayer(), "§f§kII§e Tournois §f§kII",
+						"§eUn tournois §f" + pvp + " §evient de commencer !", 10, 20 * 3, 10);
+
+		});
 
 		timer = 300;
 
@@ -504,14 +504,15 @@ public class TournamentManager extends ZUtils implements Tournament {
 		}
 
 		Team bypassTeam = getByPassTeam();
-		
-		event = new TournamentPostWaveEvent(new ArrayList<>(teams), new ArrayList<>(duels), new ArrayList<>(arenas), type, bypassTeam);
+
+		event = new TournamentPostWaveEvent(new ArrayList<>(teams), new ArrayList<>(duels), new ArrayList<>(arenas),
+				type, bypassTeam);
 		event.callEvent();
 		if (event.isCancelled())
 			return;
-		
+
 		// Si il y a un nombre impair d'équipe
-		if (bypassTeam != null) 
+		if (bypassTeam != null)
 			bypassTeam.message("§eVous êtes automatiquement qualifié pour la manche suivante !");
 
 		broadcast("§eNombre de duels§7: §6%s", duel);
@@ -524,10 +525,10 @@ public class TournamentManager extends ZUtils implements Tournament {
 				maxTeamPerArena++;
 
 			Arena arena = getAvaibleArena();
-			
+
 			TournamentEvent event2 = new TournamentWareArenaEvent(arena, currentDuel);
 			event2.callEvent();
-			
+
 			arena.addDuel(currentDuel);
 			currentDuel.startDuel(arena.getPos1(), arena.getPos2());
 			currentDuel.setArenea(arena);
@@ -562,7 +563,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 					TournamentEvent event = new TournamentAutoEndWaveEvent();
 					event.callEvent();
-					
+
 					cancel();
 					broadcast("§eLe temps est écoulé, la prochaine manche va débuter... ");
 
@@ -609,8 +610,10 @@ public class TournamentManager extends ZUtils implements Tournament {
 		Team winner = teams.get(0);
 
 		winner.clear();
-		Bukkit.getOnlinePlayers().forEach(player -> nms.sendTitle(player, "§f§kII§e Event tournois §f§kII",
-				"§eFélicitation à l'équipe §f" + winner.getName() + "§e qui gagne le tournois !", 10, 20 * 5, 10));
+
+		if (Config.sendMessageInTitle)
+			Bukkit.getOnlinePlayers().forEach(player -> nms.sendTitle(player, "§f§kII§e Event tournois §f§kII",
+					"§eFélicitation à l'équipe §f" + winner.getName() + "§e qui gagne le tournois !", 10, 20 * 5, 10));
 
 		winner.getPlayers().forEach(player -> player.teleport(location));
 		winner.show();
@@ -684,13 +687,13 @@ public class TournamentManager extends ZUtils implements Tournament {
 		}
 
 		// Verif de la taille maximal
-		if (name.length() > 14) {
-			message(player, "§cLe nom de votre team ne doit pas dépasser les §f14 §ccaractères.");
+		if (name.length() > Config.teamNameMaxName) {
+			message(player, "§cLe nom de votre team ne doit pas dépasser les §f%s §ccaractères.", Config.teamNameMaxName);
 			return;
 		}
 
 		// Verif de la taille minimal
-		if (name.length() < 3) {
+		if (name.length() < Config.teamNameMinName) {
 			message(player, "§cLe nom de votre team doit avoir au minimum §f3 §ccaractères.");
 			return;
 		}
@@ -716,8 +719,9 @@ public class TournamentManager extends ZUtils implements Tournament {
 		player.teleport(location);
 		clearPlayer(player);
 
-		nms.sendTitle(player.getPlayer(), "§f§kII§e Félicitation §f§kII",
-				"§eVous venez de créer une team pour le tournois PVP", 10, 30, 10);
+		if (Config.sendMessageInTitle)
+			nms.sendTitle(player.getPlayer(), "§f§kII§e Félicitation §f§kII",
+					"§eVous venez de créer une team pour le tournois PVP", 10, 30, 10);
 
 		broadcast("§f%s §evient de créer la team §6%s§e.", player.getName(), name);
 	}
@@ -1029,7 +1033,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	public boolean isTimeBetweenWave() {
 		return isTimeBetweenWave;
 	}
-	
+
 	@Override
 	public NMS getNMS() {
 		return nms;
