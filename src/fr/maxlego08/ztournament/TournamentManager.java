@@ -442,7 +442,28 @@ public class TournamentManager extends ZUtils implements Tournament {
 				}
 
 			}
-		}.runTaskTimer(ZPlugin.z(), 0, 20);
+			/**
+			 * 
+			 * 
+			 * 
+			 * A MODIF
+			 * 
+			 * 
+			 * 
+			 */
+
+		}.runTaskTimer(ZPlugin.z(), 0, 1);
+
+		/**
+		 * 
+		 * 
+		 * 
+		 * A MODIF
+		 * 
+		 * 
+		 * 
+		 */
+
 	}
 
 	@Override
@@ -688,7 +709,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		// Verif de la taille maximal
 		if (name.length() > Config.teamNameMaxName) {
-			message(player, "§cLe nom de votre team ne doit pas dépasser les §f%s §ccaractères.", Config.teamNameMaxName);
+			message(player, "§cLe nom de votre team ne doit pas dépasser les §f%s §ccaractères.",
+					Config.teamNameMaxName);
 			return;
 		}
 

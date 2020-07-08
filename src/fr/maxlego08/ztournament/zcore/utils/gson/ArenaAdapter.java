@@ -51,7 +51,7 @@ public class ArenaAdapter extends TypeAdapter<Arena> {
 		Map<String, Object> serial = new HashMap<String, Object>();
 		serial.put(UUID, arena.getId());
 		serial.put(POS1, arena.getPos1());
-		serial.put(POS2, arena.getPos1());
+		serial.put(POS2, arena.getPos2());
 		return ZPlugin.z().getGson().toJson(serial);
 	}
 

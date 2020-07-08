@@ -17,14 +17,14 @@ public class TournamentEvent extends Event implements Cancellable {
 	 * 
 	 */
 	public TournamentEvent() {
-		// TODO Auto-generated constructor stub
+		super(false);
 	}
 
 	/**
 	 * @param isAsync
 	 */
 	public TournamentEvent(boolean isAsync) {
-		super(isAsync);
+		super(false);
 	}
 
 	/*
