@@ -1140,35 +1140,6 @@ public abstract class ZUtils extends MessageUtils{
 
 	/**
 	 * 
-	 * @param player
-	 * @param title
-	 * @param subtitle
-	 * @param start
-	 * @param time
-	 * @param end
-	 */
-	public void sendTitle(Player player, String title, String subtitle, int start, int time, int end) {
-
-//		CraftPlayer craftPlayer = (CraftPlayer) player;
-//
-//		PacketPlayOutTitle packetTimes = new PacketPlayOutTitle(start, time, end);
-//		craftPlayer.getHandle().playerConnection.sendPacket(packetTimes);
-//
-//		if (title != null) {
-//			PacketPlayOutTitle packetTitle = new PacketPlayOutTitle(EnumTitleAction.TITLE,
-//					CraftChatMessage.fromString(title)[0], start, time, end);
-//			craftPlayer.getHandle().playerConnection.sendPacket(packetTitle);
-//		}
-//
-//		if (subtitle != null) {
-//			PacketPlayOutTitle packetSubtitle = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE,
-//					CraftChatMessage.fromString(subtitle)[0], start, time, end);
-//			craftPlayer.getHandle().playerConnection.sendPacket(packetSubtitle);
-//		}
-	}
-
-	/**
-	 * 
 	 * @param message
 	 * @return
 	 */

@@ -18,6 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.maxlego08.ztournament.api.Arena;
 import fr.maxlego08.ztournament.api.Duel;
+import fr.maxlego08.ztournament.api.NMS;
 import fr.maxlego08.ztournament.api.Team;
 import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.api.TournoisType;
@@ -31,9 +32,20 @@ import fr.maxlego08.ztournament.api.events.TournamentStartNoEnoughRestartEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartTickEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartWaveEvent;
 import fr.maxlego08.ztournament.api.events.TournamentWareArenaEvent;
+import fr.maxlego08.ztournament.nms.NMS_1_10;
+import fr.maxlego08.ztournament.nms.NMS_1_11;
+import fr.maxlego08.ztournament.nms.NMS_1_12;
+import fr.maxlego08.ztournament.nms.NMS_1_13;
+import fr.maxlego08.ztournament.nms.NMS_1_14;
+import fr.maxlego08.ztournament.nms.NMS_1_15;
+import fr.maxlego08.ztournament.nms.NMS_1_16;
+import fr.maxlego08.ztournament.nms.NMS_1_7;
+import fr.maxlego08.ztournament.nms.NMS_1_8;
+import fr.maxlego08.ztournament.nms.NMS_1_9;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
+import fr.maxlego08.ztournament.zcore.utils.ItemDecoder;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 import fr.maxlego08.ztournament.zcore.utils.builder.TimerBuilder;
 import fr.maxlego08.ztournament.zcore.utils.inventory.Pagination;
@@ -61,6 +73,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	private transient int countTeam;
 	private transient int timer = 300;
 	private transient boolean asNewTimer = false;
+	private transient NMS nms;
 
 	private transient final HashSet<String> substanceChars = new HashSet<String>(Arrays.asList(new String[] { "0",
 			"1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
@@ -69,6 +82,36 @@ public class TournamentManager extends ZUtils implements Tournament {
 	private transient int maxTeamPerArena = 1;
 	private transient boolean isTimeBetweenWave;
 
+	public TournamentManager() {
+		
+		double nms = ItemDecoder.getNMSVersion();
+		
+		if (nms == 1.7)
+			this.nms = new NMS_1_7();
+		if (nms == 1.8)
+			this.nms = new NMS_1_8();
+		if (nms == 1.9)
+			this.nms = new NMS_1_9();
+		if (nms == 1.10)
+			this.nms = new NMS_1_10();
+		if (nms == 1.11)
+			this.nms = new NMS_1_11();
+		if (nms == 1.12)
+			this.nms = new NMS_1_12();
+		if (nms == 1.13)
+			this.nms = new NMS_1_13();
+		if (nms == 1.14)
+			this.nms = new NMS_1_14();
+		if (nms == 1.15)
+			this.nms = new NMS_1_15();
+		if (nms == 1.16)
+			this.nms = new NMS_1_16();
+		
+		Logger.info("Loaded NMS " + nms +" !", LogType.INFO);
+		
+		
+	}
+	
 	/**
 	 * Permet de load la class
 	 */
@@ -566,7 +609,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		Team winner = teams.get(0);
 
 		winner.clear();
-		Bukkit.getOnlinePlayers().forEach(player -> sendTitle(player, "§f§kII§e Event tournois §f§kII",
+		Bukkit.getOnlinePlayers().forEach(player -> nms.sendTitle(player, "§f§kII§e Event tournois §f§kII",
 				"§eFélicitation à l'équipe §f" + winner.getName() + "§e qui gagne le tournois !", 10, 20 * 5, 10));
 
 		winner.getPlayers().forEach(player -> player.teleport(location));
@@ -673,7 +716,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		player.teleport(location);
 		clearPlayer(player);
 
-		sendTitle(player.getPlayer(), "§f§kII§e Félicitation §f§kII",
+		nms.sendTitle(player.getPlayer(), "§f§kII§e Félicitation §f§kII",
 				"§eVous venez de créer une team pour le tournois PVP", 10, 30, 10);
 
 		broadcast("§f%s §evient de créer la team §6%s§e.", player.getName(), name);
@@ -722,7 +765,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			team.message("§f%s §evient de rejoindre votre team !", player.getName());
 			player.teleport(location);
 			clearPlayer(player);
-			sendTitle(player.getPlayer(), "§f§kII§e Félicitation §f§kII",
+			nms.sendTitle(player.getPlayer(), "§f§kII§e Félicitation §f§kII",
 					"§eVous venez de rejoindre la team §6" + name + "§e !", 10, 30, 10);
 
 		}
@@ -985,6 +1028,11 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public boolean isTimeBetweenWave() {
 		return isTimeBetweenWave;
+	}
+	
+	@Override
+	public NMS getNMS() {
+		return nms;
 	}
 
 }
