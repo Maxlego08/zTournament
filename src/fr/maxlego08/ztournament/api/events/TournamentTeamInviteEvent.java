@@ -4,22 +4,19 @@ import org.bukkit.entity.Player;
 
 import fr.maxlego08.ztournament.api.Team;
 
-public class TournamentCreateTeamEvent extends TournamentEvent {
+public class TournamentTeamInviteEvent extends TournamentEvent {
 
 	private final Team team;
 	private final Player player;
-	private String name;
 
 	/**
 	 * @param team
 	 * @param player
-	 * @param name
 	 */
-	public TournamentCreateTeamEvent(Team team, Player player, String name) {
+	public TournamentTeamInviteEvent(Team team, Player player) {
 		super();
 		this.team = team;
 		this.player = player;
-		this.name = name;
 	}
 
 	/**
@@ -34,21 +31,6 @@ public class TournamentCreateTeamEvent extends TournamentEvent {
 	 */
 	public Player getPlayer() {
 		return player;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 
 }

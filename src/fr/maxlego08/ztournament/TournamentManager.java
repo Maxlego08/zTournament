@@ -23,15 +23,17 @@ import fr.maxlego08.ztournament.api.Team;
 import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.api.TournoisType;
 import fr.maxlego08.ztournament.api.events.TournamentAutoEndWaveEvent;
-import fr.maxlego08.ztournament.api.events.TournamentCreateTeamEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamCreateEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamDisbandEvent;
 import fr.maxlego08.ztournament.api.events.TournamentEvent;
-import fr.maxlego08.ztournament.api.events.TournamentInviteTeamEvent;
-import fr.maxlego08.ztournament.api.events.TournamentJoinSuccessTeamEvent;
-import fr.maxlego08.ztournament.api.events.TournamentJoinTeamEvent;
-import fr.maxlego08.ztournament.api.events.TournamentLooseTeamEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamInviteEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamJoinSuccessEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamJoinEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamLeaveEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamLooseEvent;
 import fr.maxlego08.ztournament.api.events.TournamentPostWaveEvent;
 import fr.maxlego08.ztournament.api.events.TournamentPreWaveEvent;
-import fr.maxlego08.ztournament.api.events.TournamentRewardTeamEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamRewardEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartNoEnoughEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartNoEnoughRestartEvent;
@@ -452,27 +454,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 				}
 
 			}
-			/**
-			 * 
-			 * 
-			 * 
-			 * A MODIF
-			 * 
-			 * 
-			 * 
-			 */
-
-		}.runTaskTimer(ZPlugin.z(), 0, 1);
-
-		/**
-		 * 
-		 * 
-		 * 
-		 * A MODIF
-		 * 
-		 * 
-		 * 
-		 */
+	
+		}.runTaskTimer(ZPlugin.z(), 0, 20);
 
 	}
 
@@ -690,7 +673,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		this.eliminatedTeams.forEach(team -> {
 
-			TournamentEvent event2 = new TournamentRewardTeamEvent(team);
+			TournamentEvent event2 = new TournamentTeamRewardEvent(team);
 			event2.callEvent();
 			
 		});
@@ -754,7 +737,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		}
 
 		
-		TournamentCreateTeamEvent event = new TournamentCreateTeamEvent(new TeamObject(name, type.getMax(), player), player, name);
+		TournamentTeamCreateEvent event = new TournamentTeamCreateEvent(new TeamObject(name, type.getMax(), player), player, name);
 		event.callEvent();
 		
 		if (event.isCancelled())
@@ -808,7 +791,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		TournamentJoinTeamEvent joinTeamEvent = new TournamentJoinTeamEvent(team, player, team.join(player));
+		TournamentTeamJoinEvent joinTeamEvent = new TournamentTeamJoinEvent(team, player, team.join(player));
 		joinTeamEvent.callEvent();
 		
 		if (joinTeamEvent.isCancelled())
@@ -820,7 +803,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		} else {
 
-			TournamentJoinSuccessTeamEvent event = new TournamentJoinSuccessTeamEvent(team, player);
+			TournamentTeamJoinSuccessEvent event = new TournamentTeamJoinSuccessEvent(team, player);
 			event.callEvent();
 			
 			if (event.isCancelled())
@@ -875,7 +858,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		TournamentEvent event = new TournamentInviteTeamEvent(team, player);
+		TournamentEvent event = new TournamentTeamInviteEvent(team, player);
 		event.callEvent();
 		
 		if (event.isCancelled())
@@ -911,11 +894,23 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		if (team.getOwner().equals(player)) {
 
+			TournamentTeamDisbandEvent event = new TournamentTeamDisbandEvent(team, player);
+			event.callEvent();
+			
+			if (event.isCancelled())
+				return;
+			
 			team.disband();
 			this.teams.remove(team);
 
 		} else {
 
+			TournamentTeamLeaveEvent event = new TournamentTeamLeaveEvent(team, player);
+			event.callEvent();
+			
+			if (event.isCancelled())
+				return;
+			
 			if (message)
 				message(player, "§eVous venez de quitter votre équipe.");
 			team.leave(player);
@@ -930,7 +925,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		
 		duel.onPlayerLoose(player);
 		
-		TournamentEvent event = new TournamentLooseTeamEvent(team, duel, player);
+		TournamentEvent event = new TournamentTeamLooseEvent(team, duel, player);
 		event.callEvent();
 		
 		duel.message("§f" + player.getName() + " §evient d'être éliminé !");

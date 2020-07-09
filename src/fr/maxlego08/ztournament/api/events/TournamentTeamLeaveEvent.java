@@ -4,22 +4,20 @@ import org.bukkit.entity.Player;
 
 import fr.maxlego08.ztournament.api.Team;
 
-public class TournamentJoinTeamEvent extends TournamentEvent {
+public class TournamentTeamLeaveEvent extends TournamentEvent {
 
 	private final Team team;
 	private final Player player;
-	private boolean canJoin;
 
 	/**
 	 * @param team
+	 * @param duel
 	 * @param player
-	 * @param canJoin
 	 */
-	public TournamentJoinTeamEvent(Team team, Player player, boolean canJoin) {
+	public TournamentTeamLeaveEvent(Team team, Player player) {
 		super();
 		this.team = team;
 		this.player = player;
-		this.canJoin = canJoin;
 	}
 
 	/**
@@ -34,21 +32,6 @@ public class TournamentJoinTeamEvent extends TournamentEvent {
 	 */
 	public Player getPlayer() {
 		return player;
-	}
-
-	/**
-	 * @return the canJoin
-	 */
-	public boolean isCanJoin() {
-		return canJoin;
-	}
-
-	/**
-	 * @param canJoin
-	 *            the canJoin to set
-	 */
-	public void setCanJoin(boolean canJoin) {
-		this.canJoin = canJoin;
 	}
 
 }

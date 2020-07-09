@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import fr.maxlego08.ztournament.api.Duel;
 import fr.maxlego08.ztournament.api.Team;
 
-public class TournamentLooseTeamEvent extends TournamentEvent {
+public class TournamentTeamLooseEvent extends TournamentEvent {
 
 	private final Team team;
 	private final Duel duel;
@@ -16,7 +16,7 @@ public class TournamentLooseTeamEvent extends TournamentEvent {
 	 * @param duel
 	 * @param player
 	 */
-	public TournamentLooseTeamEvent(Team team, Duel duel, Player player) {
+	public TournamentTeamLooseEvent(Team team, Duel duel, Player player) {
 		super();
 		this.team = team;
 		this.duel = duel;
