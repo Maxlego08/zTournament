@@ -37,7 +37,7 @@ public class CommandTournament extends VCommand {
 			message(sender, "§6» §e/tournois arena §f<§bloc1§f> §f<§bloc2§f> §8- §7Créer une arène.");
 			message(sender, "§6» §e/tournois delete §f<§buuid§f> §8- §7Supprimer une arène.");
 			message(sender, "§6» §e/tournois list §8- §7Voir la liste des arènes.");
-			message(sender, "§6» §e/tournois lobby §8- §7Mettre la position du lobby.");
+			message(sender, "§6» §e/tournois setlobby §8- §7Mettre la position du lobby.");
 			message(sender, "§6» §e/tournois stop §8- §7Permet de stop un tournois.");
 			message(sender, "§6» §e/tournois wave §8- §7Commencer la prochaine manche.");
 			message(sender, "§6» §e/tournois start §f<§btype3§f> §8- §7Lancer un tournois.");

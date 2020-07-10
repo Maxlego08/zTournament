@@ -23,22 +23,22 @@ import fr.maxlego08.ztournament.api.Team;
 import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.api.TournoisType;
 import fr.maxlego08.ztournament.api.events.TournamentAutoEndWaveEvent;
-import fr.maxlego08.ztournament.api.events.TournamentTeamCreateEvent;
-import fr.maxlego08.ztournament.api.events.TournamentTeamDisbandEvent;
 import fr.maxlego08.ztournament.api.events.TournamentEvent;
-import fr.maxlego08.ztournament.api.events.TournamentTeamInviteEvent;
-import fr.maxlego08.ztournament.api.events.TournamentTeamJoinSuccessEvent;
-import fr.maxlego08.ztournament.api.events.TournamentTeamJoinEvent;
-import fr.maxlego08.ztournament.api.events.TournamentTeamLeaveEvent;
-import fr.maxlego08.ztournament.api.events.TournamentTeamLooseEvent;
 import fr.maxlego08.ztournament.api.events.TournamentPostWaveEvent;
 import fr.maxlego08.ztournament.api.events.TournamentPreWaveEvent;
-import fr.maxlego08.ztournament.api.events.TournamentTeamRewardEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartNoEnoughEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartNoEnoughRestartEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartTickEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartWaveEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamCreateEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamDisbandEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamInviteEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamJoinEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamJoinSuccessEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamLeaveEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamLooseEvent;
+import fr.maxlego08.ztournament.api.events.TournamentTeamRewardEvent;
 import fr.maxlego08.ztournament.api.events.TournamentWareArenaEvent;
 import fr.maxlego08.ztournament.api.events.TournamentWinEvent;
 import fr.maxlego08.ztournament.nms.NMS_1_10;
@@ -53,6 +53,7 @@ import fr.maxlego08.ztournament.nms.NMS_1_8;
 import fr.maxlego08.ztournament.nms.NMS_1_9;
 import fr.maxlego08.ztournament.save.Config;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
+import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
 import fr.maxlego08.ztournament.zcore.utils.ItemDecoder;
@@ -384,13 +385,12 @@ public class TournamentManager extends ZUtils implements Tournament {
 		/**
 		 * A MODIF
 		 */
-		Bukkit.getOnlinePlayers().forEach(player -> {
-
-			if (Config.sendMessageInTitle)
-				nms.sendTitle(player.getPlayer(), "§f§kII§e Tournois §f§kII",
-						"§eUn tournois §f" + pvp + " §evient de commencer !", 10, 20 * 3, 10);
-
-		});
+		Message messages = Message.TITLE_START;
+		if (messages.isUseTitle())
+			Bukkit.getOnlinePlayers().forEach(player -> {
+				nms.sendTitle(player.getPlayer(), messages.getTitle(), messages.getSubTitle().replace("%type%", pvp),
+						(int) messages.getStart(), (int) messages.getTime(), (int) messages.getEnd());
+			});
 
 		timer = Config.timeStartTournamentInSecond;
 
@@ -415,8 +415,17 @@ public class TournamentManager extends ZUtils implements Tournament {
 				if (Config.displayTournamentInformations.contains(timer))
 					broadcast("§eEncore §6%s §eavant le début du tournois PVP.", TimerBuilder.getStringTime(timer));
 
+				Message message = Message.TITLE_START_INFO;
+				if (message.isUse()) {
+					String sub = messages.getSubTitle().replace("%timer%", TimerBuilder.getStringTime(timer));
+					Bukkit.getOnlinePlayers().forEach(player -> {
+						nms.sendTitle(player.getPlayer(), messages.getTitle(), sub, (int) messages.getStart(),
+								(int) messages.getTime(), (int) messages.getEnd());
+					});
+				}
+
 				if (timer == 0) {
-					
+
 					if (teams.size() <= 1) {
 
 						if (!asNewTimer && Config.restartTeamSearch) {
@@ -442,7 +451,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 							broadcast("§ePas assez de joueur, event annulé !");
 
 						}
-						
+
 					} else {
 						cancel();
 						start();
@@ -454,7 +463,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 				}
 
 			}
-	
+
 		}.runTaskTimer(ZPlugin.z(), 0, 20);
 
 	}
@@ -626,19 +635,19 @@ public class TournamentManager extends ZUtils implements Tournament {
 		winner.setPosition(1);
 		if (!eliminatedTeams.contains(winner))
 			eliminatedTeams.add(winner);
-		
+
 		TournamentEvent event = new TournamentWinEvent(new ArrayList<>(eliminatedTeams), winner);
 		event.callEvent();
-		
+
 		if (event.isCancelled())
 			return;
-		
+
 		this.isStart = false;
 		this.isWaiting = false;
 		this.teams.clear();
 		this.duels.clear();
 		this.wave = 0;
-		
+
 		broadcast("§eEvent tournois pvp terminé !");
 
 		if (Config.sendMessageInTitle)
@@ -675,7 +684,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 			TournamentEvent event2 = new TournamentTeamRewardEvent(team);
 			event2.callEvent();
-			
+
 		});
 
 		this.eliminatedTeams.clear();
@@ -736,15 +745,15 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		
-		TournamentTeamCreateEvent event = new TournamentTeamCreateEvent(new TeamObject(name, type.getMax(), player), player, name);
+		TournamentTeamCreateEvent event = new TournamentTeamCreateEvent(new TeamObject(name, type.getMax(), player),
+				player, name);
 		event.callEvent();
-		
+
 		if (event.isCancelled())
 			return;
-		
+
 		name = event.getName();
-		
+
 		team = new TeamObject(name, type.getMax(), player);
 		this.teams.add(team);
 		player.teleport(location);
@@ -793,10 +802,10 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		TournamentTeamJoinEvent joinTeamEvent = new TournamentTeamJoinEvent(team, player, team.join(player));
 		joinTeamEvent.callEvent();
-		
+
 		if (joinTeamEvent.isCancelled())
 			return;
-		
+
 		if (!joinTeamEvent.isCanJoin()) {
 
 			message(player, "§cVous ne pouvez pas rejoindre cette team.");
@@ -805,10 +814,10 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 			TournamentTeamJoinSuccessEvent event = new TournamentTeamJoinSuccessEvent(team, player);
 			event.callEvent();
-			
+
 			if (event.isCancelled())
 				return;
-			
+
 			team.message("§f%s §evient de rejoindre votre team !", player.getName());
 			player.teleport(location);
 			clearPlayer(player);
@@ -860,10 +869,10 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		TournamentEvent event = new TournamentTeamInviteEvent(team, player);
 		event.callEvent();
-		
+
 		if (event.isCancelled())
 			return;
-		
+
 		team.invite(target);
 		team.message("§f%s §evient d'inviter §6%s §eà rejoindre votre équipe.", player.getName(), target.getName());
 		message(target, "§eVous venez de reçevoir une inventation de §6%s §epour rejoindre l'équipe §f%s§e.",
@@ -896,10 +905,10 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 			TournamentTeamDisbandEvent event = new TournamentTeamDisbandEvent(team, player);
 			event.callEvent();
-			
+
 			if (event.isCancelled())
 				return;
-			
+
 			team.disband();
 			this.teams.remove(team);
 
@@ -907,10 +916,10 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 			TournamentTeamLeaveEvent event = new TournamentTeamLeaveEvent(team, player);
 			event.callEvent();
-			
+
 			if (event.isCancelled())
 				return;
-			
+
 			if (message)
 				message(player, "§eVous venez de quitter votre équipe.");
 			team.leave(player);
@@ -922,12 +931,12 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 	@Override
 	public void loose(Team team, Duel duel, Player player) {
-		
+
 		duel.onPlayerLoose(player);
-		
+
 		TournamentEvent event = new TournamentTeamLooseEvent(team, duel, player);
 		event.callEvent();
-		
+
 		duel.message("§f" + player.getName() + " §evient d'être éliminé !");
 		player.teleport(location);
 
@@ -1018,7 +1027,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public void stopTournois(CommandSender sender) {
 		if (!isStart && !isWaiting) {
-			message(sender, "§cAucun tournois en cours.");
+			message(sender, Message.TOURNAMENT_NOT_ENABLE);
 			return;
 		}
 
@@ -1051,7 +1060,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public void nextWave(CommandSender sender) {
 		if (!isStart) {
-			message(sender, "§cAucun tournois en cours.");
+			message(sender, Message.TOURNAMENT_NOT_ENABLE);
 			return;
 		}
 

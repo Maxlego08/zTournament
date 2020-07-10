@@ -8,6 +8,7 @@ import fr.maxlego08.ztournament.command.commands.CommandTournament;
 import fr.maxlego08.ztournament.inventory.InventoryManager;
 import fr.maxlego08.ztournament.listener.AdapterListener;
 import fr.maxlego08.ztournament.save.Config;
+import fr.maxlego08.ztournament.save.Lang;
 import fr.maxlego08.ztournament.scoreboard.ScoreBoardManager;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
 import fr.maxlego08.ztournament.zcore.utils.Metrics;
@@ -50,6 +51,7 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		/* Add Saver */
 		addSave(Config.getInstance());
+		addSave(Lang.getInstance());
 		addSave(new CooldownBuilder());
 		addSave(tournament);
 

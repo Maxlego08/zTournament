@@ -12,8 +12,7 @@ public class CommandTournamentArena extends VCommand {
 	public CommandTournamentArena() {
 		this.setPermission(Permission.ZTOURNAMENT_ARENA);
 		this.addSubCommand("arena");
-		this.addRequireArg("loc1");
-		this.addOptionalArg("loc2");
+		this.addRequireArg("world,x,y,z,yaw,pitch");
 		this.setConsoleCanUse(false);
 	}
 
@@ -21,7 +20,7 @@ public class CommandTournamentArena extends VCommand {
 	protected CommandType perform(ZTournamentPlugin main) {
 
 		Location location = argAsLocation(0);
-		Location location2 = argAsLocation(1, player.getLocation());
+		Location location2 = player.getLocation();
 		tournament.createArena(sender, location, location2);
 
 		return CommandType.SUCCESS;

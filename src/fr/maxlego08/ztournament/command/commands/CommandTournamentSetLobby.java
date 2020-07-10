@@ -8,7 +8,7 @@ public class CommandTournamentSetLobby extends VCommand {
 
 	public CommandTournamentSetLobby() {
 
-		this.addSubCommand("lobby");
+		this.addSubCommand("setlobby");
 		this.setConsoleCanUse(false);
 
 	}
