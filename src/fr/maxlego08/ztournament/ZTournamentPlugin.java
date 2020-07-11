@@ -67,6 +67,8 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		preDisable();
 
+		tournament.onPluginDisable();
+		
 		getSavers().forEach(saver -> saver.save(getPersist()));
 
 		postDisable();

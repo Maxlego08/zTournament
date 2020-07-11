@@ -66,11 +66,11 @@ public enum Message {
 
 	TOURNAMENT_START_ERROR_TEAM("§cNo team, the tournament is canceled!"),
 
-	TOURNAMENT_START_TIMER("§eStill §6%timer% §before the start of the PVP tournament."),
+	TOURNAMENT_START_TIMER("§eStill §6%timer% §ebefore the start of the PVP tournament."),
 
 	TOURNAMENT_START_FIRST_WAVE("§eStart of the PVP tournament !", "§eNumber of teams in the tournament§7: §f%size%"),
 
-	TOURNAMENT_START("§eBeginning of a PVP tournament in §6%type% §in §65 §minutes§e.",
+	TOURNAMENT_START("§eBeginning of a PVP tournament in §6%type% §ein §65 §eminutes§e.",
 			"§eMade §f/tournois§e to have all commands"),
 
 	TOURNAMENT_WAVE_AUTO("§eYou are automatically qualified for the next round!"),
@@ -142,7 +142,7 @@ public enum Message {
 
 	TOURNAMENT_CREATE_ERROR_NAME_MAX("§cThe name of your team must not exceed §f%max% §ccaractères."),
 
-	TOURNAMENT_CREATE_ERROR_NAME_MIN("§cThe name of your team must have at least §f%mine% §character."),
+	TOURNAMENT_CREATE_ERROR_NAME_MIN("§cThe name of your team must have at least §f%min% §character."),
 
 	TOURNAMENT_CREATE_ERROR_NAME(
 			"§cThe name of your team must be alphanumeric, the character §f%char% §cis not allowed."),
@@ -187,7 +187,7 @@ public enum Message {
 	TITLE_CREATE_SUCCESS("§f§kII§e Congratulations §f§kII",
 			"§eYou have just created a §fteam §efor the PVP tournament !", 10, 60, 10),
 
-	TITLE_START_INFO("§f§kII§e Tournament §f§kII", "§eStill §6%timer% §before the start of the PVP tournament.", 10, 60, 10),
+	TITLE_START_INFO("§f§kII§e Tournament §f§kII", "§eStill §6%timer% §ebefore the start of the PVP tournament.", 0, 60, 10),
 
 	TITLE_WIN("§f§kII§e Tournament §f§kII", "§eCongratulations to the §f%team% §eteam who wins the tournament !", 10,
 			100, 30),

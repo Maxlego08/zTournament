@@ -22,7 +22,7 @@ public class ArenaAdapter extends TypeAdapter<Arena> {
 	private static Type seriType = new TypeToken<Map<String, Object>>() {
 	}.getType();
 
-	private static String POS1 = "pos2";
+	private static String POS1 = "pos1";
 	private static String POS2 = "pos2";
 	private static String UUID = "uuid";
 
@@ -63,6 +63,7 @@ public class ArenaAdapter extends TypeAdapter<Arena> {
 
 		Location pos1 = adapter.fromRaw((String) keys.get(POS1));
 		Location pos2 = adapter.fromRaw((String) keys.get(POS2));
+		
 		return new ArenaObject(uuid, pos1, pos2);
 	}
 

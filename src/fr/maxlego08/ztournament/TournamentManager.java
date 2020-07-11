@@ -1087,6 +1087,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			isWaiting = false;
 			broadcast(Message.TOURNAMENT_STOP);
 			teams.forEach(e -> {
+				e.clear();
 				e.getRealPlayers().forEach(p -> {
 					p.teleport(location);
 					p.teleport(location);
@@ -1156,6 +1157,37 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public NMS getNMS() {
 		return nms;
+	}
+
+	@Override
+	public void onPluginDisable() {
+
+		if (isWaiting) {
+
+			isStart = false;
+			isWaiting = false;
+			broadcast(Message.TOURNAMENT_STOP);
+			return;
+
+		}
+
+		if (isStart) {
+
+			isStart = false;
+			isWaiting = false;
+			broadcast(Message.TOURNAMENT_STOP);
+			teams.forEach(e -> {
+				e.clear();
+				e.getRealPlayers().forEach(p -> {
+					p.teleport(location);
+					p.teleport(location);
+				});
+			});
+
+			teams.clear();
+			duels.clear();
+		}
+		
 	}
 
 }
