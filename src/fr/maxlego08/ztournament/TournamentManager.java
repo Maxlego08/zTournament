@@ -31,6 +31,7 @@ import fr.maxlego08.ztournament.api.events.TournamentStartNoEnoughEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartNoEnoughRestartEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartTickEvent;
 import fr.maxlego08.ztournament.api.events.TournamentStartWaveEvent;
+import fr.maxlego08.ztournament.api.events.TournamentStopEvent;
 import fr.maxlego08.ztournament.api.events.TournamentTeamCreateEvent;
 import fr.maxlego08.ztournament.api.events.TournamentTeamDisbandEvent;
 import fr.maxlego08.ztournament.api.events.TournamentTeamInviteEvent;
@@ -40,6 +41,7 @@ import fr.maxlego08.ztournament.api.events.TournamentTeamLeaveEvent;
 import fr.maxlego08.ztournament.api.events.TournamentTeamLooseEvent;
 import fr.maxlego08.ztournament.api.events.TournamentTeamRewardEvent;
 import fr.maxlego08.ztournament.api.events.TournamentWareArenaEvent;
+import fr.maxlego08.ztournament.api.events.TournamentWaveCommandNextEvent;
 import fr.maxlego08.ztournament.api.events.TournamentWinEvent;
 import fr.maxlego08.ztournament.nms.NMS_1_10;
 import fr.maxlego08.ztournament.nms.NMS_1_11;
@@ -211,12 +213,12 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public void setLobbyLocation(Player sender, Location location) {
 		if (isStart) {
-			message(sender, "§cUn tournois est en cours, action impossible pour le moment.");
+			message(sender, Message.TOURNAMENT_ENABLE);
 			return;
 		}
 
 		TournamentManager.location = location;
-		message(sender, "§eVous venez de mettre la location pour le lobby.");
+		message(sender, Message.TOURNAMENT_LOBBY_CREATE);
 	}
 
 	@Override
@@ -233,23 +235,23 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public void createArena(CommandSender sender, Location pos1, Location pos2) {
 		if (isStart) {
-			message(sender, "§cUn tournois est en cours, action impossible pour le moment.");
+			message(sender, Message.TOURNAMENT_ENABLE);
 			return;
 		}
 		Arena arena = new ArenaObject(pos1, pos2);
 		arenas.add(arena);
-		message(sender, "§eVous venez de créer une arène.");
+		message(sender, Message.TOURNAMENT_ARENA_CREATE);
 	}
 
 	@Override
 	public void sendArena(Player player) {
 		if (isStart) {
-			message(player, "§cUn tournois est en cours, action impossible pour le moment.");
+			message(player, Message.TOURNAMENT_ENABLE);
 			return;
 		}
 
 		if (arenas.size() == 0) {
-			message(player, "§cAucune arène de disponible.");
+			message(player, Message.TOURNAMENT_ARENA_NO);
 			return;
 		}
 
@@ -275,7 +277,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public void deleteArena(CommandSender sender, UUID uuid) {
 		if (isStart) {
-			message(sender, "§cUn tournois est en cours, action impossible pour le moment.");
+			message(sender, Message.TOURNAMENT_ENABLE);
 			return;
 		}
 
@@ -284,12 +286,12 @@ public class TournamentManager extends ZUtils implements Tournament {
 		}).findAny().orElse(null);
 
 		if (a == null) {
-			message(sender, "§cImpossible de trouver l'arène.");
+			message(sender, Message.TOURNAMENT_ARENA_NOT_FOUND);
 			return;
 		}
 
 		arenas.remove(a);
-		message(sender, "§aVous venez de supprimer une arène.");
+		message(sender, Message.TOURNAMENT_ARENA_DELETE);
 	}
 
 	@Override
@@ -348,17 +350,17 @@ public class TournamentManager extends ZUtils implements Tournament {
 	public void startTournois(CommandSender sender, TournoisType type) {
 
 		if (isStart || isWaiting) {
-			message(sender, "§cUn tournois est déjà en cours.");
+			message(sender, Message.TOURNAMENT_ENABLE);
 			return;
 		}
 
 		if (arenas.size() == 0) {
-			message(sender, "§cVous ne pouvez pas lancer de tournois sans aucune arène.");
+			message(sender, Message.TOURNAMENT_START_ERROR_ARENA);
 			return;
 		}
 
 		if (location == null) {
-			message(sender, "§cVous ne pouvez pas lancer de tournois sans la location de lobby.");
+			message(sender, Message.TOURNAMENT_START_ERROR_LOOBY);
 			return;
 		}
 
@@ -379,8 +381,9 @@ public class TournamentManager extends ZUtils implements Tournament {
 		this.maxTeams = 0;
 
 		String pvp = type.getMax() + "v" + type.getMax();
-		broadcast("§eDébut d'un tournois PVP en §6%s §edans §65 §eminutes§e.", pvp);
-		broadcast("§eFaire §f/tournois§e pour avoir toutes les commandess");
+
+		Message messageStart = Message.TOURNAMENT_START;
+		messageStart.getMessages().forEach(message -> broadcast(message.replace("%type%", pvp)));
 
 		/**
 		 * A MODIF
@@ -412,16 +415,19 @@ public class TournamentManager extends ZUtils implements Tournament {
 					return;
 				}
 
-				if (Config.displayTournamentInformations.contains(timer))
-					broadcast("§eEncore §6%s §eavant le début du tournois PVP.", TimerBuilder.getStringTime(timer));
+				if (Config.displayTournamentInformations.contains(timer)) {
+					broadcast(Message.TOURNAMENT_START_TIMER.replace("%timer%", TimerBuilder.getStringTime(timer)));
 
-				Message message = Message.TITLE_START_INFO;
-				if (message.isUse()) {
-					String sub = messages.getSubTitle().replace("%timer%", TimerBuilder.getStringTime(timer));
-					Bukkit.getOnlinePlayers().forEach(player -> {
-						nms.sendTitle(player.getPlayer(), messages.getTitle(), sub, (int) messages.getStart(),
-								(int) messages.getTime(), (int) messages.getEnd());
-					});
+					Message startMessage = Message.TITLE_START_INFO;
+
+					if (startMessage.isUse()) {
+						String sub = startMessage.getSubTitle().replace("%timer%", TimerBuilder.getStringTime(timer));
+						Bukkit.getOnlinePlayers().forEach(player -> {
+							nms.sendTitle(player.getPlayer(), startMessage.getTitle(), sub,
+									(int) startMessage.getStart(), (int) startMessage.getTime(),
+									(int) startMessage.getEnd());
+						});
+					}
 				}
 
 				if (timer == 0) {
@@ -435,8 +441,14 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 							asNewTimer = true;
 							timer = Config.timeStartTournamentInSecond;
-							broadcast(
-									"§ePas assez de joueur pour commencer le tournois, vous avez encore §65 §eminutes pour créer une équipe.");
+							broadcast(Message.TOURNAMENT_START_ERROR_PLAYER);
+
+							Message noPlayer = Message.TITLE_START_ERROR_PLAYER;
+							Bukkit.getOnlinePlayers().forEach(player -> {
+								nms.sendTitle(player.getPlayer(), noPlayer.getTitle(), noPlayer.getSubTitle(),
+										(int) noPlayer.getStart(), (int) noPlayer.getTime(), (int) noPlayer.getEnd());
+							});
+
 						} else {
 
 							event = new TournamentStartNoEnoughEvent();
@@ -448,7 +460,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 							cancel();
 
-							broadcast("§ePas assez de joueur, event annulé !");
+							broadcast(Message.TOURNAMENT_START_ERROR_PLAYER_CANCEL);
 
 						}
 
@@ -471,7 +483,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public void start() {
 		if (teams.size() == 0) {
-			broadcast("§cAucune team, le tournois est annulé !");
+			broadcast(Message.TOURNAMENT_START_ERROR_TEAM);
 			return;
 		}
 
@@ -490,8 +502,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 		if (event.isCancelled())
 			return;
 
-		broadcast("§eDébut du tournois PVP !");
-		broadcast("§eNombre d'équipe dans le tournois§7: §f%s", teams.size());
+		Message message = Message.TOURNAMENT_START_FIRST_WAVE;
+		message.getMessages().forEach(e -> broadcast(e.replace("%size%", String.valueOf(teams.size()))));
 
 		this.startWave();
 	}
@@ -536,10 +548,12 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		// Si il y a un nombre impair d'équipe
 		if (bypassTeam != null)
-			bypassTeam.message("§eVous êtes automatiquement qualifié pour la manche suivante !");
+			Message.TOURNAMENT_WAVE_AUTO.getMessages().forEach(e -> bypassTeam.message(e));
 
-		broadcast("§eNombre de duels§7: §6%s", duel);
-		broadcast("§eDébut de la manche §6" + currentWave + " §e! Que le meilleur gagne !");
+		Message.TOURNAMENT_WAVE_START.getMessages().forEach(message -> {
+			broadcast(message.replace("%round%", String.valueOf(currentWave)).replace("%duel%",
+					String.valueOf(duels.size())));
+		});
 
 		wave++;
 		duels.forEach(currentDuel -> {
@@ -558,10 +572,11 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		});
 
-		broadcast("§eFin de la manche §6" + currentWave + " §e dans §f5 minutes§e.");
+		broadcast(Message.TOURNAMENT_WAVE_TIMER.replace("%round%", String.valueOf(currentWave)).replace("%timer%",
+				TimerBuilder.getStringTime(Config.timeWaveEndInSecond)));
 		new BukkitRunnable() {
 
-			int timer = 300;
+			int timer = Config.timeWaveEndInSecond;
 
 			@Override
 			public void run() {
@@ -578,9 +593,9 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 				timer--;
 
-				if (timer == 120 || timer == 60 || timer == 30 || timer == 10 || timer == 3 || timer == 2 || timer == 1)
-					broadcast("§eFin de la manche §6" + currentWave + "§e dans §f%s§e.",
-							TimerBuilder.getStringTime(timer));
+				if (Config.displayWaveEndInformations.contains(timer))
+					broadcast(Message.TOURNAMENT_WAVE_TIMER.replace("%round%", String.valueOf(currentWave))
+							.replace("%timer%", TimerBuilder.getStringTime(timer)));
 
 				if (timer <= 0) {
 
@@ -588,7 +603,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 					event.callEvent();
 
 					cancel();
-					broadcast("§eLe temps est écoulé, la prochaine manche va débuter... ");
+					broadcast(Message.TOURNAMENT_WAVE_END);
 
 					duels.forEach(duel -> {
 
@@ -835,6 +850,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		}
 
 		if (!isWaiting) {
+			
 			message(player, "§cVous ne pouvez pas inviter de joueur pour le moment.");
 			return;
 		}
@@ -890,14 +906,14 @@ public class TournamentManager extends ZUtils implements Tournament {
 	public void leave(Player player, boolean message) {
 		if (isStart && !isWaiting) {
 			if (message)
-				message(player, "§cVous ne pouvez pas quitter votre équipe durant le combat.");
+				message(player, Message.TOURNAMENT_TEAM_LEAVE_ERROR);
 			return;
 		}
 
 		Team team = getByPlayer(player);
 		if (team == null) {
 			if (message)
-				message(player, "§cVous n'êtes pas dans une team.");
+				message(player, Message.TOURNAMENT_TEAM_PLAYER_ERROR);
 			return;
 		}
 
@@ -921,7 +937,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 				return;
 
 			if (message)
-				message(player, "§eVous venez de quitter votre équipe.");
+				message(player, Message.TOURNAMENT_TEAM_LEAVE);
 			team.leave(player);
 			player.teleport(location);
 			clearPlayer(player);
@@ -937,7 +953,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		TournamentEvent event = new TournamentTeamLooseEvent(team, duel, player);
 		event.callEvent();
 
-		duel.message("§f" + player.getName() + " §evient d'être éliminé !");
+		duel.message(Message.TOURNAMENT_PLAYER_LOOSE.replace("%player%", player.getName()));
 		player.teleport(location);
 
 		clearPlayer(player);
@@ -947,7 +963,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			duel.heal();
 
 			Team winner = duel.getWinner();
-			winner.message("§eVous venez de gagner votre duel !");
+			winner.message(Message.TOURNAMENT_DUEL_WIN);
 			winner.setInDuel(false);
 			winner.clear();
 			winner.reMap();
@@ -963,8 +979,10 @@ public class TournamentManager extends ZUtils implements Tournament {
 			looser.teleport(location);
 
 			looser.setPosition(currentTeams--);
-			looser.message("§eVous avez perdu le tournois, votre équipe est donc disqulifiée.");
-			looser.message("§eVous êtes à la position §6" + looser.getPosition() + "§8/§6" + maxTeams);
+			Message.TOURNAMENT_DUEL_LOOSE.getMessages().forEach(e -> {
+				looser.message(e.replace("%position%", String.valueOf(looser.getPosition())).replace("%team%",
+						String.valueOf(maxTeams)));
+			});
 
 			if (!eliminatedTeams.contains(looser))
 				eliminatedTeams.add(looser);
@@ -993,7 +1011,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 			teams.forEach(Team::show);
 			arenas.forEach(Arena::clear);
-			broadcast("§eDébut de la prochaine manche dans §f10 §esecondes.");
+			broadcast(Message.TOURNAMENT_WAVE_NEXT_TIME);
 
 			isTimeBetweenWave = true;
 			new BukkitRunnable() {
@@ -1004,14 +1022,14 @@ public class TournamentManager extends ZUtils implements Tournament {
 					if (!isStart)
 						return;
 
-					startWave();
+					broadcast(Message.TOURNAMENT_WAVE_NEXT.replace("%team%", String.valueOf(teams.size())));
 
-					broadcast("§eNombre de team§7: §6%s", teams.size());
-					broadcast("§eNombre d'équipe restante: §6%s", teams.size());
 					isTimeBetweenWave = false;
 
+					startWave();
+
 				}
-			}.runTaskLater(ZPlugin.z(), 20 * 10);
+			}.runTaskLater(ZPlugin.z(), 20 * Config.timeWaveNextInSecond);
 		}
 	}
 
@@ -1033,18 +1051,24 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		if (isWaiting) {
 
+			TournamentEvent event = new TournamentStopEvent();
+			event.callEvent();
+
 			isStart = false;
 			isWaiting = false;
-			broadcast("§cLe tournois PVP vient d'être annulé.");
+			broadcast(Message.TOURNAMENT_STOP);
 			return;
 
 		}
 
 		if (isStart) {
 
+			TournamentEvent event = new TournamentStopEvent();
+			event.callEvent();
+
 			isStart = false;
 			isWaiting = false;
-			broadcast("§cLe tournois PVP vient d'être annulé.");
+			broadcast(Message.TOURNAMENT_STOP);
 			teams.forEach(e -> {
 				e.getRealPlayers().forEach(p -> {
 					p.teleport(location);
@@ -1063,6 +1087,9 @@ public class TournamentManager extends ZUtils implements Tournament {
 			message(sender, Message.TOURNAMENT_NOT_ENABLE);
 			return;
 		}
+
+		TournamentEvent event = new TournamentWaveCommandNextEvent();
+		event.callEvent();
 
 		duels.forEach(duel -> {
 

@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 import fr.maxlego08.ztournament.api.Team;
+import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 import fr.maxlego08.ztournament.zcore.utils.builder.ItemBuilder;
 
@@ -415,6 +416,11 @@ public class TeamObject extends ZUtils implements Team {
 
 		}
 		return players.size() > 0;
+	}
+	
+	@Override
+	public void message(Message message) {
+		this.message(message.getMessage());
 	}
 
 }

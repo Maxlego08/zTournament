@@ -5,6 +5,8 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import fr.maxlego08.ztournament.zcore.enums.Message;
+
 public interface Team {
 
 	/**
@@ -210,5 +212,11 @@ public interface Team {
 	 * @return
 	 */
 	boolean isValid();
+
+	/**
+	 * 
+	 * @param message
+	 */
+	void message(Message message);
 
 }

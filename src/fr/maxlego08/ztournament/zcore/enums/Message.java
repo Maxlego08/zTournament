@@ -43,9 +43,70 @@ public enum Message {
 
 	TOURNAMENT_NOT_ENABLE("§cNo tournaments in progress."),
 
+	TOURNAMENT_ENABLE("§cNo tournaments in progress."),
+
+	TOURNAMENT_ARENA_NOT_FOUND("§cCould not find the arena."),
+
+	TOURNAMENT_ARENA_DELETE("§cYou have just deleted an arena."),
+
+	TOURNAMENT_ARENA_CREATE("§2Vous venez de créer une arène."),
+
+	TOURNAMENT_LOBBY_CREATE("§2You just put the rental for the lobby."),
+
+	TOURNAMENT_ARENA_NO("§cAucune arène de disponible."),
+
+	TOURNAMENT_START_ERROR_ARENA("§cYou cannot launch tournaments without any arena."),
+
+	TOURNAMENT_START_ERROR_LOOBY("§cYou cannot launch tournaments without the lobby."),
+
+	TOURNAMENT_START_ERROR_PLAYER(
+			"§ePas assez de joueur pour commencer le tournois, vous avez encore §65 §eminutes pour créer une équipe."),
+
+	TOURNAMENT_START_ERROR_PLAYER_CANCEL("§cNot enough player, event canceled!"),
+	
+	TOURNAMENT_START_ERROR_TEAM("§cNo team, the tournament is canceled!"),
+
+	TOURNAMENT_START_TIMER("§eEncore §6%timer% §eavant le début du tournois PVP."),
+	
+	TOURNAMENT_START_FIRST_WAVE("§eDébut du tournois PVP !", "§eNombre d'équipe dans le tournois§7: §f%size%"),
+
+	TOURNAMENT_START("§eDébut d'un tournois PVP en §6%type% §edans §65 §eminutes§e.",
+			"§eFaire §f/tournois§e pour avoir toutes les commandess"),
+	
+	TOURNAMENT_WAVE_AUTO("§eYou are automatically qualified for the next round!"),
+	
+	TOURNAMENT_WAVE_START("§eNumber of duels§7: §6%duel%", "§eStart of the round §6%round% §e! May the best win !"),
+	
+	TOURNAMENT_WAVE_TIMER("§eEnd of the round §6%round% §ein §f%timer%§e."),
+	
+	TOURNAMENT_WAVE_END("§eTime is up, the next round will start..."),
+	
+	TOURNAMENT_WAVE_NEXT_TIME("§eStart of the next round in §f10 §eseconds."),
+	
+	TOURNAMENT_WAVE_NEXT("§eeNumber of remaining teams§7: §6%team%"),
+	
+	TOURNAMENT_STOP("§cThe PVP tournament has just been canceled"),
+	
+	TOURNAMENT_PLAYER_LOOSE("§f%player% §ehas just been eliminated!"),
+	
+	TOURNAMENT_DUEL_WIN("§eYou have just won your duel!"),
+	
+	TOURNAMENT_DUEL_LOOSE("§eYou lost the tournament, so your team is disqulified.", "§eYou are at position §f%position% §eof §6%team%§e."),
+	
+	TOURNAMENT_TEAM_LEAVE("§cYou just left your team."),
+	
+	TOURNAMENT_TEAM_LEAVE_ERROR("§cYou cannot leave your team during the fight."),
+	
+	TOURNAMENT_TEAM_PLAYER_ERROR("§cYou are not in a team."),
+
+	// title
+
 	TITLE_START("§f§kII§e Tournois §f§kII", "§eUn tournois §f%type% §evient de commencer !", 10, 60, 10),
 
 	TITLE_START_INFO("§f§kII§e Tournois §f§kII", "§eEncore §6%timer% §eavant le début du tournois PVP.", 10, 60, 10),
+
+	TITLE_START_ERROR_PLAYER("§cPas assez de joueur pour commencer le tournois",
+			"§cvous avez encore §f5 §cminutes pour créer une équipe.", 10, 60, 10),
 
 	;
 
@@ -113,7 +174,7 @@ public enum Message {
 	}
 
 	public List<String> getMessages() {
-		return messages;
+		return messages == null ? Arrays.asList(message) : messages;
 	}
 
 	public void setMessages(List<String> messages) {
@@ -158,6 +219,10 @@ public enum Message {
 
 	public boolean isUseTitle() {
 		return (boolean) titles.getOrDefault("isUse", "true");
+	}
+
+	public String replace(String a, String b) {
+		return message.replace(a, b);
 	}
 
 }

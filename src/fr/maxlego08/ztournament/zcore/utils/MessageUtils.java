@@ -55,7 +55,7 @@ public class MessageUtils {
 	protected void message(CommandSender player, Message message, Object... args) {
 		player.sendMessage(Message.PREFIX.msg() + " " + String.format(message.msg(), args));
 	}
-	
+
 	/**
 	 * 
 	 * @param player
@@ -75,7 +75,7 @@ public class MessageUtils {
 	protected void actionMessage(Player player, Message message, Object... args) {
 		ActionBar.sendActionBar(player, String.format(message.msg(), args));
 	}
-	
+
 	/**
 	 * 
 	 * @param player
@@ -85,7 +85,7 @@ public class MessageUtils {
 	protected void actionMessage(Player player, String message, Object... args) {
 		ActionBar.sendActionBar(player, String.format(message, args));
 	}
-	
+
 	/**
 	 * 
 	 * @param player
@@ -95,5 +95,15 @@ public class MessageUtils {
 	protected void broadcast(String message, Object... args) {
 		Bukkit.broadcastMessage(Message.PREFIX.msg() + " " + String.format(message, args));
 	}
-	
+
+	/**
+	 * 
+	 * @param player
+	 * @param message
+	 * @param args
+	 */
+	protected void broadcast(Message message, Object... args) {
+		Bukkit.broadcastMessage(Message.PREFIX.msg() + " " + String.format(message.getMessage(), args));
+	}
+
 }
