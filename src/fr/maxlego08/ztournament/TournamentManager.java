@@ -741,28 +741,28 @@ public class TournamentManager extends ZUtils implements Tournament {
 		// Verif si la team existe
 		team = getByName(name);
 		if (team != null) {
-			message(player, Message.TOURNAMENT_CREATE_ERROR_EXIT.replace("name", name));
+			message(player, Message.TOURNAMENT_CREATE_ERROR_EXIT.replace("%name%", name));
 			return;
 		}
 
 		// Verif de la taille maximal
 		if (name.length() > Config.teamNameMaxName) {
 			message(player,
-					Message.TOURNAMENT_CREATE_ERROR_NAME_MAX.replace("max", String.valueOf(Config.teamNameMaxName)));
+					Message.TOURNAMENT_CREATE_ERROR_NAME_MAX.replace("%max%", String.valueOf(Config.teamNameMaxName)));
 			return;
 		}
 
 		// Verif de la taille minimal
 		if (name.length() < Config.teamNameMinName) {
 			message(player,
-					Message.TOURNAMENT_CREATE_ERROR_NAME_MIN.replace("min", String.valueOf(Config.teamNameMinName)));
+					Message.TOURNAMENT_CREATE_ERROR_NAME_MIN.replace("%min%", String.valueOf(Config.teamNameMinName)));
 			return;
 		}
 
 		// Verif des char
 		for (char c : name.toCharArray()) {
 			if (!substanceChars.contains(String.valueOf(c))) {
-				message(player, Message.TOURNAMENT_CREATE_ERROR_NAME.replace("char", String.valueOf(c)));
+				message(player, Message.TOURNAMENT_CREATE_ERROR_NAME.replace("%char%", String.valueOf(c)));
 				return;
 			}
 		}
@@ -792,7 +792,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			nms.sendTitle(player.getPlayer(), message.getTitle(), message.getSubTitle().replace("%team%", name),
 					(int) message.getStart(), (int) message.getTime(), (int) message.getEnd());
 
-		broadcast(Message.TOURNAMENT_CREATE_TEAM_BROADCAST.replace("%player%", player.getName()).replace("team", name));
+		broadcast(Message.TOURNAMENT_CREATE_TEAM_BROADCAST.replace("%player%", player.getName()).replace("%team%", name));
 	}
 
 	@Override

@@ -16,7 +16,7 @@ public class CommandTournamentStart extends VCommand {
 	public CommandTournamentStart() {
 		this.setPermission(Permission.ZTOURNAMENT_START);
 		this.addSubCommand("start");
-		this.addRequireArg("1/2/3");
+		this.addRequireArg("type");
 		this.setTabCompletor();
 	}
 

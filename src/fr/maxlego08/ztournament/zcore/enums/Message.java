@@ -49,151 +49,151 @@ public enum Message {
 
 	TOURNAMENT_ARENA_DELETE("§cYou have just deleted an arena."),
 
-	TOURNAMENT_ARENA_CREATE("§2Vous venez de créer une arène."),
+	TOURNAMENT_ARENA_CREATE("§2You have just created an arena."),
 
 	TOURNAMENT_LOBBY_CREATE("§2You just put the rental for the lobby."),
 
-	TOURNAMENT_ARENA_NO("§cAucune arène de disponible."),
+	TOURNAMENT_ARENA_NO("§cNo arena available."),
 
 	TOURNAMENT_START_ERROR_ARENA("§cYou cannot launch tournaments without any arena."),
 
 	TOURNAMENT_START_ERROR_LOOBY("§cYou cannot launch tournaments without the lobby."),
 
 	TOURNAMENT_START_ERROR_PLAYER(
-			"§ePas assez de joueur pour commencer le tournois, vous avez encore §65 §eminutes pour créer une équipe."),
+			"§eNot enough players to start the tournament, you still have §65 §eminutes to create a team."),
 
 	TOURNAMENT_START_ERROR_PLAYER_CANCEL("§cNot enough player, event canceled!"),
-	
+
 	TOURNAMENT_START_ERROR_TEAM("§cNo team, the tournament is canceled!"),
 
-	TOURNAMENT_START_TIMER("§eEncore §6%timer% §eavant le début du tournois PVP."),
-	
-	TOURNAMENT_START_FIRST_WAVE("§eDébut du tournois PVP !", "§eNombre d'équipe dans le tournois§7: §f%size%"),
+	TOURNAMENT_START_TIMER("§eStill §6%timer% §before the start of the PVP tournament."),
 
-	TOURNAMENT_START("§eDébut d'un tournois PVP en §6%type% §edans §65 §eminutes§e.",
-			"§eFaire §f/tournois§e pour avoir toutes les commandess"),
-	
+	TOURNAMENT_START_FIRST_WAVE("§eStart of the PVP tournament !", "§eNumber of teams in the tournament§7: §f%size%"),
+
+	TOURNAMENT_START("§eBeginning of a PVP tournament in §6%type% §in §65 §minutes§e.",
+			"§eMade §f/tournois§e to have all commands"),
+
 	TOURNAMENT_WAVE_AUTO("§eYou are automatically qualified for the next round!"),
-	
+
 	TOURNAMENT_WAVE_START("§eNumber of duels§7: §6%duel%", "§eStart of the round §6%round% §e! May the best win !"),
-	
+
 	TOURNAMENT_WAVE_TIMER("§eEnd of the round §6%round% §ein §f%timer%§e."),
-	
+
 	TOURNAMENT_WAVE_END("§eTime is up, the next round will start..."),
-	
+
 	TOURNAMENT_WAVE_NEXT_TIME("§eStart of the next round in §f10 §eseconds."),
-	
+
 	TOURNAMENT_WAVE_NEXT("§eeNumber of remaining teams§7: §6%team%"),
-	
+
 	TOURNAMENT_STOP("§cThe PVP tournament has just been canceled"),
-	
+
 	TOURNAMENT_PLAYER_LOOSE("§f%player% §ehas just been eliminated!"),
-	
+
 	TOURNAMENT_DUEL_WIN("§eYou have just won your duel!"),
-	
-	TOURNAMENT_DUEL_LOOSE("§eYou lost the tournament, so your team is disqulified.", "§eYou are at position §f%position% §eof §6%team%§e."),
-	
+
+	TOURNAMENT_DUEL_LOOSE("§eYou lost the tournament, so your team is disqulified.",
+			"§eYou are at position §f%position% §eof §6%team%§e."),
+
 	TOURNAMENT_TEAM_LEAVE("§cYou just left your team."),
-	
+
 	TOURNAMENT_TEAM_LEAVE_ERROR("§cYou cannot leave your team during the fight."),
-	
+
 	TOURNAMENT_TEAM_PLAYER_ERROR("§cYou are not in a team."),
 
 	TOURNAMENT_INVITE_ERROR("§cYou cannot invite a player at this time."),
-	
+
 	TOURNAMENT_INVITE_ERROR_TEAM("§cYou don't have a team, you can't do this."),
-	
+
 	TOURNAMENT_INVITE_ERROR_PLAYER("§cYou cannot invite yourself to your own team."),
-	
+
 	TOURNAMENT_INVITE_ERROR_OWNER("§cOnly the leader of your team can invite players."),
-	
+
 	TOURNAMENT_INVITE_ERROR_TYTE("§cYou cannot invite a player for a §f1v1§c tournament."),
-	
+
 	TOURNAMENT_INVITE_REMOVE("§f%player% §e withdrawing the invitation from §6%target% §eto join your team."),
-	
+
 	TOURNAMENT_INVITE_TEAM("§f%player% §ebecomes to invite §6%target% §eto join your team."),
-	
+
 	TOURNAMENT_INVITE_INFO("§eYou have just received an invitation from §6%player% §eto join the §f%team% §eteam."),
-	
+
 	TOURNAMENT_INVITE_INFO_JSON("§eMake §f/tournament join %team% §etournaments to join this team. §8(§bClick here§8)"),
-	
+
 	TOURNAMENT_INVITE_INFO_JSON_HOVER("§7Click to join the team §f%team%§7."),
-	
+
 	TOURNAMENT_JOIN_SUCCESS_INFO("§f%player% §ejust joined your team."),
-	
+
 	TOURNAMENT_JOIN_ERROR("§cYou cannot join this team."),
-	
+
 	TOURNAMENT_JOIN_ERROR_JOIN("§cYou cannot join a team at the moment."),
-	
+
 	TOURNAMENT_JOIN_ERROR_INVITE("§cYou are not invited to join this team."),
-	
-	TOURNAMENT_JOIN_ERROR_INVENOTRY("§cYou must have an empty inventory to participate in the tournaments §8(§7Your inventory will be deleted when you join a team§8)"),
-	
+
+	TOURNAMENT_JOIN_ERROR_INVENOTRY(
+			"§cYou must have an empty inventory to participate in the tournaments §8(§7Your inventory will be deleted when you join a team§8)"),
+
 	TOURNAMENT_JOIN_ERROR_TEAM("§cNo team with the name §f%team% §cexiste."),
-	
+
 	TOURNAMENT_JOIN_ERROR_TEAM_ALREADY("§cYou have already joined a team."),
-		
+
 	TOURNAMENT_CREATE_TEAM_BROADCAST("§f%player% §ecreated the team §6%team%§e."),
-	
-	TOURNAMENT_CREATE_ERROR_INVENOTRY("§cYou must have an empty inventory to participate in the tournaments §8(§7Your inventory will be deleted when you join a team§8)"),
-	
-	
-	
+
+	TOURNAMENT_CREATE_ERROR_INVENOTRY(
+			"§cYou must have an empty inventory to participate in the tournaments §8(§7Your inventory will be deleted when you join a team§8)"),
+
 	TOURNAMENT_CREATE_ERROR_NAME_MAX("§cThe name of your team must not exceed §f%max% §ccaractères."),
-	
+
 	TOURNAMENT_CREATE_ERROR_NAME_MIN("§cThe name of your team must have at least §f%mine% §character."),
-	
-	TOURNAMENT_CREATE_ERROR_NAME("§cThe name of your team must be alphanumeric, the character §f%char% §cis not allowed."),
-	
+
+	TOURNAMENT_CREATE_ERROR_NAME(
+			"§cThe name of your team must be alphanumeric, the character §f%char% §cis not allowed."),
+
 	TOURNAMENT_CREATE_ERROR_EXIT("§cThe name §f%name% §cis already taken for a team, you must choose another one."),
-	
+
 	TOURNAMENT_CREATE_ERROR_PLAYER("§cYou already have a team, you cannot create another."),
-	
+
 	TOURNAMENT_CREATE_ERROR("§cYou cannot create a team at this time."),
-	
+
 	TOURNAMENT_WIN_ERROR("§cNobody has won the tournament event!"),
-	
+
 	TOURNAMENT_WIN("§eEvent tournois pvp terminé !", "", "§eTeam ranking"),
-	
-	TOURNAMENT_CLASSEMENT("§eThe team §6%team% §has finished §f%position% §eat tournaments."),
-	
+
+	TOURNAMENT_CLASSEMENT("§eThe team §6%team% §ehas finished §f%position% §eat tournaments."),
+
 	TOURNAMENT_CLASSEMENT_HOVER("§ePlayers§7:", "%players%"),
-	
+
 	TOURNAMENT_CLASSEMENT_HOVER_PLAYER(" §f- §f%player%"),
-	
-	TOURNAMENT_HELP("§6» §e/tournois create §f<§bnom de team§f> §8- §7Créer une nouvelle team.",
-			"§6» §e/tournois join §f<§bnom de team§f> §8- §7Rejoindre une team.",
-			"§6» §e/tournois invite §f<§bplayer§f> §8- §7Inviter un joueur.",
-			"§6» §e/tournois leave §8- §7Quitter votre team.",
-			"§6» §e/tournois version §8- §7Voir la version du plugin."
-			),
-	
-	TOURNAMENT_HELP_ADMIN(
-			"§6» §e/tournois arena §f<§bloc1§f> §f<§bloc2§f> §8- §7Créer une arène.",
-			"§6» §e/tournois delete §f<§buuid§f> §8- §7Supprimer une arène.",
-			"§6» §e/tournois list §8- §7Voir la liste des arènes.",
-			"§6» §e/tournois setlobby §8- §7Mettre la position du lobby.",
-			"§6» §e/tournois stop §8- §7Permet de stop un tournois.",
-			"§6» §e/tournois wave §8- §7Commencer la prochaine manche.",
-			"§6» §e/tournois start §f<§btype3§f> §8- §7Lancer un tournois.",
-			"§6» §e/tournois reload §8- §7Reload le plugin."
-			),
-	
-	
+
+	TOURNAMENT_HELP("§6» §e/tournament create §f<§bnom de team§f> §8- §7Create team",
+			"§6» §e/tournament join §f<§bnom de team§f> §8- §7Join team.",
+			"§6» §e/tournament invite §f<§bplayer§f> §8- §7Invite a player.",
+			"§6» §e/tournament leave §8- §7Leave your team.",
+			"§6» §e/tournament version §8- §7Show plugin version."),
+
+	TOURNAMENT_HELP_ADMIN("§6» §e/tournament arena §f<§bloc1§f> §f<§bloc2§f> §8- §7Create arena.",
+			"§6» §e/tournament delete §f<§buuid§f> §8- §7Delete arena.",
+			"§6» §e/tournament list §8- §7Show arena.",
+			"§6» §e/tournament setlobby §8- §7Set lobby position.",
+			"§6» §e/tournament stop §8- §7Shop a tournament.",
+			"§6» §e/tournament wave §8- §7Star next wave.",
+			"§6» §e/tournament start §f<§btype3§f> §8- §7Start tournament.",
+			"§6» §e/tournament reload §8- §7Reload le plugin."),
+
 	// title
 
 	TITLE_START("§f§kII§e Tournois §f§kII", "§eUn tournois §f%type% §evient de commencer !", 10, 60, 10),
-	
+
 	TITLE_JOIN_SUCCESS("§f§kII§e Congratulations §f§kII", "§eYou have just joined the team §f%team% §e!", 10, 60, 10),
-	
-	TITLE_CREATE_SUCCESS("§f§kII§e Congratulations §f§kII", "§eYou have just created a §fteam §efor the PVP tournament !", 10, 60, 10),
 
-	TITLE_START_INFO("§f§kII§e Tournament §f§kII", "§eEncore §6%timer% §eavant le début du tournois PVP.", 10, 60, 10),
-	
-	TITLE_WIN("§f§kII§e Tournament §f§kII", "§eCongratulations to the §f%team% §eteam who wins the tournament !", 10, 100, 30),
+	TITLE_CREATE_SUCCESS("§f§kII§e Congratulations §f§kII",
+			"§eYou have just created a §fteam §efor the PVP tournament !", 10, 60, 10),
 
-	TITLE_START_ERROR_PLAYER("§cPas assez de joueur pour commencer le tournois",
-			"§cvous avez encore §f5 §cminutes pour créer une équipe.", 10, 60, 10),
+	TITLE_START_INFO("§f§kII§e Tournament §f§kII", "§eStill §6%timer% §before the start of the PVP tournament.", 10, 60, 10),
+
+	TITLE_WIN("§f§kII§e Tournament §f§kII", "§eCongratulations to the §f%team% §eteam who wins the tournament !", 10,
+			100, 30),
+
+	TITLE_START_ERROR_PLAYER("§cNot enough players to start the tournament",
+			"§cyou still have §f5 §cminutes to create a team.", 10, 60, 10),
 
 	;
 
@@ -292,16 +292,16 @@ public enum Message {
 		return titles.containsKey("title");
 	}
 
-	public double getStart() {
-		return (double) titles.get("start");
+	public int getStart() {
+		return ((Number) titles.get("start")).intValue();
 	}
 
-	public double getEnd() {
-		return (double) titles.get("end");
+	public int getEnd() {
+		return ((Number) titles.get("end")).intValue();
 	}
 
-	public double getTime() {
-		return (double) titles.get("time");
+	public int getTime() {
+		return ((Number) titles.get("time")).intValue();
 	}
 
 	public boolean isUseTitle() {

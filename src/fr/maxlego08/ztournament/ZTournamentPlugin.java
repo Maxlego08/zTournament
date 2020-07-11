@@ -12,7 +12,6 @@ import fr.maxlego08.ztournament.save.Lang;
 import fr.maxlego08.ztournament.scoreboard.ScoreBoardManager;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
 import fr.maxlego08.ztournament.zcore.utils.Metrics;
-import fr.maxlego08.ztournament.zcore.utils.builder.CooldownBuilder;
 
 /**
  * System to create your plugins very simply Projet:
@@ -52,7 +51,7 @@ public class ZTournamentPlugin extends ZPlugin {
 		/* Add Saver */
 		addSave(Config.getInstance());
 		addSave(Lang.getInstance());
-		addSave(new CooldownBuilder());
+//		addSave(new CooldownBuilder());
 		addSave(tournament);
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
