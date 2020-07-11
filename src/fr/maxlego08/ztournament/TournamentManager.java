@@ -710,9 +710,32 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		this.eliminatedTeams.forEach(team -> {
 
-			TournamentEvent tournamentEvent = new TournamentTeamRewardEvent(team);
+			Reward reward = this.getReward(team.getPosition());
+
+			TournamentTeamRewardEvent tournamentEvent = new TournamentTeamRewardEvent(team, reward);
 			tournamentEvent.callEvent();
-			
+
+			if (tournamentEvent.isCancelled())
+				return;
+
+			reward = tournamentEvent.getReward();
+
+			if (reward != null) {
+
+				reward.getCommands().forEach(command -> {
+
+					String finalCommand = command.replace("%team%", team.getName());
+
+					if (finalCommand.contains("%player%")) {
+						team.getRealPlayers().forEach(player -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+								finalCommand.replace("%player%", player.getName())));
+					} else {
+						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand);
+					}
+
+				});
+
+			}
 
 		});
 
@@ -792,7 +815,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 			nms.sendTitle(player.getPlayer(), message.getTitle(), message.getSubTitle().replace("%team%", name),
 					(int) message.getStart(), (int) message.getTime(), (int) message.getEnd());
 
-		broadcast(Message.TOURNAMENT_CREATE_TEAM_BROADCAST.replace("%player%", player.getName()).replace("%team%", name));
+		broadcast(
+				Message.TOURNAMENT_CREATE_TEAM_BROADCAST.replace("%player%", player.getName()).replace("%team%", name));
 	}
 
 	@Override
@@ -1089,8 +1113,10 @@ public class TournamentManager extends ZUtils implements Tournament {
 			teams.forEach(e -> {
 				e.clear();
 				e.getRealPlayers().forEach(p -> {
-					p.teleport(location);
-					p.teleport(location);
+					if (p.isOnline()) {
+						p.getPlayer().teleport(location);
+						p.getPlayer().teleport(location);
+					}
 				});
 			});
 
@@ -1179,15 +1205,24 @@ public class TournamentManager extends ZUtils implements Tournament {
 			teams.forEach(e -> {
 				e.clear();
 				e.getRealPlayers().forEach(p -> {
-					p.teleport(location);
-					p.teleport(location);
+					if (p.isOnline()) {
+						p.getPlayer().teleport(location);
+						p.getPlayer().teleport(location);
+					}
 				});
 			});
 
 			teams.clear();
 			duels.clear();
 		}
-		
+
+	}
+
+	@Override
+	public Reward getReward(int position) {
+		return Config.rewards.stream()
+				.filter(reward -> reward.getMaxPosition() <= position && reward.getMinPosition() >= position).findAny()
+				.orElse(null);
 	}
 
 }

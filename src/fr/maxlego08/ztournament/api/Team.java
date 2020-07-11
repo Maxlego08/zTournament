@@ -3,6 +3,7 @@ package fr.maxlego08.ztournament.api;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import fr.maxlego08.ztournament.zcore.enums.Message;
@@ -160,7 +161,7 @@ public interface Team {
 	 * 
 	 * @return
 	 */
-	List<Player> getRealPlayers();
+	List<OfflinePlayer> getRealPlayers();
 
 	/**
 	 * 

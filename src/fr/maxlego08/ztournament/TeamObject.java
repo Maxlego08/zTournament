@@ -3,11 +3,13 @@ package fr.maxlego08.ztournament;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
@@ -21,7 +23,7 @@ public class TeamObject extends ZUtils implements Team {
 
 	private final String name;
 	private final int maxPlayers;
-	private final List<Player> realPlayers = new ArrayList<>();
+	private final List<OfflinePlayer> realPlayers = new ArrayList<>();
 	private List<Player> players = new ArrayList<>();
 	private final List<String> users = new ArrayList<>();
 	private final Player owner;
@@ -52,7 +54,7 @@ public class TeamObject extends ZUtils implements Team {
 	public void message(String message, Object... args) {
 		realPlayers.forEach(player -> {
 			if (player.isOnline())
-				super.message(player, message, args);
+				super.message(player.getPlayer(), message, args);
 		});
 	}
 
@@ -68,16 +70,16 @@ public class TeamObject extends ZUtils implements Team {
 	}
 
 	public void clear() {
-		players.forEach(player -> {
+		realPlayers.forEach(player -> {
 			if (player.isOnline()) {
-				player.getInventory().clear();
-				player.getInventory().setBoots(null);
-				player.getInventory().setChestplate(null);
-				player.getInventory().setLeggings(null);
-				player.getInventory().setHelmet(null);
+				player.getPlayer().getInventory().clear();
+				player.getPlayer().getInventory().setBoots(null);
+				player.getPlayer().getInventory().setChestplate(null);
+				player.getPlayer().getInventory().setLeggings(null);
+				player.getPlayer().getInventory().setHelmet(null);
 				player.getPlayer().setItemOnCursor(null);
 				player.getPlayer().getOpenInventory().getTopInventory().clear();
-				player.setGameMode(GameMode.SURVIVAL);
+				player.getPlayer().setGameMode(GameMode.SURVIVAL);
 				player.getPlayer().getActivePotionEffects().forEach(e -> {
 					player.getPlayer().removePotionEffect(e.getType());
 				});
@@ -199,11 +201,11 @@ public class TeamObject extends ZUtils implements Team {
 		realPlayers.forEach(player -> {
 			team.getRealPlayers().forEach(zPlayer -> {
 				if (player.isOnline())
-					player.showPlayer(zPlayer.getPlayer());
+					player.getPlayer().showPlayer(zPlayer.getPlayer());
 			});
 			realPlayers.forEach(currentPlayer -> {
 				if (player.isOnline())
-					player.showPlayer(currentPlayer.getPlayer());
+					player.getPlayer().showPlayer(currentPlayer.getPlayer());
 			});
 		});
 	}
@@ -227,11 +229,11 @@ public class TeamObject extends ZUtils implements Team {
 		realPlayers.forEach(player -> {
 			team.getRealPlayers().forEach(zPlayer -> {
 				if (player.isOnline())
-					player.hidePlayer(zPlayer.getPlayer());
+					player.getPlayer().hidePlayer(zPlayer.getPlayer());
 			});
 			realPlayers.forEach(currentPlayer -> {
 				if (player.isOnline())
-					player.hidePlayer(currentPlayer.getPlayer());
+					player.getPlayer().hidePlayer(currentPlayer.getPlayer());
 			});
 		});
 	}
@@ -239,8 +241,8 @@ public class TeamObject extends ZUtils implements Team {
 	public void heal() {
 		realPlayers.forEach(player -> {
 			if (player.isOnline()) {
-				player.setHealth(20.0);
-				player.setFoodLevel(20);
+				player.getPlayer().setHealth(20.0);
+				player.getPlayer().setFoodLevel(20);
 				player.getPlayer().setFireTicks(0);
 			}
 		});
@@ -269,9 +271,9 @@ public class TeamObject extends ZUtils implements Team {
 	 * @param e
 	 */
 	@SuppressWarnings("deprecation")
-	private void show(Player e) {
+	private void show(OfflinePlayer e) {
 		if (e.isOnline())
-			Bukkit.getOnlinePlayers().forEach(player -> e.showPlayer(player));
+			Bukkit.getOnlinePlayers().forEach(player -> e.getPlayer().showPlayer(player));
 	}
 
 	/**
@@ -279,9 +281,9 @@ public class TeamObject extends ZUtils implements Team {
 	 * @param e
 	 */
 	@SuppressWarnings("deprecation")
-	private void hide(Player e) {
+	private void hide(OfflinePlayer e) {
 		if (e.isOnline())
-			Bukkit.getOnlinePlayers().forEach(player -> e.hidePlayer(player));
+			Bukkit.getOnlinePlayers().forEach(player -> e.getPlayer().hidePlayer(player));
 	}
 
 	/**
@@ -360,10 +362,11 @@ public class TeamObject extends ZUtils implements Team {
 	}
 
 	public void reMap() {
-		this.players = new ArrayList<>(this.realPlayers);
+		this.players = this.realPlayers.stream().filter(e -> e.isOnline()).map(e -> e.getPlayer())
+				.collect(Collectors.toList());
 	}
 
-	public List<Player> getRealPlayers() {
+	public List<OfflinePlayer> getRealPlayers() {
 		return realPlayers;
 	}
 
@@ -404,11 +407,15 @@ public class TeamObject extends ZUtils implements Team {
 
 	public boolean isValid() {
 
-		Iterator<Player> iterator = realPlayers.iterator();
+		Iterator<OfflinePlayer> iterator = realPlayers.iterator();
 		while (iterator.hasNext()) {
 
-			Player player = iterator.next();
-			if (!player.isValid()) {
+			OfflinePlayer player = iterator.next();
+			if (!player.isOnline()) {
+				message("§f" + player.getName() + " §evient d'être disqualifé de votre équipe.");
+				players.remove(player);
+				iterator.remove();
+			} else if (player.isOnline() && !player.getPlayer().isValid()) {
 				message("§f" + player.getName() + " §evient d'être disqualifé de votre équipe.");
 				players.remove(player);
 				iterator.remove();
@@ -417,7 +424,7 @@ public class TeamObject extends ZUtils implements Team {
 		}
 		return players.size() > 0;
 	}
-	
+
 	@Override
 	public void message(Message message) {
 		this.message(message.getMessage());

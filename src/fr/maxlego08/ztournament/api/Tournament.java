@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.maxlego08.ztournament.Reward;
 import fr.maxlego08.ztournament.zcore.utils.storage.Saveable;
 
 public interface Tournament extends Saveable {
@@ -242,5 +243,12 @@ public interface Tournament extends Saveable {
 	 * 
 	 */
 	void onPluginDisable();
+
+	/**
+	 * 
+	 * @param position
+	 * @return reward
+	 */
+	Reward getReward(int position);
 	
 }
