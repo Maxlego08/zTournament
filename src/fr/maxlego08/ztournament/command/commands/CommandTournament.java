@@ -2,6 +2,8 @@ package fr.maxlego08.ztournament.command.commands;
 
 import fr.maxlego08.ztournament.ZTournamentPlugin;
 import fr.maxlego08.ztournament.command.VCommand;
+import fr.maxlego08.ztournament.zcore.enums.Message;
+import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournament extends VCommand {
@@ -26,23 +28,9 @@ public class CommandTournament extends VCommand {
 	@Override
 	protected CommandType perform(ZTournamentPlugin main) {
 
-		message(sender, "§6» §e/tournois create §f<§bnom de team§f> §8- §7Créer une nouvelle team.");
-		message(sender, "§6» §e/tournois join §f<§bnom de team§f> §8- §7Rejoindre une team.");
-		message(sender, "§6» §e/tournois invite §f<§bplayer§f> §8- §7Inviter un joueur.");
-		message(sender, "§6» §e/tournois leave §8- §7Quitter votre team.");
-		message(sender, "§6» §e/tournois version §8- §7Voir la version du plugin.");
-
-		if (sender.hasPermission("admin.tournamen")) {
-
-			message(sender, "§6» §e/tournois arena §f<§bloc1§f> §f<§bloc2§f> §8- §7Créer une arène.");
-			message(sender, "§6» §e/tournois delete §f<§buuid§f> §8- §7Supprimer une arène.");
-			message(sender, "§6» §e/tournois list §8- §7Voir la liste des arènes.");
-			message(sender, "§6» §e/tournois setlobby §8- §7Mettre la position du lobby.");
-			message(sender, "§6» §e/tournois stop §8- §7Permet de stop un tournois.");
-			message(sender, "§6» §e/tournois wave §8- §7Commencer la prochaine manche.");
-			message(sender, "§6» §e/tournois start §f<§btype3§f> §8- §7Lancer un tournois.");
-			message(sender, "§6» §e/tournois reload §8- §7Reload le plugin.");
-		}
+		Message.TOURNAMENT_HELP.getMessages().forEach(m -> message(sender, m));
+		if (sender.hasPermission(Permission.ZTOURNAMENT_HELP.getPermission())) 
+			Message.TOURNAMENT_HELP_ADMIN.getMessages().forEach(m -> message(sender, m));
 
 		return CommandType.SUCCESS;
 	}

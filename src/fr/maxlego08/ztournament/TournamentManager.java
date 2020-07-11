@@ -639,7 +639,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public void end() {
 		if (teams.size() == 0) {
-			broadcast("§ePersonne n'a gagné l'event tournois !");
+			broadcast(Message.TOURNAMENT_WIN_ERROR);
 			return;
 		}
 
@@ -663,42 +663,56 @@ public class TournamentManager extends ZUtils implements Tournament {
 		this.duels.clear();
 		this.wave = 0;
 
-		broadcast("§eEvent tournois pvp terminé !");
+		Message message = Message.TITLE_WIN;
+		if (message.isUseTitle()) {
+			String sub = message.getSubTitle().replace("%team%", winner.getName());
+			Bukkit.getOnlinePlayers().forEach(player -> nms.sendTitle(player, message.getTitle(), sub,
+					(int) message.getStart(), (int) message.getTime(), (int) message.getEnd()));
+		}
 
-		if (Config.sendMessageInTitle)
-			Bukkit.getOnlinePlayers().forEach(player -> nms.sendTitle(player, "§f§kII§e Event tournois §f§kII",
-					"§eFélicitation à l'équipe §f" + winner.getName() + "§e qui gagne le tournois !", 10, 20 * 5, 10));
+		Message.TOURNAMENT_WIN.getMessages().forEach(e -> broadcast(e));
 
-		Bukkit.broadcastMessage("");
-		broadcast("§eClassement des équipes§7:");
-		Pagination<Team> pagination = new Pagination<>();
-		pagination.paginateReverse(eliminatedTeams, 3, 1).forEach(team -> {
+		if (Config.showRanking) {
+			Pagination<Team> pagination = new Pagination<>();
+			pagination.paginateReverse(eliminatedTeams, 3, 1).forEach(team -> {
 
-			String p = team.getPosition() == 1 ? "§4§lpremière"
-					: team.getPosition() == 2 ? "§c§ldeuxième" : "§6§ltroisième";
-			String msg = "§eL'équipe §6" + team.getName() + " §ea terminé §f" + p + " §eau tournois !";
+				String position = Config.rankingPosition.getOrDefault(team.getPosition(),
+						"Impossible de trouver la position, message de vérifier votre configuration.");
 
-			TextComponent component = buildTextComponent(msg);
+				String msg = Message.TOURNAMENT_CLASSEMENT.replace("%team%", team.getName()).replace("%position%",
+						position);
 
-			List<String> strings = new ArrayList<>();
-			strings.add("§eJoueurs§7:");
-			team.getRealPlayers().forEach(pp -> {
-				if (pp != null && pp.isOnline())
-					strings.add(" §7- §f" + pp.getName());
+				TextComponent component = buildTextComponent(msg);
+
+				List<String> strings = new ArrayList<>();
+				List<String> classementMessage = Message.TOURNAMENT_CLASSEMENT_HOVER.getMessages();
+				classementMessage.forEach(m -> {
+
+					if (m.equals("%players%"))
+						team.getRealPlayers().forEach(pp -> {
+							if (pp != null)
+								strings.add(
+										Message.TOURNAMENT_CLASSEMENT_HOVER_PLAYER.replace("%player%", pp.getName()));
+						});
+					else
+						strings.add(m);
+
+				});
+
+				setHoverMessage(component, strings);
+
+				Bukkit.getOnlinePlayers().forEach(bukkitPlayer -> {
+					bukkitPlayer.spigot().sendMessage(component);
+				});
+
 			});
-
-			setHoverMessage(component, strings);
-
-			Bukkit.getOnlinePlayers().forEach(bukkitPlayer -> {
-				bukkitPlayer.spigot().sendMessage(component);
-			});
-
-		});
+		}
 
 		this.eliminatedTeams.forEach(team -> {
 
-			TournamentEvent event2 = new TournamentTeamRewardEvent(team);
-			event2.callEvent();
+			TournamentEvent tournamentEvent = new TournamentTeamRewardEvent(team);
+			tournamentEvent.callEvent();
+			
 
 		});
 
@@ -708,55 +722,54 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public void createTeam(Player player, String name) {
 		if (isStart && !isWaiting) {
-			message(player, "§cVous ne pouvez pas créer de team pour le moment.");
+			message(player, Message.TOURNAMENT_CREATE_ERROR);
 			return;
 		}
 
 		if (!isWaiting) {
-			message(player, "§cVous ne pouvez pas créer de team pour le moment.");
+			message(player, Message.TOURNAMENT_CREATE_ERROR);
 			return;
 		}
 
 		// Verif si le mec a déjà une team
 		Team team = getByPlayer(player);
 		if (team != null) {
-			message(player, "§cVous avez déjà une équipe, vous ne pouvez pas en créer une autre.");
+			message(player, Message.TOURNAMENT_CREATE_ERROR_PLAYER);
 			return;
 		}
 
 		// Verif si la team existe
 		team = getByName(name);
 		if (team != null) {
-			message(player, "§cLe nom §f%s§c est déjà pris pour une team, vous devez en choisir un autre.", name);
+			message(player, Message.TOURNAMENT_CREATE_ERROR_EXIT.replace("name", name));
 			return;
 		}
 
 		// Verif de la taille maximal
 		if (name.length() > Config.teamNameMaxName) {
-			message(player, "§cLe nom de votre team ne doit pas dépasser les §f%s §ccaractères.",
-					Config.teamNameMaxName);
+			message(player,
+					Message.TOURNAMENT_CREATE_ERROR_NAME_MAX.replace("max", String.valueOf(Config.teamNameMaxName)));
 			return;
 		}
 
 		// Verif de la taille minimal
 		if (name.length() < Config.teamNameMinName) {
-			message(player, "§cLe nom de votre team doit avoir au minimum §f3 §ccaractères.");
+			message(player,
+					Message.TOURNAMENT_CREATE_ERROR_NAME_MIN.replace("min", String.valueOf(Config.teamNameMinName)));
 			return;
 		}
 
 		// Verif des char
 		for (char c : name.toCharArray()) {
 			if (!substanceChars.contains(String.valueOf(c))) {
-				message(player, "§cLe nom de faction doit être alphanumérique, le caractère §f%s§c n'est pas autorié.",
-						c);
+				message(player, Message.TOURNAMENT_CREATE_ERROR_NAME.replace("char", String.valueOf(c)));
 				return;
 			}
 		}
 
 		// Verif de l'inventaire
 		if (inventoryHasItem(player)) {
-			message(player,
-					"§cVous devez avoir un inventaire vide pour participer au tournois §8(§7Votre inventaire va être supprimer lorsque vous allez créer votre équipe§8)");
+			message(player, Message.TOURNAMENT_CREATE_ERROR_INVENOTRY);
 			return;
 		}
 
@@ -774,43 +787,43 @@ public class TournamentManager extends ZUtils implements Tournament {
 		player.teleport(location);
 		clearPlayer(player);
 
-		if (Config.sendMessageInTitle)
-			nms.sendTitle(player.getPlayer(), "§f§kII§e Félicitation §f§kII",
-					"§eVous venez de créer une team pour le tournois PVP", 10, 30, 10);
+		Message message = Message.TITLE_CREATE_SUCCESS;
+		if (message.isUseTitle())
+			nms.sendTitle(player.getPlayer(), message.getTitle(), message.getSubTitle().replace("%team%", name),
+					(int) message.getStart(), (int) message.getTime(), (int) message.getEnd());
 
-		broadcast("§f%s §evient de créer la team §6%s§e.", player.getName(), name);
+		broadcast(Message.TOURNAMENT_CREATE_TEAM_BROADCAST.replace("%player%", player.getName()).replace("team", name));
 	}
 
 	@Override
 	public void joinTeam(Player player, String name) {
 		if (isStart && !isWaiting) {
-			message(player, "§cVous ne pouvez pas créer de team pour le moment.");
+			message(player, Message.TOURNAMENT_JOIN_ERROR_JOIN);
 			return;
 		}
 
 		Team team = getByPlayer(player);
 		if (team != null) {
-			message(player, "§cVous avez déjà rejoins une équipe. Vous ne pouvez pas rejoindre §f%s§c.", name);
+			message(player, Message.TOURNAMENT_JOIN_ERROR_TEAM_ALREADY.replace("%team%", name));
 			return;
 		}
 
 		team = getByName(name);
 		if (team == null) {
-			message(player, "§cAucune team avec le nom §f%s §cexiste.", name);
+			message(player, Message.TOURNAMENT_JOIN_ERROR_TEAM.replace("%team%", name));
 			return;
 		}
 
 		if (inventoryHasItem(player)) {
 
-			message(player,
-					"§cVous devez avoir un inventaire vide pour participer au tournois §8(§7Votre inventaire va être supprimer lorsque vous allez rejoindre une équipe§8)");
+			message(player, Message.TOURNAMENT_JOIN_ERROR_INVENOTRY);
 
 			return;
 		}
 
 		if (!team.isInvite(player)) {
 
-			message(player, "§cVous n'êtes pas inviter à rejoindre cette équipe.");
+			message(player, Message.TOURNAMENT_JOIN_ERROR_INVITE);
 
 			return;
 		}
@@ -823,7 +836,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		if (!joinTeamEvent.isCanJoin()) {
 
-			message(player, "§cVous ne pouvez pas rejoindre cette team.");
+			message(player, Message.TOURNAMENT_JOIN_ERROR);
 
 		} else {
 
@@ -833,11 +846,14 @@ public class TournamentManager extends ZUtils implements Tournament {
 			if (event.isCancelled())
 				return;
 
-			team.message("§f%s §evient de rejoindre votre team !", player.getName());
+			team.message(Message.TOURNAMENT_JOIN_SUCCESS_INFO.replace("%player%", player.getName()));
 			player.teleport(location);
 			clearPlayer(player);
-			nms.sendTitle(player.getPlayer(), "§f§kII§e Félicitation §f§kII",
-					"§eVous venez de rejoindre la team §6" + name + "§e !", 10, 30, 10);
+
+			Message message = Message.TITLE_JOIN_SUCCESS;
+			if (message.isUseTitle())
+				nms.sendTitle(player.getPlayer(), message.getTitle(), message.getSubTitle().replace("%team%", name),
+						(int) message.getStart(), (int) message.getTime(), (int) message.getEnd());
 
 		}
 	}
@@ -845,41 +861,40 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public void invitePlayer(Player player, Player target) {
 		if (isStart && !isWaiting) {
-			message(player, "§cVous ne pouvez pas inviter de joueur pour le moment.");
+			message(player, Message.TOURNAMENT_INVITE_ERROR);
 			return;
 		}
 
 		if (!isWaiting) {
-			
-			message(player, "§cVous ne pouvez pas inviter de joueur pour le moment.");
+			message(player, Message.TOURNAMENT_INVITE_ERROR);
 			return;
 		}
 
 		Team team = getByPlayer(player);
 		if (team == null) {
-			message(player, "§cVous n'avez pas d'équipe, vous ne pouvez pas faire ceci.");
+			message(player, Message.TOURNAMENT_INVITE_ERROR_TEAM);
 			return;
 		}
 
 		if (player.getUniqueId().equals(target.getUniqueId())) {
-			message(player, "§cVous ne pouvez pas vous inviter dans votre propre équipe.");
+			message(player, Message.TOURNAMENT_INVITE_ERROR_PLAYER);
 			return;
 		}
 
 		if (!team.isOwner(player)) {
-			message(player, "§cSeul le chef de votre équipe peut inviter des joueurs.");
+			message(player, Message.TOURNAMENT_INVITE_ERROR_OWNER);
 			return;
 		}
 
 		if (type.equals(TournoisType.V1)) {
-			message(player, "§cVous ne pouvez pas inviter de joueur pour un tournois §f1v1§c.");
+			message(player, Message.TOURNAMENT_INVITE_ERROR_TYTE);
 			return;
 		}
 
 		if (team.isInvite(target)) {
 			team.removeInvite(target);
-			team.message("§f%s §evient de retirer l'invitation de §6%s §eà rejoindre votre équipe.", player.getName(),
-					target.getName());
+			team.message(Message.TOURNAMENT_INVITE_REMOVE.replace("%player%", player.getName()).replace("%target%",
+					target.getName()));
 			return;
 		}
 
@@ -890,14 +905,16 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 
 		team.invite(target);
-		team.message("§f%s §evient d'inviter §6%s §eà rejoindre votre équipe.", player.getName(), target.getName());
-		message(target, "§eVous venez de reçevoir une inventation de §6%s §epour rejoindre l'équipe §f%s§e.",
-				player.getName(), team.getName());
+		team.message(Message.TOURNAMENT_INVITE_TEAM.replace("%player%", player.getName()).replace("%target%",
+				target.getName()));
 
-		TextComponent component = buildTextComponent("§eFaite §f/tournois §fjoin §f" + team.getName()
-				+ " §epour §erejoindre §ecette §eéquipe§e. §8(§bClique §bici§8)");
+		team.message(
+				Message.TOURNAMENT_INVITE_INFO.replace("%player%", player.getName()).replace("%team%", team.getName()));
+
+		TextComponent component = buildTextComponent(
+				Message.TOURNAMENT_INVITE_INFO_JSON.replace("%team%", team.getName()));
 		setClickAction(component, Action.RUN_COMMAND, "/tournois join " + team.getName());
-		setHoverMessage(component, "§7Clique pour rejoindre l'équipe §f" + team.getName());
+		setHoverMessage(component, Message.TOURNAMENT_INVITE_INFO_JSON_HOVER.replace("%team%", team.getName()));
 
 		target.spigot().sendMessage(component);
 	}
