@@ -45,9 +45,9 @@ public class Config implements Saveable {
 		rankingPosition.put(5, "§bfive");
 		
 		rewards.add(new Reward(1, 1, Arrays.asList("bc %team% is strong")));
-		rewards.add(new Reward(2, 2, Arrays.asList("bc %team% is not really strong")));
-		rewards.add(new Reward(5, 3, Arrays.asList("bc %team% is bad")));
-		rewards.add(new Reward(10, 6, Arrays.asList("bc %team% is poop")));
+		rewards.add(new Reward(2, 2, Arrays.asList("bc %player% is not really strong")));
+		rewards.add(new Reward(3, 5, Arrays.asList("bc %team% is bad")));
+		rewards.add(new Reward(6, 10, Arrays.asList("bc %team% is poop")));
 		
 	}
 

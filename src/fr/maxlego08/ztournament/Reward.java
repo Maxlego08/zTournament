@@ -6,8 +6,8 @@ import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 
 public class Reward extends ZUtils{
 
-	private final int maxPosition;
 	private final int minPosition;
+	private final int maxPosition;
 	private final List<String> commands;
 
 	/**
@@ -15,7 +15,7 @@ public class Reward extends ZUtils{
 	 * @param minPosition
 	 * @param commands
 	 */
-	public Reward(int maxPosition, int minPosition, List<String> commands) {
+	public Reward(int minPosition, int maxPosition, List<String> commands) {
 		super();
 		this.maxPosition = maxPosition;
 		this.minPosition = minPosition;
