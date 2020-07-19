@@ -251,4 +251,16 @@ public interface Tournament extends Saveable {
 	 */
 	Reward getReward(int position);
 	
+	/**
+	 * 
+	 * @return kits manager
+	 */
+	Kits getKits();
+	
+	/**
+	 * 
+	 * @return current kit use
+	 */
+	Kit getKit();
+	
 }

@@ -2,6 +2,7 @@ package fr.maxlego08.ztournament;
 
 import org.bukkit.plugin.ServicePriority;
 
+import fr.maxlego08.ztournament.api.Kits;
 import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.command.CommandManager;
 import fr.maxlego08.ztournament.command.commands.CommandTournament;
@@ -22,7 +23,8 @@ import fr.maxlego08.ztournament.zcore.utils.Metrics;
  */
 public class ZTournamentPlugin extends ZPlugin {
 
-	private final Tournament tournament = new TournamentManager();
+	private Kits kits;
+	private Tournament tournament;
 
 	@Override
 	public void onEnable() {
@@ -37,6 +39,9 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		scoreboardManager = new ScoreBoardManager(1000);
 
+		kits = new KitManager();
+		tournament = new TournamentManager(kits);
+		
 		getServer().getServicesManager().register(Tournament.class, tournament, this, ServicePriority.High);
 
 		
@@ -53,6 +58,7 @@ public class ZTournamentPlugin extends ZPlugin {
 		addSave(Lang.getInstance());
 //		addSave(new CooldownBuilder());
 		addSave(tournament);
+		addSave(kits);
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
