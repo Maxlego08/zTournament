@@ -3,6 +3,8 @@ package fr.maxlego08.ztournament.zcore.enums;
 public enum Inventory {
 
 	INVENTORY_TEST(1),
+	INVENTORY_KIT_CREATE(2),
+	INVENTORY_KIT_SHOW(3),
 	
 	;
 	

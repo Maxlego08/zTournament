@@ -3,16 +3,21 @@ package fr.maxlego08.ztournament;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.ztournament.api.Kit;
 import fr.maxlego08.ztournament.api.Kits;
 import fr.maxlego08.ztournament.exceptions.KitCreateException;
+import fr.maxlego08.ztournament.zcore.enums.Inventory;
+import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
@@ -160,7 +165,67 @@ public class KitManager extends ZUtils implements Kits {
 
 	@Override
 	public Kit getKit(String name) {
-		return kits.getOrDefault(name, null);
+		return kits.values().stream().filter(e -> e.getName().equalsIgnoreCase(name)).findAny().orElse(null);
+	}
+
+	@Override
+	public boolean existKit(String name) {
+		return kits.keySet().stream().filter(e -> e.equalsIgnoreCase(name)).findAny().isPresent();
+	}
+
+	@Override
+	public void createKit(CommandSender sender, String name) {
+
+		if (existKit(name)) {
+			message(sender, Message.TOURNAMENT_KIT_ALREADY_EXIST.replace("%name%", name));
+			return;
+		}
+
+		Kit kit = new fr.maxlego08.ztournament.Kit(name, null, null, null, null, new HashMap<>());
+		kits.put(name, kit);
+		message(sender, Message.TOURNAMENT_KIT_CREATE.replace("%name%", name));
+
+	}
+
+	@Override
+	public void editKit(Player player, String name) {
+
+		if (!existKit(name)) {
+			message(player, Message.TOURNAMENT_KIT_NOT_EXIST.replace("%name%", name));
+			return;
+		}
+
+		createInventory(player, Inventory.INVENTORY_KIT_CREATE, 1, getKit(name));
+
+	}
+
+	@Override
+	public void showKit(Player player, String name) {
+		if (!existKit(name)) {
+			message(player, Message.TOURNAMENT_KIT_NOT_EXIST.replace("%name%", name));
+			return;
+		}
+		
+		createInventory(player, Inventory.INVENTORY_KIT_SHOW, 1, getKit(name));
+	}
+
+	@Override
+	public void deleteKit(CommandSender sender, String name) {
+		if (!existKit(name)) {
+			message(sender, Message.TOURNAMENT_KIT_NOT_EXIST.replace("%name%", name));
+			return;
+		}
+		
+		Kit kit = getKit(name);
+		kits.remove(kit.getName());
+		
+		message(sender, Message.TOURNAMENT_KIT_DELETE.replace("%name%", name));
+	}
+
+	@Override
+	public List<String> getNames() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

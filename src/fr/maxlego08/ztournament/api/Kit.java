@@ -35,11 +35,41 @@ public interface Kit {
 	 * @return
 	 */
 	ItemStack getBoots();
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	Map<Integer, ItemStack> getItems();
+
+	/**
+	 * 
+	 * @param itemStack
+	 */
+	void setLeggings(ItemStack itemStack);
+
+	/**
+	 * 
+	 * @param itemStack
+	 */
+	void setBoots(ItemStack itemStack);
+
+	/**
+	 * 
+	 * @param itemStack
+	 */
+	void setChestplate(ItemStack itemStack);
+
+	/**
+	 * 
+	 * @param itemStack
+	 */
+	void setHelmet(ItemStack itemStack);
+
+	/**
+	 * 
+	 * @param items
+	 */
+	void setItems(Map<Integer, ItemStack> items);
 
 }
