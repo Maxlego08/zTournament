@@ -2,9 +2,9 @@ package fr.maxlego08.ztournament;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -68,7 +68,7 @@ public class TournamentListener extends ListenerAdapter {
 	}
 
 	@Override
-	public void onPlayerDamage(EntityDamageByEntityEvent event, Player player) {
+	public void onPlayerDamage(EntityDamageEvent event, DamageCause cause, double damage, Player player) {
 
 		if (tournament.isStart() && !tournament.isWaiting() && player.getHealth() - event.getFinalDamage() <= 0) {
 			Team team = tournament.getByPlayer(player);
@@ -88,29 +88,23 @@ public class TournamentListener extends ListenerAdapter {
 	}
 
 	@Override
-	public void onDamageByEntity(EntityDamageByEntityEvent event, DamageCause cause, double damage,
-			LivingEntity damager, LivingEntity entity) {
+	public void onPlayerDamage(EntityDamageByEntityEvent event, DamageCause cause, double damage, Player damager,
+			Player player) {
 
 		if (tournament.isStart() && !tournament.isWaiting()) {
 
-			if (entity instanceof Player && damager instanceof Player) {
+			Team team = tournament.getByPlayer(player);
 
-				Player player = (Player) entity;
-				Player player2 = (Player) damager;
+			if (team == null)
+				return;
 
-				Team team = tournament.getByPlayer(player);
+			if (team.contains(damager)) {
 
-				if (team == null)
-					return;
+				event.setCancelled(true);
+				actionMessage(player, "§eVous ne pouvez pas faire des dégâts à un membre de votre équipe.");
 
-				if (team.contains(player2)) {
-
-					event.setCancelled(true);
-					actionMessage(player, "§eVous ne pouvez pas faire des dégâts à un membre de votre équipe.");
-
-				}
-
-			}
+			} else
+				event.setCancelled(false);
 
 		}
 	}
