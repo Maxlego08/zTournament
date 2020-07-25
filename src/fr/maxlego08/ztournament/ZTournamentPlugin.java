@@ -7,6 +7,7 @@ import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.command.CommandManager;
 import fr.maxlego08.ztournament.command.commands.CommandTournament;
 import fr.maxlego08.ztournament.inventory.InventoryManager;
+import fr.maxlego08.ztournament.inventory.inventories.InventoryKitEdit;
 import fr.maxlego08.ztournament.inventory.inventories.InventoryKitShow;
 import fr.maxlego08.ztournament.listener.AdapterListener;
 import fr.maxlego08.ztournament.save.Config;
@@ -50,6 +51,7 @@ public class ZTournamentPlugin extends ZPlugin {
 		registerCommand("tournament", new CommandTournament(), "tournois");
 		
 		registerInventory(Inventory.INVENTORY_KIT_SHOW, new InventoryKitShow());
+		registerInventory(Inventory.INVENTORY_KIT_CREATE, new InventoryKitEdit());
 		
 		/* Add Listener */
 

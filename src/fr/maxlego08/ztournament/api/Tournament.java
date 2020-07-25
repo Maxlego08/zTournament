@@ -132,7 +132,7 @@ public interface Tournament extends Saveable {
 	 * @param sender
 	 * @param type
 	 */
-	void startTournois(CommandSender sender, TournoisType type);
+	void startTournois(CommandSender sender, TournoisType type, Kit kit);
 
 	/**
 	 * 

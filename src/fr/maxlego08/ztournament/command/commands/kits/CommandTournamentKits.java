@@ -14,6 +14,9 @@ public class CommandTournamentKits extends VCommand {
 		this.addSubCommand("kit");
 		this.addSubCommand(new CommandTournamentKitsList());
 		this.addSubCommand(new CommandTournamentKitsShow());
+		this.addSubCommand(new CommandTournamentKitsCreate());
+		this.addSubCommand(new CommandTournamentKitsEdit());
+		this.addSubCommand(new CommandTournamentKitsDelete());
 	}
 
 	@Override

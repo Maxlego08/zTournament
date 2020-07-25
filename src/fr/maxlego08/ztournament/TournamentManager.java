@@ -353,7 +353,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	}
 
 	@Override
-	public void startTournois(CommandSender sender, TournoisType type) {
+	public void startTournois(CommandSender sender, TournoisType type, Kit kit) {
 
 		if (isStart || isWaiting) {
 			message(sender, Message.TOURNAMENT_ENABLE);
@@ -370,15 +370,19 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		TournamentStartEvent event = new TournamentStartEvent(type);
+		this.kit = kit;
+
+		TournamentStartEvent event = new TournamentStartEvent(type, kit);
 		event.callEvent();
 
 		if (event.isCancelled())
 			return;
 
+		this.kit = event.getKit();
+		this.type = event.getType();
+
 		this.isStart = true;
 		this.isWaiting = true;
-		this.type = type;
 		this.asNewTimer = false;
 
 		this.duels.clear();
@@ -802,7 +806,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		TournamentTeamCreateEvent event = new TournamentTeamCreateEvent(new TeamObject(name, type.getMax(), player),
+		TournamentTeamCreateEvent event = new TournamentTeamCreateEvent(new TeamObject(name, type.getMax(), player, kit),
 				player, name);
 		event.callEvent();
 
@@ -811,7 +815,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		name = event.getName();
 
-		team = new TeamObject(name, type.getMax(), player);
+		team = new TeamObject(name, type.getMax(), player, kit);
 		this.teams.add(team);
 		player.teleport(location);
 		clearPlayer(player);
