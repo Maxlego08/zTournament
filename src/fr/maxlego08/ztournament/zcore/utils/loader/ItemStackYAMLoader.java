@@ -16,6 +16,7 @@ import fr.maxlego08.ztournament.exceptions.ItemEnchantException;
 import fr.maxlego08.ztournament.exceptions.ItemFlagException;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
+import fr.maxlego08.ztournament.zcore.utils.ItemDecoder;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 
 public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack> {
@@ -33,9 +34,13 @@ public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack> {
 
 		Material material = getMaterial(id);
 
-		ItemStack item = new ItemStack(material, amount, (byte) data);
+		ItemStack item = new ItemStack(material, amount);
 
-		item.setDurability(durability);
+		if (data != 0)
+			item = new ItemStack(material, amount, (byte) data);
+
+		if (durability != 0)
+			item.setDurability(durability);
 
 		ItemMeta meta = item.getItemMeta();
 
@@ -95,7 +100,7 @@ public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack> {
 		List<String> flags = configuration.getStringList(path + "flags");
 
 		// Permet de charger les différents flags
-		if (flags.size() != 0) {
+		if (flags.size() != 0 && ItemDecoder.getNMSVersion() != 1.7) {
 
 			for (String flagString : flags) {
 
@@ -130,15 +135,18 @@ public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack> {
 		}
 
 		configuration.set(path + "id", item.getType().getId());
-		configuration.set(path + "data", item.getData().getData());
-		configuration.set(path + "amount", item.getAmount());
-		configuration.set(path + "durability", item.getDurability());
+		if (item.getData().getData() != 0)
+			configuration.set(path + "data", item.getData().getData());
+		if (item.getAmount() > 1)
+			configuration.set(path + "amount", item.getAmount());
+		if (item.getDurability() != 0)
+			configuration.set(path + "durability", item.getDurability());
 		ItemMeta meta = item.getItemMeta();
 		if (meta.hasDisplayName())
 			configuration.set(path + "name", meta.getDisplayName().replace("&", "§"));
 		if (meta.hasLore())
 			configuration.set(path + "lore", colorReverse(meta.getLore()));
-		if (meta.getItemFlags().size() != 0)
+		if (ItemDecoder.getNMSVersion() != 1.7 && meta.getItemFlags().size() != 0)
 			configuration.set(path + "flags",
 					meta.getItemFlags().stream().map(flag -> flag.name()).collect(Collectors.toList()));
 		if (meta.hasEnchants()) {

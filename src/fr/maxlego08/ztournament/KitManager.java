@@ -2,14 +2,15 @@ package fr.maxlego08.ztournament;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -21,6 +22,7 @@ import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
+import fr.maxlego08.ztournament.zcore.utils.builder.ItemBuilder;
 import fr.maxlego08.ztournament.zcore.utils.loader.ItemStackYAMLoader;
 import fr.maxlego08.ztournament.zcore.utils.loader.Loader;
 import fr.maxlego08.ztournament.zcore.utils.storage.Persist;
@@ -47,9 +49,8 @@ public class KitManager extends ZUtils implements Kits {
 		YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 		Loader<ItemStack> loader = new ItemStackYAMLoader();
 
+		AtomicInteger integer = new AtomicInteger(1);
 		kits.forEach((name, kit) -> {
-
-			AtomicInteger integer = new AtomicInteger(1);
 
 			String path = "kits." + integer.getAndIncrement() + ".";
 
@@ -119,10 +120,10 @@ public class KitManager extends ZUtils implements Kits {
 			if (name == null || name.length() == 1)
 				throw new KitCreateException("Cannot create kit witout name (kits." + kitId + ".name is null)");
 
-			ItemStack helmet = loader.load(configuration, "kits." + kitId + ".helmet");
-			ItemStack chestplate = loader.load(configuration, "kits." + kitId + ".chestplate");
-			ItemStack leggings = loader.load(configuration, "kits." + kitId + ".leggings");
-			ItemStack boots = loader.load(configuration, "kits." + kitId + ".boots");
+			ItemStack helmet = loader.load(configuration, "kits." + kitId + ".helmet.");
+			ItemStack chestplate = loader.load(configuration, "kits." + kitId + ".chestplate.");
+			ItemStack leggings = loader.load(configuration, "kits." + kitId + ".leggings.");
+			ItemStack boots = loader.load(configuration, "kits." + kitId + ".boots.");
 
 			Map<Integer, ItemStack> itemstacks = new HashMap<>();
 
@@ -152,14 +153,48 @@ public class KitManager extends ZUtils implements Kits {
 		kits.clear();
 
 		Map<Integer, ItemStack> items = new HashMap<>();
-		items.put(0, new ItemStack(Material.IRON_SWORD));
-		items.put(1, new ItemStack(Material.GOLDEN_APPLE, 8));
+		items.put(0, new ItemStack(getMaterial(272)));
+		items.put(1, new ItemStack(getMaterial(261)));
+		items.put(2, new ItemStack(getMaterial(322), 2));
+		items.put(3, new ItemStack(getMaterial(320), 9));
+		items.put(4, new ItemBuilder(getMaterial(373), 1, 81923).build());
 
-		Kit kit = new fr.maxlego08.ztournament.Kit("default", new ItemStack(Material.LEATHER_HELMET),
-				new ItemStack(Material.LEATHER_CHESTPLATE), new ItemStack(Material.LEATHER_LEGGINGS),
-				new ItemStack(Material.LEATHER_BOOTS), items);
+		items.put(9, new ItemStack(getMaterial(262), 8));
+
+		Kit kit = new fr.maxlego08.ztournament.Kit("default", new ItemStack(getMaterial(298)),
+				new ItemStack(getMaterial(299)), new ItemStack(getMaterial(300)), new ItemStack(getMaterial(301)),
+				items);
 
 		kits.put("default", kit);
+
+		
+		// 2
+		items = new HashMap<>();
+		items.put(0, new ItemBuilder(getMaterial(276)).addEnchant(Enchantment.DAMAGE_ALL, 1).build());
+		items.put(1, new ItemBuilder(getMaterial(261)).addEnchant(Enchantment.ARROW_DAMAGE, 2).build());
+		items.put(2, new ItemStack(getMaterial(322), 4));
+		items.put(3, new ItemStack(getMaterial(400), 13));
+		items.put(4, new ItemBuilder(getMaterial(373), 1, 16421).build());
+		items.put(5, new ItemBuilder(getMaterial(373), 1, 16421).build());
+		items.put(6, new ItemBuilder(getMaterial(373), 1, 16421).build());
+		items.put(7, new ItemBuilder(getMaterial(373), 1, 16421).build());
+		items.put(8, new ItemBuilder(getMaterial(373), 1, 16421).build());
+		items.put(9, new ItemBuilder(getMaterial(373), 1, 8226).build());
+		items.put(10, new ItemBuilder(getMaterial(373), 1, 8226).build());
+
+		items.put(24, new ItemStack(getMaterial(262), 16));
+
+		ItemStack helmet = new ItemBuilder(getMaterial(306)).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+				.build();
+		ItemStack chestplate = new ItemBuilder(getMaterial(307)).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+				.build();
+		ItemStack leggings = new ItemBuilder(getMaterial(308)).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+				.build();
+		ItemStack boots = new ItemBuilder(getMaterial(309)).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+
+		kit = new fr.maxlego08.ztournament.Kit("iron", helmet, chestplate, leggings, boots, items);
+
+		kits.put("iron", kit);
 
 	}
 
@@ -205,7 +240,7 @@ public class KitManager extends ZUtils implements Kits {
 			message(player, Message.TOURNAMENT_KIT_NOT_EXIST.replace("%name%", name));
 			return;
 		}
-		
+
 		createInventory(player, Inventory.INVENTORY_KIT_SHOW, 1, getKit(name));
 	}
 
@@ -215,17 +250,16 @@ public class KitManager extends ZUtils implements Kits {
 			message(sender, Message.TOURNAMENT_KIT_NOT_EXIST.replace("%name%", name));
 			return;
 		}
-		
+
 		Kit kit = getKit(name);
 		kits.remove(kit.getName());
-		
+
 		message(sender, Message.TOURNAMENT_KIT_DELETE.replace("%name%", name));
 	}
 
 	@Override
 	public List<String> getNames() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<String>(kits.keySet());
 	}
 
 }

@@ -13,13 +13,14 @@ public class CommandTournamentKits extends VCommand {
 		this.addSubCommand("kits");
 		this.addSubCommand("kit");
 		this.addSubCommand(new CommandTournamentKitsList());
+		this.addSubCommand(new CommandTournamentKitsShow());
 	}
 
 	@Override
 	protected CommandType perform(ZTournamentPlugin main) {
 
 		messageWO(sender, Message.TOURNAMENT_HELP_HEADER);
-		Message.TOURNAMENT_HELP_ADMIN.getMessages().forEach(m -> message(sender, m));
+		Message.TOURNAMENT_HELP_ADMIN_KIT.getMessages().forEach(m -> message(sender, m));
 
 		return CommandType.SUCCESS;
 	}

@@ -5,18 +5,17 @@ import fr.maxlego08.ztournament.command.VCommand;
 import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
-public class CommandTournamentKitsList extends VCommand {
+public class CommandTournamentKitsShow extends VCommand {
 
-	public CommandTournamentKitsList() {
+	public CommandTournamentKitsShow() {
 		this.setPermission(Permission.ZTOURNAMENT_KIT_USE);
-		this.addSubCommand("list");
+		this.addSubCommand("show");
+		this.addRequireArg("kit");
 	}
 
 	@Override
 	protected CommandType perform(ZTournamentPlugin main) {
-
-		message(sender, "§eKit§8: §7", toList(tournament.getKits().getNames(), "§7", "§8"));
-
+		tournament.getKits().showKit(getPlayer(), argAsString(0));
 		return CommandType.SUCCESS;
 	}
 
