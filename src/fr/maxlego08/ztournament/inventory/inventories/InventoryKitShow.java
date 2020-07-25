@@ -21,7 +21,7 @@ public class InventoryKitShow extends VInventory {
 
 		createInventory("§eKit", 54);
 
-		for (int a = 9; a != 18; a++)
+		for (int a = 4; a != 18; a++)
 			addItem(a, new ItemBuilder(getMaterial(160), 1, 8));
 
 		if (kit.getHelmet() != null)

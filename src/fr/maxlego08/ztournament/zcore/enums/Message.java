@@ -193,6 +193,7 @@ public enum Message {
 	TOURNAMENT_KIT_NOT_EXIST("§cKit §f%name% §cdoesn't exist"),
 	TOURNAMENT_KIT_CREATE("§eYou create the kit §6%name%§e."),
 	TOURNAMENT_KIT_DELETE("§eYou delete the kit §6%name%§e."),
+	TOURNAMENT_KIT_EDIT("§eYou have just edited the kit §f%s§e."),
 	
 	// title
 
