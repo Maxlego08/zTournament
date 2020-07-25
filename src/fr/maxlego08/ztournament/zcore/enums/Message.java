@@ -163,6 +163,8 @@ public enum Message {
 
 	TOURNAMENT_CLASSEMENT_HOVER_PLAYER(" §f- §f%player%"),
 
+	TOURNAMENT_HELP_HEADER("§8[§b?§8] §7Commands lists:"),
+	
 	TOURNAMENT_HELP("§6» §e/tournament create §f<§bnom de team§f> §8- §7Create team",
 			"§6» §e/tournament join §f<§bnom de team§f> §8- §7Join team.",
 			"§6» §e/tournament invite §f<§bplayer§f> §8- §7Invite a player.",
@@ -175,9 +177,24 @@ public enum Message {
 			"§6» §e/tournament setlobby §8- §7Set lobby position.",
 			"§6» §e/tournament stop §8- §7Shop a tournament.",
 			"§6» §e/tournament wave §8- §7Star next wave.",
-			"§6» §e/tournament start §f<§btype3§f> §8- §7Start tournament.",
+			"§6» §e/tournament start §f<§btype§f> §f<§bkit name§f>§8- §7Start tournament.",
+			"§6» §e/tournament kit §8- §7Show kit commands.",
 			"§6» §e/tournament reload §8- §7Reload le plugin."),
+	
+	TOURNAMENT_HELP_ADMIN_KIT(
+			"§6» §e/tournament kit list§8- §7Show kit list.",
+			"§6» §e/tournament kit show <name>§8- §7Show kit content.",
+			"§6» §e/tournament kit create <name>§8- §7Create an empty kit.",
+			"§6» §e/tournament kit edit <name>§8- §7Edit a kit.",
+			"§6» §e/tournament kit delete <name>§8- §7Edit a kit."
+			),
 
+	TOURNAMENT_KIT_ALREADY_EXIST("§cKit §f%name% §calready exist"),
+	TOURNAMENT_KIT_NOT_EXIST("§cKit §f%name% §cdoesn't exist"),
+	TOURNAMENT_KIT_CREATE("§eYou create the kit §6%name%§e."),
+	TOURNAMENT_KIT_DELETE("§eYou delete the kit §6%name%§e."),
+	TOURNAMENT_KIT_EDIT("§eYou have just edited the kit §f%s§e."),
+	
 	// title
 
 	TITLE_START("§f§kII§e Tournois §f§kII", "§eUn tournois §f%type% §evient de commencer !", 10, 60, 10),

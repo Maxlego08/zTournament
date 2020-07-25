@@ -219,5 +219,11 @@ public interface Team {
 	 * @param message
 	 */
 	void message(Message message);
+	
+	/**
+	 * 
+	 * @return
+	 */
+	Kit getKit();
 
 }

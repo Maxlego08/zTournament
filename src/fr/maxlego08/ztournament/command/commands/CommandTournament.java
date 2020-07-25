@@ -2,6 +2,7 @@ package fr.maxlego08.ztournament.command.commands;
 
 import fr.maxlego08.ztournament.ZTournamentPlugin;
 import fr.maxlego08.ztournament.command.VCommand;
+import fr.maxlego08.ztournament.command.commands.kits.CommandTournamentKits;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
@@ -23,11 +24,13 @@ public class CommandTournament extends VCommand {
 		this.addSubCommand(new CommandTournamentWave());
 		this.addSubCommand(new CommandTournamentVersion());
 		this.addSubCommand(new CommandTournamentReload());
+		this.addSubCommand(new CommandTournamentKits());
 	}
 
 	@Override
 	protected CommandType perform(ZTournamentPlugin main) {
 
+		messageWO(sender, Message.TOURNAMENT_HELP_HEADER);
 		Message.TOURNAMENT_HELP.getMessages().forEach(m -> message(sender, m));
 		if (sender.hasPermission(Permission.ZTOURNAMENT_HELP.getPermission())) 
 			Message.TOURNAMENT_HELP_ADMIN.getMessages().forEach(m -> message(sender, m));

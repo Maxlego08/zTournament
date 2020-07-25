@@ -8,16 +8,13 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 import fr.maxlego08.ztournament.api.Team;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
-import fr.maxlego08.ztournament.zcore.utils.builder.ItemBuilder;
 
 public class TeamObject extends ZUtils implements Team {
 
@@ -30,19 +27,22 @@ public class TeamObject extends ZUtils implements Team {
 	private boolean isInDuel = false;
 	private List<Player> invitePlayers = new ArrayList<>();
 
+	private final fr.maxlego08.ztournament.api.Kit kit;
+
 	private int position;
 
 	/**
 	 * @param name
 	 * @param maxPlayers
 	 */
-	public TeamObject(String name, int maxPlayers, Player owner) {
+	public TeamObject(String name, int maxPlayers, Player owner, fr.maxlego08.ztournament.api.Kit kit) {
 		super();
 		this.name = name;
 		this.maxPlayers = maxPlayers;
 		this.owner = owner;
 		this.players.add(owner);
 		this.realPlayers.add(owner);
+		this.kit = kit;
 		this.users.add(owner.getName());
 	}
 
@@ -107,51 +107,16 @@ public class TeamObject extends ZUtils implements Team {
 
 		PlayerInventory inventory = player.getInventory();
 
-		ItemBuilder builder = new ItemBuilder(Material.IRON_LEGGINGS, "§eTournois PVP");
-		builder.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
-		builder.addEnchant(Enchantment.DURABILITY, 7);
+		if (kit.getChestplate() != null)
+			inventory.setChestplate(kit.getChestplate());
+		if (kit.getLeggings() != null)
+			inventory.setLeggings(kit.getLeggings());
+		if (kit.getBoots() != null)
+			inventory.setBoots(kit.getBoots());
+		if (kit.getHelmet() != null)
+			inventory.setHelmet(kit.getHelmet());
 
-		inventory.setLeggings(builder.build());
-
-		builder = new ItemBuilder(Material.IRON_CHESTPLATE, "§eTournois PVP");
-		builder.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
-		builder.addEnchant(Enchantment.DURABILITY, 7);
-		inventory.setChestplate(builder.build());
-
-		builder = new ItemBuilder(Material.IRON_BOOTS, "§eTournois PVP");
-		builder.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
-		builder.addEnchant(Enchantment.DURABILITY, 7);
-
-		inventory.setBoots(builder.build());
-
-		builder = new ItemBuilder(Material.IRON_HELMET, "§eTournois PVP");
-		builder.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
-		builder.addEnchant(Enchantment.DURABILITY, 7);
-
-		inventory.setHelmet(builder.build());
-
-		builder = new ItemBuilder(Material.DIAMOND_SWORD, "§eTournois PVP");
-		builder.addEnchant(Enchantment.DAMAGE_ALL, 2);
-		inventory.setItem(0, builder.build());
-
-		builder = new ItemBuilder(Material.GOLDEN_APPLE, 4, "§eTournois PVP");
-		inventory.setItem(1, builder.build());
-
-		builder = new ItemBuilder(Material.POTION, 1, "§ePotion");
-		builder.durability(8226);
-		inventory.setItem(2, builder.build());
-
-		builder = new ItemBuilder(Material.POTION, 1, "§ePotion");
-		builder.durability(8226);
-		inventory.setItem(3, builder.build());
-
-		for (int a = 4; a != 16; a++) {
-
-			builder = new ItemBuilder(Material.POTION, 1, "§ePotion");
-			builder.durability(16421);
-			inventory.setItem(a, builder.build());
-
-		}
+		kit.getItems().forEach((slot, item) -> inventory.setItem(slot, item));
 
 	}
 
@@ -428,6 +393,11 @@ public class TeamObject extends ZUtils implements Team {
 	@Override
 	public void message(Message message) {
 		this.message(message.getMessage());
+	}
+
+	@Override
+	public fr.maxlego08.ztournament.api.Kit getKit() {
+		return kit;
 	}
 
 }

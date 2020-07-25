@@ -18,6 +18,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.maxlego08.ztournament.api.Arena;
 import fr.maxlego08.ztournament.api.Duel;
+import fr.maxlego08.ztournament.api.Kit;
+import fr.maxlego08.ztournament.api.Kits;
 import fr.maxlego08.ztournament.api.NMS;
 import fr.maxlego08.ztournament.api.Team;
 import fr.maxlego08.ztournament.api.Tournament;
@@ -87,6 +89,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 	private transient int timer = 300;
 	private transient boolean asNewTimer = false;
 	private transient NMS nms;
+	private transient final Kits kits;
+	private transient Kit kit;
 
 	private transient final HashSet<String> substanceChars = new HashSet<String>(Arrays.asList(new String[] { "0", "1",
 			"2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
@@ -96,7 +100,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	private transient int maxTeamPerArena = 1;
 	private transient boolean isTimeBetweenWave;
 
-	public TournamentManager() {
+	public TournamentManager(Kits kits) {
 
 		double nms = ItemDecoder.getNMSVersion();
 
@@ -120,6 +124,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 			this.nms = new NMS_1_15();
 		if (nms == 1.16)
 			this.nms = new NMS_1_16();
+
+		this.kits = kits;
 
 		Logger.info("Loaded NMS " + nms + " !", LogType.INFO);
 
@@ -347,7 +353,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	}
 
 	@Override
-	public void startTournois(CommandSender sender, TournoisType type) {
+	public void startTournois(CommandSender sender, TournoisType type, Kit kit) {
 
 		if (isStart || isWaiting) {
 			message(sender, Message.TOURNAMENT_ENABLE);
@@ -364,15 +370,19 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		TournamentStartEvent event = new TournamentStartEvent(type);
+		this.kit = kit;
+
+		TournamentStartEvent event = new TournamentStartEvent(type, kit);
 		event.callEvent();
 
 		if (event.isCancelled())
 			return;
 
+		this.kit = event.getKit();
+		this.type = event.getType();
+
 		this.isStart = true;
 		this.isWaiting = true;
-		this.type = type;
 		this.asNewTimer = false;
 
 		this.duels.clear();
@@ -796,7 +806,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		TournamentTeamCreateEvent event = new TournamentTeamCreateEvent(new TeamObject(name, type.getMax(), player),
+		TournamentTeamCreateEvent event = new TournamentTeamCreateEvent(new TeamObject(name, type.getMax(), player, kit),
 				player, name);
 		event.callEvent();
 
@@ -805,7 +815,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		name = event.getName();
 
-		team = new TeamObject(name, type.getMax(), player);
+		team = new TeamObject(name, type.getMax(), player, kit);
 		this.teams.add(team);
 		player.teleport(location);
 		clearPlayer(player);
@@ -1223,6 +1233,16 @@ public class TournamentManager extends ZUtils implements Tournament {
 		return Config.rewards.stream()
 				.filter(reward -> reward.getMaxPosition() <= position && reward.getMinPosition() >= position).findAny()
 				.orElse(null);
+	}
+
+	@Override
+	public Kits getKits() {
+		return kits;
+	}
+
+	@Override
+	public Kit getKit() {
+		return kit;
 	}
 
 }
