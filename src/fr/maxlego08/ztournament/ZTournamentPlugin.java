@@ -5,6 +5,7 @@ import org.bukkit.plugin.ServicePriority;
 import fr.maxlego08.ztournament.api.Kits;
 import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.command.CommandManager;
+import fr.maxlego08.ztournament.command.commands.CommandClearC;
 import fr.maxlego08.ztournament.command.commands.CommandTournament;
 import fr.maxlego08.ztournament.inventory.InventoryManager;
 import fr.maxlego08.ztournament.inventory.inventories.InventoryKitEdit;
@@ -49,6 +50,7 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		
 		registerCommand("tournament", new CommandTournament(), "tournois");
+		registerCommand("clearc", new CommandClearC());
 		
 		registerInventory(Inventory.INVENTORY_KIT_SHOW, new InventoryKitShow());
 		registerInventory(Inventory.INVENTORY_KIT_CREATE, new InventoryKitEdit());

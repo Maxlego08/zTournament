@@ -11,13 +11,13 @@ public enum Message {
 
 	PREFIX_END("§8(§6zTournament§8)"),
 
-	TELEPORT_MOVE("§cVous ne devez pas bouger !", false), TELEPORT_MESSAGE("§7Téléportatio dans §3%s §7secondes !",
+	TELEPORT_MOVE("§cVous ne devez pas bouger !", false), TELEPORT_MESSAGE("§7Téléportation dans §3%s §7secondes !",
 			false), TELEPORT_ERROR("§cVous avez déjà une téléportation en cours !",
-					false), TELEPORT_SUCCESS("§7Téléportation effectué !", false),
+					false), TELEPORT_SUCCESS("§7Téléportation effectuée !", false),
 
 	INVENTORY_NULL("§cImpossible de trouver l'inventaire avec l'id §6%s§c.", false), INVENTORY_CLONE_NULL(
 			"§cLe clone de l'inventaire est null !",
-			false), INVENTORY_OPEN_ERROR("§cUne erreur est survenu avec l'ouverture de l'inventaire §6%s§c.",
+			false), INVENTORY_OPEN_ERROR("§cUne erreur est survenue avec l'ouverture de l'inventaire §6%s§c.",
 					false), INVENTORY_BUTTON_PREVIOUS("§f» §7Page précédente",
 							false), INVENTORY_BUTTON_NEXT("§f» §7Page suivante", false),
 
@@ -33,9 +33,9 @@ public enum Message {
 
 	COMMAND_SYNTAXE_ERROR("§cYou must execute the command like this§7: §2%command%"),
 
-	COMMAND_NO_PERMISSION("§cYou don't have permission !"),
+	COMMAND_NO_PERMISSION("§cYou don't have the permission permission to use that!"),
 
-	COMMAND_NO_CONSOLE("§cOnly player can execute this command"),
+	COMMAND_NO_CONSOLE("§cOnly players can execute this command"),
 
 	COMMAND_NO_ARG("§cThis argument does not exist!"),
 
@@ -45,56 +45,56 @@ public enum Message {
 
 	TOURNAMENT_ENABLE("§cNo tournaments in progress."),
 
-	TOURNAMENT_ARENA_NOT_FOUND("§cCould not find the arena."),
+	TOURNAMENT_ARENA_NOT_FOUND("§cCouldn't find the arena."),
 
-	TOURNAMENT_ARENA_DELETE("§cYou have just deleted an arena."),
+	TOURNAMENT_ARENA_DELETE("§cYou just deleted an arena."),
 
-	TOURNAMENT_ARENA_CREATE("§2You have just created an arena."),
+	TOURNAMENT_ARENA_CREATE("§2You just created an arena."),
 
-	TOURNAMENT_LOBBY_CREATE("§2You just put the rental for the lobby."),
+	TOURNAMENT_LOBBY_CREATE("§2Lobby's location has been set with success."),
 
 	TOURNAMENT_ARENA_NO("§cNo arena available."),
 
-	TOURNAMENT_START_ERROR_ARENA("§cYou cannot launch tournaments without any arena."),
+	TOURNAMENT_START_ERROR_ARENA("§cYou have to create at least one arena in order to start."),
 
-	TOURNAMENT_START_ERROR_LOOBY("§cYou cannot launch tournaments without the lobby."),
+	TOURNAMENT_START_ERROR_LOOBY("§cYou have to set lobby's location in order to start.."),
 
 	TOURNAMENT_START_ERROR_PLAYER(
 			"§eNot enough players to start the tournament, you still have §65 §eminutes to create a team."),
 
-	TOURNAMENT_START_ERROR_PLAYER_CANCEL("§cNot enough player, event canceled!"),
+	TOURNAMENT_START_ERROR_PLAYER_CANCEL("§cNot enough players, event canceled!"),
 
-	TOURNAMENT_START_ERROR_TEAM("§cNo team, the tournament is canceled!"),
+	TOURNAMENT_START_ERROR_TEAM("§cNo teams has been found, canceling the tournament..."),
 
-	TOURNAMENT_START_TIMER("§eStill §6%timer% §ebefore the start of the PVP tournament."),
+	TOURNAMENT_START_TIMER("§eStill §6%timer% §ebefore starting the PVP tournament."),
 
-	TOURNAMENT_START_FIRST_WAVE("§eStart of the PVP tournament !", "§eNumber of teams in the tournament§7: §f%size%"),
+	TOURNAMENT_START_FIRST_WAVE("§eStarting the PVP tournament !", "§eNumber of teams in the tournament§7: §f%size%"),
 
-	TOURNAMENT_START("§eBeginning of a PVP tournament in §6%type% §ein §65 §eminutes§e.",
-			"§eMade §f/tournois§e to have all commands"),
+	TOURNAMENT_START("§Starting a PVP tournament in §6%type% §ein §65 §eminutes§e.",
+			"§eDo §f/tournois§e to have all commands"),
 
 	TOURNAMENT_WAVE_AUTO("§eYou are automatically qualified for the next round!"),
 
-	TOURNAMENT_WAVE_START("§eNumber of duels§7: §6%duel%", "§eStart of the round §6%round% §e! May the best win !"),
+	TOURNAMENT_WAVE_START("§eNumber of duels§7: §6%duel%", "§eStarting round number §6%round% §e! May the best win !"),
 
 	TOURNAMENT_WAVE_TIMER("§eEnd of the round §6%round% §ein §f%timer%§e."),
 
-	TOURNAMENT_WAVE_END("§eTime is up, the next round will start..."),
+	TOURNAMENT_WAVE_END("§eTime elapsed, the next round will start..."),
 
-	TOURNAMENT_WAVE_NEXT_TIME("§eStart of the next round in §f10 §eseconds."),
+	TOURNAMENT_WAVE_NEXT_TIME("§eStarting the next round in §f10 §eseconds."),
 
-	TOURNAMENT_WAVE_NEXT("§eeNumber of remaining teams§7: §6%team%"),
+	TOURNAMENT_WAVE_NEXT("§eNumber of teams remaining§7: §6%team%"),
 
-	TOURNAMENT_STOP("§cThe PVP tournament has just been canceled"),
+	TOURNAMENT_STOP("§cThe PVP tournament's just been cancelled."),
 
 	TOURNAMENT_PLAYER_LOOSE("§f%player% §ehas just been eliminated!"),
 
-	TOURNAMENT_DUEL_WIN("§eYou have just won your duel!"),
+	TOURNAMENT_DUEL_WIN("§eYou've just won your duel!"),
 
-	TOURNAMENT_DUEL_LOOSE("§eYou lost the tournament, so your team is disqulified.",
+	TOURNAMENT_DUEL_LOOSE("§eYou lost the tournament, your team's just been disqualified.",
 			"§eYou are at position §f%position% §eof §6%team%§e."),
 
-	TOURNAMENT_TEAM_LEAVE("§cYou just left your team."),
+	TOURNAMENT_TEAM_LEAVE("§cYou are leaving your team."),
 
 	TOURNAMENT_TEAM_LEAVE_ERROR("§cYou cannot leave your team during the fight."),
 
@@ -110,15 +110,15 @@ public enum Message {
 
 	TOURNAMENT_INVITE_ERROR_TYTE("§cYou cannot invite a player for a §f1v1§c tournament."),
 
-	TOURNAMENT_INVITE_REMOVE("§f%player% §e withdrawing the invitation from §6%target% §eto join your team."),
+	TOURNAMENT_INVITE_REMOVE("§f%player% §ehas canceled the invitation from §6%target% §eto join your team."),
 
-	TOURNAMENT_INVITE_TEAM("§f%player% §ebecomes to invite §6%target% §eto join your team."),
+	TOURNAMENT_INVITE_TEAM("§f%player% §esent an invitation to §6%target% §eto join your team."),
 
-	TOURNAMENT_INVITE_INFO("§eYou have just received an invitation from §6%player% §eto join the §f%team% §eteam."),
+	TOURNAMENT_INVITE_INFO("§e§6%player% §etinvited you to join §f%team%"),
 
-	TOURNAMENT_INVITE_INFO_JSON("§eMake §f/tournament join %team% §etournaments to join this team. §8(§bClick here§8)"),
+	TOURNAMENT_INVITE_INFO_JSON("§eDo §f/tournament join %team% §etournaments to join this team. §8(§bClick here§8)"),
 
-	TOURNAMENT_INVITE_INFO_JSON_HOVER("§7Click to join the team §f%team%§7."),
+	TOURNAMENT_INVITE_INFO_JSON_HOVER("§7Click to join §f%team%§7."),
 
 	TOURNAMENT_JOIN_SUCCESS_INFO("§f%player% §ejust joined your team."),
 
@@ -126,28 +126,28 @@ public enum Message {
 
 	TOURNAMENT_JOIN_ERROR_JOIN("§cYou cannot join a team at the moment."),
 
-	TOURNAMENT_JOIN_ERROR_INVITE("§cYou are not invited to join this team."),
+	TOURNAMENT_JOIN_ERROR_INVITE("§cYou must be invited to join this team."),
 
 	TOURNAMENT_JOIN_ERROR_INVENOTRY(
-			"§cYou must have an empty inventory to participate in the tournaments §8(§7Your inventory will be deleted when you join a team§8)"),
+			"§cYou must have an empty inventory to take part in tournaments §8(§7Your inventory will be deleted when you join a team§8)"),
 
-	TOURNAMENT_JOIN_ERROR_TEAM("§cNo team with the name §f%team% §cexiste."),
+	TOURNAMENT_JOIN_ERROR_TEAM("§cNo team with the name §f%team% §cexists."),
 
-	TOURNAMENT_JOIN_ERROR_TEAM_ALREADY("§cYou have already joined a team."),
+	TOURNAMENT_JOIN_ERROR_TEAM_ALREADY("§cYou are already in a team."),
 
-	TOURNAMENT_CREATE_TEAM_BROADCAST("§f%player% §ecreated the team §6%team%§e."),
+	TOURNAMENT_CREATE_TEAM_BROADCAST("§f%player% §ecreated team §6%team%§e."),
 
 	TOURNAMENT_CREATE_ERROR_INVENOTRY(
-			"§cYou must have an empty inventory to participate in the tournaments §8(§7Your inventory will be deleted when you join a team§8)"),
+			"§cYou must have an empty inventory to take part in tournaments §8(§7Your inventory will be deleted when you join a team§8)"),
 
-	TOURNAMENT_CREATE_ERROR_NAME_MAX("§cThe name of your team must not exceed §f%max% §ccaractères."),
+	TOURNAMENT_CREATE_ERROR_NAME_MAX("§cThe name of your team must not exceed §f%max% §ccharacters."),
 
-	TOURNAMENT_CREATE_ERROR_NAME_MIN("§cThe name of your team must have at least §f%min% §character."),
+	TOURNAMENT_CREATE_ERROR_NAME_MIN("§cThe name of your team must have at least §f%min% §characters."),
 
 	TOURNAMENT_CREATE_ERROR_NAME(
 			"§cThe name of your team must be alphanumeric, the character §f%char% §cis not allowed."),
 
-	TOURNAMENT_CREATE_ERROR_EXIT("§cThe name §f%name% §cis already taken for a team, you must choose another one."),
+	TOURNAMENT_CREATE_ERROR_EXIT("§cThe name §f%name% §cis already taken, please choose another one."),
 
 	TOURNAMENT_CREATE_ERROR_PLAYER("§cYou already have a team, you cannot create another."),
 
@@ -155,7 +155,7 @@ public enum Message {
 
 	TOURNAMENT_WIN_ERROR("§cNobody has won the tournament event!"),
 
-	TOURNAMENT_WIN("§eEvent tournois pvp terminé !", "", "§eTeam ranking"),
+	TOURNAMENT_WIN("§ePvp tournament event over !", "", "§eTeam ranking"),
 
 	TOURNAMENT_CLASSEMENT("§eThe team §6%team% §ehas finished §f%position% §eat tournaments."),
 
@@ -165,21 +165,21 @@ public enum Message {
 
 	TOURNAMENT_HELP_HEADER("§8[§b?§8] §7Commands lists:"),
 	
-	TOURNAMENT_HELP("§6» §e/tournament create §f<§bnom de team§f> §8- §7Create team",
-			"§6» §e/tournament join §f<§bnom de team§f> §8- §7Join team.",
-			"§6» §e/tournament invite §f<§bplayer§f> §8- §7Invite a player.",
+	TOURNAMENT_HELP("§6» §e/tournament create §f<§bnom de team§f> §8- §7Create a team",
+			"§6» §e/tournament join §f<§bnom de team§f> §8- §7Join a team.",
+			"§6» §e/tournament invite §f<§bplayer§f> §8- §7Invite a player to your team.",
 			"§6» §e/tournament leave §8- §7Leave your team.",
-			"§6» §e/tournament version §8- §7Show plugin version."),
+			"§6» §e/tournament version §8- §7Show plugin's version."),
 
-	TOURNAMENT_HELP_ADMIN("§6» §e/tournament arena §f<§bloc1§f> §f<§bloc2§f> §8- §7Create arena.",
-			"§6» §e/tournament delete §f<§buuid§f> §8- §7Delete arena.",
-			"§6» §e/tournament list §8- §7Show arena.",
-			"§6» §e/tournament setlobby §8- §7Set lobby position.",
+	TOURNAMENT_HELP_ADMIN("§6» §e/tournament arena §f<§bloc§f> §8- §7Create an arena.",
+			"§6» §e/tournament delete §f<§buuid§f> §8- §7Delete an arena.",
+			"§6» §e/tournament list §8- §7Show an arena.",
+			"§6» §e/tournament setlobby §8- §7Set lobby's position.",
 			"§6» §e/tournament stop §8- §7Shop a tournament.",
-			"§6» §e/tournament wave §8- §7Star next wave.",
+			"§6» §e/tournament wave §8- §7Start next wave.",
 			"§6» §e/tournament start §f<§btype§f> §f<§bkit name§f>§8- §7Start tournament.",
 			"§6» §e/tournament kit §8- §7Show kit commands.",
-			"§6» §e/tournament reload §8- §7Reload le plugin."),
+			"§6» §e/tournament reload §8- §7Reload the plugin."),
 	
 	TOURNAMENT_HELP_ADMIN_KIT(
 			"§6» §e/tournament kit list§8- §7Show kit list.",
@@ -189,28 +189,30 @@ public enum Message {
 			"§6» §e/tournament kit delete <name>§8- §7Edit a kit."
 			),
 
-	TOURNAMENT_KIT_ALREADY_EXIST("§cKit §f%name% §calready exist"),
-	TOURNAMENT_KIT_NOT_EXIST("§cKit §f%name% §cdoesn't exist"),
-	TOURNAMENT_KIT_CREATE("§eYou create the kit §6%name%§e."),
-	TOURNAMENT_KIT_DELETE("§eYou delete the kit §6%name%§e."),
-	TOURNAMENT_KIT_EDIT("§eYou have just edited the kit §f%s§e."),
+	TOURNAMENT_KIT_ALREADY_EXIST("§cKit §f%name% §calready exists"),
+	TOURNAMENT_KIT_NOT_EXIST("§cKit §f%name% §cdoesn't exists"),
+	TOURNAMENT_KIT_CREATE("§eYou created kit §6%name%§e."),
+	TOURNAMENT_KIT_DELETE("§eYou deleted kit §6%name%§e."),
+	TOURNAMENT_KIT_EDIT("§eYou edited the kit §f%s§e."),
 	
 	// title
 
-	TITLE_START("§f§kII§e Tournois §f§kII", "§eUn tournois §f%type% §evient de commencer !", 10, 60, 10),
+	TITLE_START("§f§kII§e Tournois §f§kII", "§eA §f%type% §etournament just start !", 10, 60, 10),
 
-	TITLE_JOIN_SUCCESS("§f§kII§e Congratulations §f§kII", "§eYou have just joined the team §f%team% §e!", 10, 60, 10),
+	TITLE_JOIN_SUCCESS("§f§kII§e Congratulations §f§kII", "§eYou joined the team §f%team% §e!", 10, 60, 10),
 
 	TITLE_CREATE_SUCCESS("§f§kII§e Congratulations §f§kII",
-			"§eYou have just created a §fteam §efor the PVP tournament !", 10, 60, 10),
+			"§eYou created a §fteam §efor the PVP tournament !", 10, 60, 10),
 
-	TITLE_START_INFO("§f§kII§e Tournament §f§kII", "§eStill §6%timer% §ebefore the start of the PVP tournament.", 0, 60, 10),
+	TITLE_START_INFO("§f§kII§e Tournament §f§kII", "§eStill §6%timer% §ebefore starting PVP tournament.", 0, 60, 10),
 
-	TITLE_WIN("§f§kII§e Tournament §f§kII", "§eCongratulations to the §f%team% §eteam who wins the tournament !", 10,
+	TITLE_WIN("§f§kII§e Tournament §f§kII", "§eCongratulations to the §f%team% §eteam that wins the tournament !", 10,
 			100, 30),
 
 	TITLE_START_ERROR_PLAYER("§cNot enough players to start the tournament",
 			"§cyou still have §f5 §cminutes to create a team.", 10, 60, 10),
+
+	;
 
 	;
 
