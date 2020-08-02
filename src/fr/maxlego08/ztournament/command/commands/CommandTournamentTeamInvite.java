@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import fr.maxlego08.ztournament.ZTournamentPlugin;
 import fr.maxlego08.ztournament.command.VCommand;
+import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentTeamInvite extends VCommand {
@@ -12,6 +13,7 @@ public class CommandTournamentTeamInvite extends VCommand {
 		this.addSubCommand("invite");
 		this.addRequireArg("joueur");
 		this.setConsoleCanUse(false);
+		this.setPermission(Permission.ZTOURNAMENT_TEAM_INVITE);
 	}
 
 	@Override

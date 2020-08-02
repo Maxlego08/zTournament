@@ -2,6 +2,7 @@ package fr.maxlego08.ztournament.command.commands;
 
 import fr.maxlego08.ztournament.ZTournamentPlugin;
 import fr.maxlego08.ztournament.command.VCommand;
+import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentSetLobby extends VCommand {
@@ -10,6 +11,7 @@ public class CommandTournamentSetLobby extends VCommand {
 
 		this.addSubCommand("setlobby");
 		this.setConsoleCanUse(false);
+		this.setPermission(Permission.ZTOURNAMENT_SETLOBBY);
 
 	}
 
