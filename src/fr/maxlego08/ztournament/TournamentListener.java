@@ -18,10 +18,12 @@ import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.listener.ListenerAdapter;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
 import fr.maxlego08.ztournament.zcore.enums.Message;
+import fr.maxlego08.ztournament.zcore.enums.Permission;
 
 public class TournamentListener extends ListenerAdapter {
 
 	private final Tournament tournament;
+	private boolean useLastVersion = true;
 
 	/**
 	 * @param tournament
@@ -29,6 +31,10 @@ public class TournamentListener extends ListenerAdapter {
 	public TournamentListener(Tournament tournament) {
 		super();
 		this.tournament = tournament;
+	}
+
+	public void setUseLastVersion(boolean useLastVersion) {
+		this.useLastVersion = useLastVersion;
 	}
 
 	@Override
@@ -168,6 +174,14 @@ public class TournamentListener extends ListenerAdapter {
 			if (ZPlugin.z().getDescription().getFullName().toLowerCase().contains("dev")) {
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
 						+ " §eCeci est une version de développement et non de production.");
+			}
+
+			if (!useLastVersion && ((player.hasPermission(Permission.ZTOURNAMENT_RELOAD.getPermission())
+					|| event.getPlayer().getName().startsWith("Maxlego08")
+					|| event.getPlayer().getName().startsWith("Sak")))) {
+				message(player,
+						"§cYou are not using the latest version of the plugin, remember to update the plugin quickly.");
+				message(player, "§cDownload link: §fhttps://www.spigotmc.org/resources/81959/");
 			}
 
 		});
