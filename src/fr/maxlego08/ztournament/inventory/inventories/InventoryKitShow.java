@@ -8,7 +8,6 @@ import fr.maxlego08.ztournament.ZTournamentPlugin;
 import fr.maxlego08.ztournament.api.Kit;
 import fr.maxlego08.ztournament.exceptions.InventoryOpenException;
 import fr.maxlego08.ztournament.inventory.VInventory;
-import fr.maxlego08.ztournament.zcore.utils.builder.ItemBuilder;
 import fr.maxlego08.ztournament.zcore.utils.inventory.InventoryResult;
 
 public class InventoryKitShow extends VInventory {
@@ -22,7 +21,7 @@ public class InventoryKitShow extends VInventory {
 		createInventory("§eKit", 54);
 
 		for (int a = 4; a != 18; a++)
-			addItem(a, new ItemBuilder(getMaterial(160), 1, 8));
+			addItem(a, getGlass());
 
 		if (kit.getHelmet() != null)
 			addItem(0, kit.getHelmet());

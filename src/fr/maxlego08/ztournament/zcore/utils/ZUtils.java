@@ -40,6 +40,7 @@ import fr.maxlego08.ztournament.zcore.enums.Inventory;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.builder.CooldownBuilder;
+import fr.maxlego08.ztournament.zcore.utils.builder.ItemBuilder;
 import fr.maxlego08.ztournament.zcore.utils.builder.TimerBuilder;
 import fr.maxlego08.ztournament.zcore.utils.players.ActionBar;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -47,10 +48,9 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.HoverEvent.Action;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.milkbowl.vault.economy.Economy;
 
 @SuppressWarnings("deprecation")
-public abstract class ZUtils extends MessageUtils{
+public abstract class ZUtils extends MessageUtils {
 
 	private static transient List<String> teleportPlayers = new ArrayList<String>();
 	protected transient ZTournamentPlugin plugin = (ZTournamentPlugin) ZPlugin.z();
@@ -241,22 +241,31 @@ public abstract class ZUtils extends MessageUtils{
 	private static transient Material[] byId;
 
 	static {
-		byId = new Material[0];
-		for (Material material : Material.values()) {
-			if (byId.length > material.getId()) {
-				byId[material.getId()] = material;
-			} else {
-				byId = Arrays.copyOfRange(byId, 0, material.getId() + 2);
-				byId[material.getId()] = material;
+		if (!ItemDecoder.isNewVersion()) {
+			byId = new Material[0];
+			for (Material material : Material.values()) {
+				if (byId.length > material.getId()) {
+					byId[material.getId()] = material;
+				} else {
+					byId = Arrays.copyOfRange(byId, 0, material.getId() + 2);
+					byId[material.getId()] = material;
+				}
 			}
 		}
 	}
 
+
+	protected ItemStack getGlass() {
+		if (ItemDecoder.isNewVersion())
+			return new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+		return new ItemBuilder(getMaterial(160), 1, 8).build();
+	}
+	
 	/**
 	 * @param id
 	 * @return the material according to his id
 	 */
-	protected Material getMaterial(int id) {
+	public Material getMaterial(int id) {
 		return byId.length > id && id >= 0 ? byId[id] : null;
 	}
 
@@ -408,162 +417,6 @@ public abstract class ZUtils extends MessageUtils{
 	protected String format(double decimal, String format) {
 		DecimalFormat decimalFormat = new DecimalFormat(format);
 		return decimalFormat.format(decimal);
-	}
-
-	private transient Economy economy = ZPlugin.z().getEconomy();
-
-	/**
-	 * Player bank
-	 * 
-	 * @param player
-	 * @return player bank
-	 */
-	protected double getBalance(Player player) {
-		return economy.getBalance(player);
-	}
-
-	/**
-	 * Player has money
-	 * 
-	 * @param player
-	 * @param int
-	 *            value
-	 * @return player has value in his bank
-	 */
-	protected boolean hasMoney(Player player, int value) {
-		return hasMoney(player, (double) value);
-	}
-
-	/**
-	 * Player has money
-	 * 
-	 * @param player
-	 * @param float
-	 *            value
-	 * @return player has value in his bank
-	 */
-	protected boolean hasMoney(Player player, float value) {
-		return hasMoney(player, (double) value);
-	}
-
-	/**
-	 * Player has money
-	 * 
-	 * @param player
-	 * @param long
-	 *            value
-	 * @return player has value in his bank
-	 */
-	protected boolean hasMoney(Player player, long value) {
-		return hasMoney(player, (double) value);
-	}
-
-	/**
-	 * Player has money
-	 * 
-	 * @param player
-	 * @param double
-	 *            value
-	 * @return player has value in his bank
-	 */
-	protected boolean hasMoney(Player player, double value) {
-		return getBalance(player) >= value;
-	}
-
-	/**
-	 * Deposit player money
-	 * 
-	 * @param player
-	 * @param double
-	 *            value
-	 */
-	protected void depositMoney(Player player, double value) {
-		economy.depositPlayer(player, value);
-	}
-
-	/**
-	 * Deposit player money
-	 * 
-	 * @param player
-	 * @param long
-	 *            value
-	 */
-	protected void depositMoney(Player player, long value) {
-		economy.depositPlayer(player, (double) value);
-	}
-
-	/**
-	 * Deposit player money
-	 * 
-	 * @param player
-	 * @param int
-	 *            value
-	 */
-	protected void depositMoney(Player player, int value) {
-		economy.depositPlayer(player, (double) value);
-	}
-
-	/**
-	 * Deposit player money
-	 * 
-	 * @param player
-	 * @param float
-	 *            value
-	 */
-	protected void depositMoney(Player player, float value) {
-		economy.depositPlayer(player, (double) value);
-	}
-
-	/**
-	 * With draw player money
-	 * 
-	 * @param player
-	 * @param double
-	 *            value
-	 */
-	protected void withdrawMoney(Player player, double value) {
-		economy.withdrawPlayer(player, value);
-	}
-
-	/**
-	 * With draw player money
-	 * 
-	 * @param player
-	 * @param long
-	 *            value
-	 */
-	protected void withdrawMoney(Player player, long value) {
-		economy.withdrawPlayer(player, (double) value);
-	}
-
-	/**
-	 * With draw player money
-	 * 
-	 * @param player
-	 * @param int
-	 *            value
-	 */
-	protected void withdrawMoney(Player player, int value) {
-		economy.withdrawPlayer(player, (double) value);
-	}
-
-	/**
-	 * With draw player money
-	 * 
-	 * @param player
-	 * @param float
-	 *            value
-	 */
-	protected void withdrawMoney(Player player, float value) {
-		economy.withdrawPlayer(player, (double) value);
-	}
-
-	/**
-	 * 
-	 * @return {@link Economy}
-	 */
-	protected Economy getEconomy() {
-		return economy;
 	}
 
 	/**

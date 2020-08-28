@@ -5,7 +5,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.material.MaterialData;
 
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 
@@ -203,28 +202,6 @@ public abstract class Arguments extends ZUtils {
 			return Bukkit.getWorld(argAsString(index));
 		}catch (Exception e) {
 			return world;
-		}
-	}
-	
-	/**
-	 * 
-	 * @param index
-	 * @return
-	 */
-	protected MaterialData argAsMaterialData(int index) {
-		String str = argAsString(index);
-		if (str == null)
-			return null;
-		MaterialData data;
-		try {
-			if (str.contains(":")) {
-				String[] split = str.split(":");
-				data = new MaterialData(getMaterial(Integer.valueOf(split[0])), Byte.valueOf(split[1]));
-			} else
-				data = new MaterialData(getMaterial(Integer.valueOf(str)));
-			return data;
-		} catch (Exception e) {
-			return null;
 		}
 	}
 

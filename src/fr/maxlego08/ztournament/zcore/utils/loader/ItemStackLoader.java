@@ -19,25 +19,37 @@ import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
 import fr.maxlego08.ztournament.zcore.utils.ItemDecoder;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 
-public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack> {
+public class ItemStackLoader extends ZUtils implements Loader<ItemStack> {
 
 	@SuppressWarnings("deprecation")
 	public ItemStack load(YamlConfiguration configuration, String path) {
 
-		int id = configuration.getInt(path + "id", 0);
 		int data = configuration.getInt(path + ".data", 0);
 		int amount = configuration.getInt(path + ".amount", 1);
 		short durability = (short) configuration.getInt(path + ".durability", 0);
 
-		if (id == 0)
+		Material material = null;
+
+		int value = configuration.getInt(path + "material", 0);
+		if (value != 0)
+			material = getMaterial(value);
+
+		if (material == null) {
+			String str = configuration.getString(path + "material", null);
+			if (str == null)
+				return null;
+			material = Material.getMaterial(str.toUpperCase());
+		}
+
+		if (material == null) {
 			return null;
+		}
 
-		Material material = getMaterial(id);
+		if (material.equals(Material.AIR)) {
+			return null;
+		}
 
-		ItemStack item = new ItemStack(material, amount);
-
-		if (data != 0)
-			item = new ItemStack(material, amount, (byte) data);
+		ItemStack item = new ItemStack(material, amount, (byte) data);
 
 		if (durability != 0)
 			item.setDurability(durability);
@@ -85,6 +97,7 @@ public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack> {
 								"an error occurred while loading the enchantment " + enchantString);
 
 					if (material.equals(Material.ENCHANTED_BOOK)) {
+
 						((EnchantmentStorageMeta) meta).addStoredEnchant(enchantment, level, true);
 
 					} else
@@ -124,6 +137,7 @@ public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack> {
 
 		return item;
 
+
 	}
 
 	@SuppressWarnings("deprecation")
@@ -134,7 +148,7 @@ public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack> {
 			return;
 		}
 
-		configuration.set(path + "id", item.getType().getId());
+		configuration.set(path + "material", item.getType().getId());
 		if (item.getData().getData() != 0)
 			configuration.set(path + "data", item.getData().getData());
 		if (item.getAmount() > 1)

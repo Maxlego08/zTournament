@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -23,7 +24,7 @@ import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 import fr.maxlego08.ztournament.zcore.utils.builder.ItemBuilder;
-import fr.maxlego08.ztournament.zcore.utils.loader.ItemStackYAMLoader;
+import fr.maxlego08.ztournament.zcore.utils.loader.ItemStackLoader;
 import fr.maxlego08.ztournament.zcore.utils.loader.Loader;
 import fr.maxlego08.ztournament.zcore.utils.storage.Persist;
 
@@ -47,7 +48,7 @@ public class KitManager extends ZUtils implements Kits {
 		}
 
 		YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-		Loader<ItemStack> loader = new ItemStackYAMLoader();
+		Loader<ItemStack> loader = new ItemStackLoader();
 
 		AtomicInteger integer = new AtomicInteger(1);
 		kits.forEach((name, kit) -> {
@@ -111,7 +112,7 @@ public class KitManager extends ZUtils implements Kits {
 			return;
 		}
 
-		Loader<ItemStack> loader = new ItemStackYAMLoader();
+		Loader<ItemStack> loader = new ItemStackLoader();
 
 		for (String kitId : configuration.getConfigurationSection("kits.").getKeys(false)) {
 
@@ -153,16 +154,16 @@ public class KitManager extends ZUtils implements Kits {
 		kits.clear();
 
 		Map<Integer, ItemStack> items = new HashMap<>();
-		items.put(0, new ItemStack(getMaterial(272)));
-		items.put(1, new ItemStack(getMaterial(261)));
-		items.put(2, new ItemStack(getMaterial(322), 2));
-		items.put(3, new ItemStack(getMaterial(320), 9));
-		items.put(4, new ItemBuilder(getMaterial(373), 1, 81923).build());
+		items.put(0, new ItemStack(Material.STONE_SWORD));
+		items.put(1, new ItemStack(Material.BOW));
+		items.put(2, new ItemStack(Material.GOLDEN_APPLE, 2));
+		items.put(3, new ItemStack(Material.COOKED_BEEF, 9));
+		items.put(4, new ItemBuilder(Material.POTION, 1, 81923).build());
 
-		items.put(9, new ItemStack(getMaterial(262), 8));
+		items.put(9, new ItemStack(Material.ARROW, 8));
 
-		Kit kit = new fr.maxlego08.ztournament.Kit("default", new ItemStack(getMaterial(298)),
-				new ItemStack(getMaterial(299)), new ItemStack(getMaterial(300)), new ItemStack(getMaterial(301)),
+		Kit kit = new fr.maxlego08.ztournament.Kit("default", new ItemStack(Material.LEATHER_HELMET),
+				new ItemStack(Material.LEATHER_CHESTPLATE), new ItemStack(Material.LEATHER_LEGGINGS), new ItemStack(Material.LEATHER_BOOTS),
 				items);
 
 		kits.put("default", kit);
@@ -170,27 +171,27 @@ public class KitManager extends ZUtils implements Kits {
 		
 		// 2
 		items = new HashMap<>();
-		items.put(0, new ItemBuilder(getMaterial(276)).addEnchant(Enchantment.DAMAGE_ALL, 1).build());
-		items.put(1, new ItemBuilder(getMaterial(261)).addEnchant(Enchantment.ARROW_DAMAGE, 2).build());
-		items.put(2, new ItemStack(getMaterial(322), 4));
-		items.put(3, new ItemStack(getMaterial(400), 13));
-		items.put(4, new ItemBuilder(getMaterial(373), 1, 16421).build());
-		items.put(5, new ItemBuilder(getMaterial(373), 1, 16421).build());
-		items.put(6, new ItemBuilder(getMaterial(373), 1, 16421).build());
-		items.put(7, new ItemBuilder(getMaterial(373), 1, 16421).build());
-		items.put(8, new ItemBuilder(getMaterial(373), 1, 16421).build());
-		items.put(9, new ItemBuilder(getMaterial(373), 1, 8226).build());
-		items.put(10, new ItemBuilder(getMaterial(373), 1, 8226).build());
+		items.put(0, new ItemBuilder(Material.DIAMOND_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).build());
+		items.put(1, new ItemBuilder(Material.BOW).addEnchant(Enchantment.ARROW_DAMAGE, 2).build());
+		items.put(2, new ItemStack(Material.GOLDEN_APPLE, 1));
+		items.put(3, new ItemStack(Material.COOKED_BEEF, 13));
+		items.put(4, new ItemBuilder(Material.POTION, 1, 16421).build());
+		items.put(5, new ItemBuilder(Material.POTION, 1, 16421).build());
+		items.put(6, new ItemBuilder(Material.POTION, 1, 16421).build());
+		items.put(7, new ItemBuilder(Material.POTION, 1, 16421).build());
+		items.put(8, new ItemBuilder(Material.POTION, 1, 16421).build());
+		items.put(9, new ItemBuilder(Material.POTION, 1, 8226).build());
+		items.put(10, new ItemBuilder(Material.POTION, 1, 8226).build());
 
-		items.put(24, new ItemStack(getMaterial(262), 16));
+		items.put(24, new ItemStack(Material.ARROW, 16));
 
-		ItemStack helmet = new ItemBuilder(getMaterial(306)).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+		ItemStack helmet = new ItemBuilder(Material.IRON_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
 				.build();
-		ItemStack chestplate = new ItemBuilder(getMaterial(307)).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+		ItemStack chestplate = new ItemBuilder(Material.IRON_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
 				.build();
-		ItemStack leggings = new ItemBuilder(getMaterial(308)).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+		ItemStack leggings = new ItemBuilder(Material.IRON_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
 				.build();
-		ItemStack boots = new ItemBuilder(getMaterial(309)).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+		ItemStack boots = new ItemBuilder(Material.IRON_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
 
 		kit = new fr.maxlego08.ztournament.Kit("iron", helmet, chestplate, leggings, boots, items);
 

@@ -7,7 +7,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,13 +26,11 @@ import fr.maxlego08.ztournament.zcore.enums.Inventory;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
 import fr.maxlego08.ztournament.zcore.utils.gson.ArenaAdapter;
-import fr.maxlego08.ztournament.zcore.utils.gson.ItemStackAdapter;
 import fr.maxlego08.ztournament.zcore.utils.gson.LocationAdapter;
 import fr.maxlego08.ztournament.zcore.utils.gson.PotionEffectAdapter;
 import fr.maxlego08.ztournament.zcore.utils.plugins.Plugins;
 import fr.maxlego08.ztournament.zcore.utils.storage.Persist;
 import fr.maxlego08.ztournament.zcore.utils.storage.Saveable;
-import net.milkbowl.vault.economy.Economy;
 
 public abstract class ZPlugin extends JavaPlugin {
 
@@ -44,7 +41,6 @@ public abstract class ZPlugin extends JavaPlugin {
 	private long enableTime;
 	private List<Saveable> savers = new ArrayList<>();
 	private List<ListenerAdapter> listenerAdapters = new ArrayList<>();
-	private Economy economy = null;
 
 	protected CommandManager commandManager;
 	protected InventoryManager inventoryManager;
@@ -65,9 +61,6 @@ public abstract class ZPlugin extends JavaPlugin {
 
 		gson = getGsonBuilder().create();
 		persist = new Persist(this);
-
-		if (getPlugin(Plugins.VAULT) != null)
-			economy = getProvider(Economy.class);
 
 		return true;
 
@@ -106,7 +99,6 @@ public abstract class ZPlugin extends JavaPlugin {
 	public GsonBuilder getGsonBuilder() {
 		return new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls()
 				.excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
-				.registerTypeHierarchyAdapter(ItemStack.class, new ItemStackAdapter())
 				.registerTypeAdapter(PotionEffect.class, new PotionEffectAdapter())
 				.registerTypeAdapter(Arena.class, new ArenaAdapter())
 				.registerTypeAdapter(Location.class, new LocationAdapter());
@@ -190,10 +182,6 @@ public abstract class ZPlugin extends JavaPlugin {
 			return null;
 		}
 		return provider.getProvider() != null ? (T) provider.getProvider() : null;
-	}
-
-	public Economy getEconomy() {
-		return economy;
 	}
 
 	/**

@@ -8,11 +8,9 @@ import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 
@@ -231,27 +229,6 @@ public class ItemBuilder extends ZUtils implements Cloneable {
 	public ItemBuilder glow() {
 		addEnchant(material != Material.BOW ? Enchantment.ARROW_INFINITE : Enchantment.LUCK, 10);
 		setFlag(ItemFlag.HIDE_ENCHANTS);
-		return this;
-	}
-
-	/**
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public ItemBuilder owner(Player name) {
-		return owner(name.getName());
-	}
-
-	@SuppressWarnings("deprecation")
-	public ItemBuilder owner(String name) {
-		if ((material == getMaterial(144)) || (material == getMaterial(397))) {
-			SkullMeta smeta = (SkullMeta) meta;
-			smeta.setOwner(name);
-			if (meta == null)
-				build();
-			meta = smeta;
-		}
 		return this;
 	}
 

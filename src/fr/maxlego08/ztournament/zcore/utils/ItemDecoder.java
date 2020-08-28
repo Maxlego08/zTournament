@@ -116,6 +116,11 @@ public class ItemDecoder {
 
 	public static double version;
 	
+	public static boolean isNewVersion() {
+		double version = getNMSVersion();
+		return version == 1.13 || version == 1.14 || version == 1.15 || version == 1.16;
+	}
+	
 	public static double getNMSVersion() {
 		if (version != 0)
 			return version;
