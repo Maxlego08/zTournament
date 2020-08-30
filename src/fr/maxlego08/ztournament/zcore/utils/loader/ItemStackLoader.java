@@ -137,7 +137,6 @@ public class ItemStackLoader extends ZUtils implements Loader<ItemStack> {
 
 		return item;
 
-
 	}
 
 	@SuppressWarnings("deprecation")
@@ -148,7 +147,7 @@ public class ItemStackLoader extends ZUtils implements Loader<ItemStack> {
 			return;
 		}
 
-		configuration.set(path + "material", item.getType().getId());
+		configuration.set(path + "material", item.getType().name());
 		if (item.getData().getData() != 0)
 			configuration.set(path + "data", item.getData().getData());
 		if (item.getAmount() > 1)

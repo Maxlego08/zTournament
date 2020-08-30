@@ -34,7 +34,6 @@ public class CommandTournament extends VCommand {
 		Message.TOURNAMENT_HELP.getMessages().forEach(m -> message(sender, m));
 		if (sender.hasPermission(Permission.ZTOURNAMENT_HELP.getPermission())) 
 			Message.TOURNAMENT_HELP_ADMIN.getMessages().forEach(m -> message(sender, m));
-
 		return CommandType.SUCCESS;
 	}
 

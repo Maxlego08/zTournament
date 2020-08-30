@@ -5,8 +5,6 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Location;
-
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -50,8 +48,8 @@ public class ArenaAdapter extends TypeAdapter<Arena> {
 	private String getRaw(Arena arena) {
 		Map<String, Object> serial = new HashMap<String, Object>();
 		serial.put(UUID, arena.getId());
-		serial.put(POS1, arena.getPos1());
-		serial.put(POS2, arena.getPos2());
+		serial.put(POS1, arena.getPos1String());
+		serial.put(POS2, arena.getPos2String());
 		return ZPlugin.z().getGson().toJson(serial);
 	}
 
@@ -59,11 +57,9 @@ public class ArenaAdapter extends TypeAdapter<Arena> {
 		Map<String, Object> keys = ZPlugin.z().getGson().fromJson(raw, seriType);
 		java.util.UUID uuid = java.util.UUID.fromString((String) keys.get(UUID));
 
-		LocationAdapter adapter = new LocationAdapter();
+		String pos1 = (String) keys.get(POS1);
+		String pos2 = (String) keys.get(POS2);
 
-		Location pos1 = adapter.fromRaw((String) keys.get(POS1));
-		Location pos2 = adapter.fromRaw((String) keys.get(POS2));
-		
 		return new ArenaObject(uuid, pos1, pos2);
 	}
 

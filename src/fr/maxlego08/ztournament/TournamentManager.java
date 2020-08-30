@@ -73,8 +73,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class TournamentManager extends ZUtils implements Tournament {
 
-	private static List<Arena> arenas = new ArrayList<Arena>();
-	private static Location location;
+	private static List<ArenaObject> arenas = new ArrayList<ArenaObject>();
+	private static String location;
 	private transient List<Team> teams = new ArrayList<>();
 	private transient List<Team> eliminatedTeams = new ArrayList<>();
 	private transient List<Duel> duels = new ArrayList<>();
@@ -223,7 +223,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		TournamentManager.location = location;
+		TournamentManager.location = changeLocationToStringEye(location);
 		message(sender, Message.TOURNAMENT_LOBBY_CREATE);
 	}
 
@@ -244,7 +244,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			message(sender, Message.TOURNAMENT_ENABLE);
 			return;
 		}
-		Arena arena = new ArenaObject(pos1, pos2);
+		ArenaObject arena = new ArenaObject(pos1, pos2);
 		arenas.add(arena);
 		message(sender, Message.TOURNAMENT_ARENA_CREATE);
 	}
@@ -261,7 +261,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		TextComponent message = buildTextComponent("§eListe des arènes§8: §6");
+		TextComponent message = buildTextComponent("§eList of arenas§8: §6");
 		for (int a = 0; a != arenas.size(); a++) {
 			if (a == arenas.size() - 1 && a != 0) {
 				message.addExtra("§7 et §6");
@@ -270,11 +270,12 @@ public class TournamentManager extends ZUtils implements Tournament {
 			}
 			Arena arena = arenas.get(a);
 			TextComponent component = new TextComponent("§6" + arena.getId());
-			component.setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/tournament delete " + arena.getId()));
+			component.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/ztournament delete " + arena.getId()));
 			component.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
-					new BaseComponent[] { new TextComponent("§f» §7Clique pour supprimer cette arène"),
-							new TextComponent("§f» §7Coordonné 1: " + changeLocationToString(arena.getPos1())),
-							new TextComponent("§f» §7Coordonné 2: " + changeLocationToString(arena.getPos2())) }));
+					new BaseComponent[] { new TextComponent("§8» §7Click to delete this arena\n"),
+							new TextComponent(
+									"§8» §7Location 1: §f" + arena.getPos1String().replace(",", " §8,§f ") + "\n"),
+							new TextComponent("§8» §7Location 2: §f" + arena.getPos2String().replace(",", " §8,§f ")) }));
 			message.addExtra(component);
 		}
 		player.spigot().sendMessage(message);
@@ -625,14 +626,14 @@ public class TournamentManager extends ZUtils implements Tournament {
 						winner.reMap();
 						winner.show();
 						winner.heal();
-						winner.teleport(location);
+						winner.teleport(getLocation());
 
 						Team looser = duel.getOpponant();
 						looser.setInDuel(false);
 						looser.clear();
 						looser.heal();
 						looser.show();
-						looser.teleport(location);
+						looser.teleport(getLocation());
 
 					});
 
@@ -655,7 +656,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		Team winner = teams.get(0);
 		winner.clear();
-		winner.getPlayers().forEach(player -> player.teleport(location));
+		winner.getPlayers().forEach(player -> player.teleport(getLocation()));
 		winner.show();
 		winner.setPosition(1);
 		if (!eliminatedTeams.contains(winner))
@@ -806,8 +807,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		TournamentTeamCreateEvent event = new TournamentTeamCreateEvent(new TeamObject(name, type.getMax(), player, kit),
-				player, name);
+		TournamentTeamCreateEvent event = new TournamentTeamCreateEvent(
+				new TeamObject(name, type.getMax(), player, kit), player, name);
 		event.callEvent();
 
 		if (event.isCancelled())
@@ -817,7 +818,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		team = new TeamObject(name, type.getMax(), player, kit);
 		this.teams.add(team);
-		player.teleport(location);
+		player.teleport(getLocation());
 		clearPlayer(player);
 
 		Message message = Message.TITLE_CREATE_SUCCESS;
@@ -881,7 +882,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 				return;
 
 			team.message(Message.TOURNAMENT_JOIN_SUCCESS_INFO.replace("%player%", player.getName()));
-			player.teleport(location);
+			player.teleport(getLocation());
 			clearPlayer(player);
 
 			Message message = Message.TITLE_JOIN_SUCCESS;
@@ -942,7 +943,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		team.message(Message.TOURNAMENT_INVITE_TEAM.replace("%player%", player.getName()).replace("%target%",
 				target.getName()));
 
-		team.message(
+		message(target,
 				Message.TOURNAMENT_INVITE_INFO.replace("%player%", player.getName()).replace("%team%", team.getName()));
 
 		TextComponent component = buildTextComponent(
@@ -990,7 +991,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			if (message)
 				message(player, Message.TOURNAMENT_TEAM_LEAVE);
 			team.leave(player);
-			player.teleport(location);
+			player.teleport(getLocation());
 			clearPlayer(player);
 
 		}
@@ -1005,7 +1006,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		event.callEvent();
 
 		duel.message(Message.TOURNAMENT_PLAYER_LOOSE.replace("%player%", player.getName()));
-		player.teleport(location);
+		player.teleport(getLocation());
 
 		clearPlayer(player);
 
@@ -1020,14 +1021,14 @@ public class TournamentManager extends ZUtils implements Tournament {
 			winner.reMap();
 			winner.show();
 			winner.heal();
-			winner.teleport(location);
+			winner.teleport(getLocation());
 
 			Team looser = duel.getLooser();
 			looser.setInDuel(false);
 			looser.clear();
 			looser.heal();
 			looser.show();
-			looser.teleport(location);
+			looser.teleport(getLocation());
 
 			looser.setPosition(currentTeams--);
 			Message.TOURNAMENT_DUEL_LOOSE.getMessages().forEach(e -> {
@@ -1124,8 +1125,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 				e.clear();
 				e.getRealPlayers().forEach(p -> {
 					if (p.isOnline()) {
-						p.getPlayer().teleport(location);
-						p.getPlayer().teleport(location);
+						p.getPlayer().teleport(getLocation());
+						p.getPlayer().teleport(getLocation());
 					}
 				});
 			});
@@ -1155,14 +1156,14 @@ public class TournamentManager extends ZUtils implements Tournament {
 			winner.reMap();
 			winner.show();
 			winner.heal();
-			winner.teleport(location);
+			winner.teleport(getLocation());
 
 			Team looser = duel.getOpponant();
 			looser.setInDuel(false);
 			looser.clear();
 			looser.heal();
 			looser.show();
-			looser.teleport(location);
+			looser.teleport(getLocation());
 
 		});
 
@@ -1182,7 +1183,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 	@Override
 	public Location getLocation() {
-		return location;
+		return changeStringLocationToLocationEye(location);
 	}
 
 	@Override
@@ -1216,8 +1217,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 				e.clear();
 				e.getRealPlayers().forEach(p -> {
 					if (p.isOnline()) {
-						p.getPlayer().teleport(location);
-						p.getPlayer().teleport(location);
+						p.getPlayer().teleport(getLocation());
+						p.getPlayer().teleport(getLocation());
 					}
 				});
 			});

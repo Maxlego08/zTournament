@@ -15,7 +15,6 @@ import org.bukkit.potion.PotionEffect;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import fr.maxlego08.ztournament.api.Arena;
 import fr.maxlego08.ztournament.command.CommandManager;
 import fr.maxlego08.ztournament.command.VCommand;
 import fr.maxlego08.ztournament.inventory.InventoryManager;
@@ -25,7 +24,6 @@ import fr.maxlego08.ztournament.scoreboard.ScoreBoardManager;
 import fr.maxlego08.ztournament.zcore.enums.Inventory;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
-import fr.maxlego08.ztournament.zcore.utils.gson.ArenaAdapter;
 import fr.maxlego08.ztournament.zcore.utils.gson.LocationAdapter;
 import fr.maxlego08.ztournament.zcore.utils.gson.PotionEffectAdapter;
 import fr.maxlego08.ztournament.zcore.utils.plugins.Plugins;
@@ -100,7 +98,7 @@ public abstract class ZPlugin extends JavaPlugin {
 		return new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls()
 				.excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
 				.registerTypeAdapter(PotionEffect.class, new PotionEffectAdapter())
-				.registerTypeAdapter(Arena.class, new ArenaAdapter())
+//				.registerTypeAdapter(Arena.class, new ArenaAdapter())
 				.registerTypeAdapter(Location.class, new LocationAdapter());
 	}
 

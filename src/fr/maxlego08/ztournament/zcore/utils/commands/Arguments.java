@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 
-@SuppressWarnings("deprecation")
 public abstract class Arguments extends ZUtils {
 
 	protected String[] args;

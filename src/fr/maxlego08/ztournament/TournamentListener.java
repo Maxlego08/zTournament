@@ -1,6 +1,5 @@
 package fr.maxlego08.ztournament;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -50,7 +49,7 @@ public class TournamentListener extends ListenerAdapter {
 				if (duel != null) {
 					Location location = duel.getArena().getPos1();
 					event.setTo(location);
-					message(player, "§eVous ne pouvez pas sortir de l'arene.");
+					message(player, Message.TOURNAMENT_LEAVE_ARENA);
 
 				}
 			}
@@ -67,7 +66,7 @@ public class TournamentListener extends ListenerAdapter {
 				return;
 
 			event.setCancelled(true);
-			message(player, "§cVous ne pouvez pas jeter d'item au sol.");
+			message(player, Message.DROP_ITEM);
 
 		}
 
@@ -107,7 +106,7 @@ public class TournamentListener extends ListenerAdapter {
 			if (team.contains(damager)) {
 
 				event.setCancelled(true);
-				actionMessage(player, "§eVous ne pouvez pas faire des dégâts à un membre de votre équipe.");
+				actionMessage(player, Message.TEAM_DAMAGE);
 
 			} else
 				event.setCancelled(false);
@@ -149,12 +148,13 @@ public class TournamentListener extends ListenerAdapter {
 
 	@Override
 	protected void onCommand(PlayerCommandPreprocessEvent event, Player player, String message) {
+		
 		Team team = tournament.getByPlayer(player);
-		if (team != null && (tournament.isStart() || tournament.isWaiting()) && !message.startsWith("/tournois")
-				&& !message.startsWith("/tournament")) {
+		if (team != null && (tournament.isStart() || tournament.isWaiting()) && (!message.startsWith("/tournois")
+				|| !message.startsWith("/tournament") || !message.startsWith("/ztournament"))) {
 
 			event.setCancelled(true);
-			message(player, "§cVous ne pouvez pas faire de commande pendant un tournois.");
+			message(player, Message.TOURNAMENT_COMMAND);
 
 		}
 	}
@@ -168,8 +168,6 @@ public class TournamentListener extends ListenerAdapter {
 				String name = "%%__USER__%%";
 				event.getPlayer()
 						.sendMessage(Message.PREFIX_END.getMessage() + " §aUtilisateur spigot §2" + name + " §a!");
-				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage() + " §aAdresse du serveur §2"
-						+ Bukkit.getServer().getIp().toString() + ":" + Bukkit.getServer().getPort() + " §a!");
 			}
 			if (ZPlugin.z().getDescription().getFullName().toLowerCase().contains("dev")) {
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()

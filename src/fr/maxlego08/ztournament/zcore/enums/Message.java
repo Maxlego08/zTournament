@@ -172,7 +172,7 @@ public enum Message {
 			"§6» §e/tournament version §8- §7Show plugin's version."),
 
 	TOURNAMENT_HELP_ADMIN("§6» §e/tournament arena §f<§bloc§f> §8- §7Create an arena.",
-			"§6» §e/tournament delete §f<§buuid§f> §8- §7Delete an arena.",
+			"§6» §e/tournament delete §f<§buuid§f> §8- §7Allows you to delete an arena. Makes /ztournament list to retrieve the arena list (json message).",
 			"§6» §e/tournament list §8- §7Show an arena.",
 			"§6» §e/tournament setlobby §8- §7Set lobby's position.",
 			"§6» §e/tournament stop §8- §7Shop a tournament.",
@@ -194,6 +194,7 @@ public enum Message {
 	TOURNAMENT_KIT_CREATE("§eYou created kit §6%name%§e."),
 	TOURNAMENT_KIT_DELETE("§eYou deleted kit §6%name%§e."),
 	TOURNAMENT_KIT_EDIT("§eYou edited the kit §f%s§e."),
+	TEAM_DAMAGE("§cYou cannot do damage to a member of your team."),
 	
 	// title
 
@@ -210,7 +211,12 @@ public enum Message {
 			100, 30),
 
 	TITLE_START_ERROR_PLAYER("§cNot enough players to start the tournament",
-			"§cyou still have §f5 §cminutes to create a team.", 10, 60, 10),
+			"§cyou still have §f5 §cminutes to create a team.", 10, 60, 10), 
+	
+	TOURNAMENT_COMMAND("§cYou cannot place orders during a tournament."), 
+	TOURNAMENT_LEAVE_ARENA("§eYou cannot leave the arena."), 
+	DROP_ITEM("§cYou may not throw items on the ground."), 
+	
 
 	;
 

@@ -24,6 +24,18 @@ public interface Arena {
 	 * @return
 	 */
 	Location getPos2();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	String getPos1String();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	String getPos2String();
 
 	/**
 	 * 

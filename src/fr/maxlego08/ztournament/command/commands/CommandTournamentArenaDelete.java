@@ -13,6 +13,7 @@ public class CommandTournamentArenaDelete extends VCommand {
 		this.setPermission(Permission.ZTOURNAMENT_DELETE);
 		this.addSubCommand("delete");
 		this.addRequireArg("uuid");
+		this.setDescription("Allows you to delete an arena. Makes /ztournament list to retrieve the arena list (json message).");
 		this.setConsoleCanUse(false);
 	}
 

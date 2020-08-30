@@ -13,8 +13,8 @@ import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 public class ArenaObject extends ZUtils implements Arena {
 
 	private final UUID id;
-	private final Location pos1;
-	private final Location pos2;
+	private final String pos1;
+	private final String pos2;
 	private transient List<Duel> teams = new ArrayList<Duel>();
 
 	/**
@@ -25,11 +25,11 @@ public class ArenaObject extends ZUtils implements Arena {
 	 */
 	public ArenaObject(Location pos1, Location pos2) {
 		this.id = UUID.randomUUID();
-		this.pos1 = pos1;
-		this.pos2 = pos2;
+		this.pos1 = changeLocationToStringEye(pos1);
+		this.pos2 = changeLocationToStringEye(pos2);
 		this.teams = new ArrayList<Duel>();
 	}
-	
+
 	/**
 	 * 
 	 * @param id
@@ -38,6 +38,19 @@ public class ArenaObject extends ZUtils implements Arena {
 	 */
 	public ArenaObject(UUID uuid, Location pos1, Location pos2) {
 		this.id = uuid;
+		this.pos1 = changeLocationToStringEye(pos1);
+		this.pos2 = changeLocationToStringEye(pos2);
+		this.teams = new ArrayList<Duel>();
+	}
+
+	/**
+	 * @param id
+	 * @param pos1
+	 * @param pos2
+	 */
+	public ArenaObject(UUID id, String pos1, String pos2) {
+		super();
+		this.id = id;
 		this.pos1 = pos1;
 		this.pos2 = pos2;
 		this.teams = new ArrayList<Duel>();
@@ -54,14 +67,14 @@ public class ArenaObject extends ZUtils implements Arena {
 	 * @return the pos1
 	 */
 	public Location getPos1() {
-		return pos1;
+		return changeStringLocationToLocationEye(pos1);
 	}
 
 	/**
 	 * @return the pos2
 	 */
 	public Location getPos2() {
-		return pos2;
+		return changeStringLocationToLocationEye(pos2);
 	}
 
 	public List<Duel> getTeams() {
@@ -97,6 +110,16 @@ public class ArenaObject extends ZUtils implements Arena {
 			teams = new ArrayList<Duel>();
 		if (teams != null)
 			teams.clear();
+	}
+
+	@Override
+	public String getPos1String() {
+		return pos1;
+	}
+
+	@Override
+	public String getPos2String() {
+		return pos2;
 	}
 
 }
