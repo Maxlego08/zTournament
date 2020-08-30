@@ -177,9 +177,14 @@ public class TournamentListener extends ListenerAdapter {
 	@Override
 	protected void onCommand(PlayerCommandPreprocessEvent event, Player player, String message) {
 
+		message = message.toLowerCase();
+
 		Team team = tournament.getByPlayer(player);
-		if (team != null && (tournament.isStart() || tournament.isWaiting()) && (!message.startsWith("/tournois")
-				|| !message.startsWith("/tournament") || !message.startsWith("/ztournament"))) {
+
+		if ((team != null) && (tournament.isStart() || tournament.isWaiting())
+				&& (!message.contains("/tournois") && !message.contains("/tournament")
+						&& !message.contains("/ztournament"))
+				&& !player.hasPermission(Permission.ZTOURNAMENT_BYPASS_COMMAND.getPermission())) {
 
 			event.setCancelled(true);
 			message(player, Message.TOURNAMENT_COMMAND);
