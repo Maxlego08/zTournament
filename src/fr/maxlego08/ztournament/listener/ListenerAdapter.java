@@ -25,6 +25,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 
@@ -91,12 +92,15 @@ public abstract class ListenerAdapter extends ZUtils {
 	public void onPlayerWalk(PlayerMoveEvent event, Player player, int i) {
 	}
 
-	public void onPlayerDamage(EntityDamageByEntityEvent event, DamageCause cause, double damage,
-			Player damager, Player entity) {
+	public void onPlayerDamage(EntityDamageByEntityEvent event, DamageCause cause, double damage, Player damager,
+			Player entity) {
 	}
 
-	public void onPlayerDamage(EntityDamageEvent event, DamageCause cause, double damage,
-			Player entity) {
+	public void onPlayerDamage(EntityDamageEvent event, DamageCause cause, double damage, Player entity) {
+	}
+
+	public void onPlayerDamageLow(EntityDamageByEntityEvent event, @NotNull DamageCause cause, double damage,
+			Player damager, Player entity) {
 	}
 
 }

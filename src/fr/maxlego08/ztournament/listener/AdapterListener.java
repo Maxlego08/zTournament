@@ -88,4 +88,12 @@ public class AdapterListener extends ZUtils implements Listener {
 			template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamage(event, event.getCause(),
 					event.getDamage(), (Player) event.getDamager(), (Player) event.getEntity()));
 	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onDamageLow(EntityDamageByEntityEvent event) {
+		
+		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player)
+			template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamageLow(event, event.getCause(),
+					event.getDamage(), (Player) event.getDamager(), (Player) event.getEntity()));
+	}
 }

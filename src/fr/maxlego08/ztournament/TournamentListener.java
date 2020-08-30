@@ -73,23 +73,24 @@ public class TournamentListener extends ListenerAdapter {
 	}
 
 	@Override
-	public void onPlayerDamage(EntityDamageEvent event, DamageCause cause, double damage, Player player) {
+	public void onPlayerDamageLow(EntityDamageByEntityEvent event, DamageCause cause, double damage, Player player,
+			Player entity) {
 
-		if (tournament.isStart() && !tournament.isWaiting() && player.getHealth() - event.getFinalDamage() <= 0) {
+		if (tournament.isStart() && !tournament.isWaiting()) {
+
 			Team team = tournament.getByPlayer(player);
 
 			if (team == null)
 				return;
 
-			Duel duel = tournament.getDuel(team);
-			if (duel == null)
+			if (!team.isAlive(player))
 				return;
 
+			// on cancel l'event pour bypass tout les autres
 			event.setCancelled(true);
-			player.teleport(tournament.getLocation());
 
-			tournament.loose(team, duel, player);
 		}
+
 	}
 
 	@Override
@@ -103,14 +104,41 @@ public class TournamentListener extends ListenerAdapter {
 			if (team == null)
 				return;
 
+			if (!team.isAlive(player))
+				return;
+
 			if (team.contains(damager)) {
 
 				event.setCancelled(true);
 				actionMessage(player, Message.TEAM_DAMAGE);
 
 			} else
+
 				event.setCancelled(false);
 
+		}
+	}
+
+	@Override
+	public void onPlayerDamage(EntityDamageEvent event, DamageCause cause, double damage, Player player) {
+
+		if (tournament.isStart() && !tournament.isWaiting() && player.getHealth() - event.getFinalDamage() <= 0) {
+			Team team = tournament.getByPlayer(player);
+
+			if (team == null)
+				return;
+
+			Duel duel = tournament.getDuel(team);
+			if (duel == null)
+				return;
+
+			if (!team.isAlive(player))
+				return;
+
+			event.setCancelled(true);
+			player.teleport(tournament.getLocation());
+
+			tournament.loose(team, duel, player);
 		}
 	}
 
@@ -148,7 +176,7 @@ public class TournamentListener extends ListenerAdapter {
 
 	@Override
 	protected void onCommand(PlayerCommandPreprocessEvent event, Player player, String message) {
-		
+
 		Team team = tournament.getByPlayer(player);
 		if (team != null && (tournament.isStart() || tournament.isWaiting()) && (!message.startsWith("/tournois")
 				|| !message.startsWith("/tournament") || !message.startsWith("/ztournament"))) {
