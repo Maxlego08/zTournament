@@ -86,6 +86,9 @@ public class TournamentListener extends ListenerAdapter {
 			if (!team.isAlive(player))
 				return;
 
+			if (!team.isInDuel())
+				return;
+			
 			// on cancel l'event pour bypass tout les autres
 			event.setCancelled(true);
 
@@ -107,14 +110,19 @@ public class TournamentListener extends ListenerAdapter {
 			if (!team.isAlive(player))
 				return;
 
+			if (!team.isInDuel())
+				return;
+			
 			if (team.contains(damager)) {
 
 				event.setCancelled(true);
 				actionMessage(player, Message.TEAM_DAMAGE);
 
-			} else
+			} else {
 
 				event.setCancelled(false);
+				
+			}
 
 		}
 	}
