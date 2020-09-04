@@ -106,25 +106,26 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		if (nms == 1.7)
 			this.nms = new NMS_1_7();
-		if (nms == 1.8)
+		else if (nms == 1.8)
 			this.nms = new NMS_1_8();
-		if (nms == 1.9)
+		else if (nms == 1.9)
 			this.nms = new NMS_1_9();
-		if (nms == 1.10)
+		else if (nms == 1.10)
 			this.nms = new NMS_1_10();
-		if (nms == 1.11)
+		else if (nms == 1.11)
 			this.nms = new NMS_1_11();
-		if (nms == 1.12)
+		else if (nms == 1.12)
 			this.nms = new NMS_1_12();
-		if (nms == 1.13)
+		else if (nms == 1.13)
 			this.nms = new NMS_1_13();
-		if (nms == 1.14)
+		else if (nms == 1.14)
 			this.nms = new NMS_1_14();
-		if (nms == 1.15)
+		else if (nms == 1.15)
 			this.nms = new NMS_1_15();
-		if (nms == 1.16)
+		else if (nms == 1.16)
 			this.nms = new NMS_1_16();
 
+		
 		this.kits = kits;
 
 		Logger.info("Loaded NMS " + nms + " !", LogType.INFO);

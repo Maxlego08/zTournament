@@ -1,13 +1,13 @@
 package fr.maxlego08.ztournament.nms;
 
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.util.CraftChatMessage;
+import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R2.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 
 import fr.maxlego08.ztournament.api.NMS;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction;
+import net.minecraft.server.v1_16_R2.PacketPlayOutTitle;
+import net.minecraft.server.v1_16_R2.PacketPlayOutTitle.EnumTitleAction;
 
 public class NMS_1_16 extends ZUtils implements NMS {
 
