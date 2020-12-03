@@ -165,28 +165,28 @@ public enum Message {
 
 	TOURNAMENT_HELP_HEADER("§8[§b?§8] §7Commands lists:"),
 	
-	TOURNAMENT_HELP("§6» §e/tournament create §f<§bnom de team§f> §8- §7Create a team",
-			"§6» §e/tournament join §f<§bnom de team§f> §8- §7Join a team.",
-			"§6» §e/tournament invite §f<§bplayer§f> §8- §7Invite a player to your team.",
-			"§6» §e/tournament leave §8- §7Leave your team.",
-			"§6» §e/tournament version §8- §7Show plugin's version."),
+	TOURNAMENT_HELP("§6» §f/tournament create §8<§ateam name§8> §8- §7Create a team",
+			"§6» §f/tournament join §f<§anom de team§f> §8- §7Join a team.",
+			"§6» §f/tournament invite §8<§aplayer§8> §8- §7Invite a player to your team.",
+			"§6» §f/tournament leave §8- §7Leave your team.",
+			"§6» §f/tournament version §8- §7Show plugin's version."),
 
-	TOURNAMENT_HELP_ADMIN("§6» §e/tournament arena §f<§bloc§f> §8- §7Create an arena.",
-			"§6» §e/tournament delete §f<§buuid§f> §8- §7Allows you to delete an arena. Makes /ztournament list to retrieve the arena list (json message).",
-			"§6» §e/tournament list §8- §7Show an arena.",
-			"§6» §e/tournament setlobby §8- §7Set lobby's position.",
-			"§6» §e/tournament stop §8- §7Shop a tournament.",
-			"§6» §e/tournament wave §8- §7Start next wave.",
-			"§6» §e/tournament start §f<§btype§f> §f<§bkit name§f>§8- §7Start tournament.",
-			"§6» §e/tournament kit §8- §7Show kit commands.",
-			"§6» §e/tournament reload §8- §7Reload the plugin."),
+	TOURNAMENT_HELP_ADMIN("§6» §f/tournament arena §§8<§aname§8> §8<§aloc1§8> §8<§aloc2§8> §8- §7Create an arena.",
+			"§6» §f/tournament delete §8<§auuid§8> §8- §7Allows you to delete an arena. Makes /ztournament list to retrieve the arena list (json message).",
+			"§6» §f/tournament list §8- §7Show an arena.",
+			"§6» §f/tournament setlobby §8- §7Set lobby's position.",
+			"§6» §f/tournament stop §8- §7Shop a tournament.",
+			"§6» §f/tournament wave §8- §7Start next wave.",
+			"§6» §f/tournament start §f<§atype§f> §f<§bkit name§f>§8- §7Start tournament.",
+			"§6» §f/tournament kit §8- §7Show kit commands.",
+			"§6» §f/tournament reload §8- §7Reload the plugin."),
 	
 	TOURNAMENT_HELP_ADMIN_KIT(
-			"§6» §e/tournament kit list§8- §7Show kit list.",
-			"§6» §e/tournament kit show <name>§8- §7Show kit content.",
-			"§6» §e/tournament kit create <name>§8- §7Create an empty kit.",
-			"§6» §e/tournament kit edit <name>§8- §7Edit a kit.",
-			"§6» §e/tournament kit delete <name>§8- §7Edit a kit."
+			"§6» §f/tournament kit list§8- §7Show kit list.",
+			"§6» §f/tournament kit show §8<§aname§8>§8- §7Show kit content.",
+			"§6» §f/tournament kit create §8<§aname§8>§8- §7Create an empty kit.",
+			"§6» §f/tournament kit edit §8<§aname§8>§8- §7Edit a kit.",
+			"§6» §f/tournament kit delete §8<§aname§8>§8- §7Edit a kit."
 			),
 
 	TOURNAMENT_KIT_ALREADY_EXIST("§cKit §f%name% §calready exists"),

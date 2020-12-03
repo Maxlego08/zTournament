@@ -95,7 +95,7 @@ public interface Tournament extends Saveable {
 	 * @param pos1
 	 * @param pos2
 	 */
-	void createArena(CommandSender sender, Location pos1, Location pos2);
+	void createArena(CommandSender sender, String name, Location pos1, Location pos2);
 
 	/**
 	 * 

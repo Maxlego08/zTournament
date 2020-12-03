@@ -243,12 +243,12 @@ public class TournamentManager extends ZUtils implements Tournament {
 	}
 
 	@Override
-	public void createArena(CommandSender sender, Location pos1, Location pos2) {
+	public void createArena(CommandSender sender, String name, Location pos1, Location pos2) {
 		if (isStart) {
 			message(sender, Message.TOURNAMENT_ENABLE);
 			return;
 		}
-		ArenaObject arena = new ArenaObject(pos1, pos2);
+		ArenaObject arena = new ArenaObject(name, pos1, pos2);
 		arenas.add(arena);
 		message(sender, Message.TOURNAMENT_ARENA_CREATE);
 	}
@@ -273,8 +273,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 				message.addExtra("§7, §6");
 			}
 			Arena arena = arenas.get(a);
-			TextComponent component = new TextComponent("§6" + arena.getId());
-			component.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/ztournament delete " + arena.getId()));
+			TextComponent component = new TextComponent("§6" + arena.getUniqueId());
+			component.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/ztournament delete " + arena.getUniqueId()));
 			component.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
 					new BaseComponent[] { new TextComponent("§8» §7Click to delete this arena\n"),
 							new TextComponent(
