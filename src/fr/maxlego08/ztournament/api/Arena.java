@@ -9,31 +9,38 @@ public interface Arena {
 
 	/**
 	 * 
+	 * @return uuid
+	 */
+	@Deprecated
+	UUID getId();
+	
+	/**
+	 * Get unique id
 	 * @return
 	 */
-	UUID getId();
+	UUID getUniqueId();
 
 	/**
 	 * 
-	 * @return
+	 * @return {@link Location}
 	 */
 	Location getPos1();
 
 	/**
 	 * 
-	 * @return
+	 * @return {@link Location}
 	 */
 	Location getPos2();
 	
 	/**
 	 * 
-	 * @return
+	 * @return location as string
 	 */
 	String getPos1String();
 	
 	/**
 	 * 
-	 * @return
+	 * @return location as string
 	 */
 	String getPos2String();
 
@@ -71,5 +78,17 @@ public interface Arena {
 	 * 
 	 */
 	void clear();
+	
+	/**
+	 * 
+	 * @return arena name
+	 */
+	String getName();
+	
+	/**
+	 * 
+	 * @param name
+	 */
+	void setName(String name);
 	
 }

@@ -23,7 +23,7 @@ public class CommandTournamentKits extends VCommand {
 	protected CommandType perform(ZTournamentPlugin main) {
 
 		messageWO(sender, Message.TOURNAMENT_HELP_HEADER);
-		Message.TOURNAMENT_HELP_ADMIN_KIT.getMessages().forEach(m -> message(sender, m));
+		Message.TOURNAMENT_HELP_ADMIN_KIT.getMessages().forEach(m -> messageWO(sender, m));
 
 		return CommandType.SUCCESS;
 	}

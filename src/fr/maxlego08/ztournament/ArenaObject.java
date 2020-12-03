@@ -12,6 +12,7 @@ import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 
 public class ArenaObject extends ZUtils implements Arena {
 
+	private String name;
 	private final UUID id;
 	private final String pos1;
 	private final String pos2;
@@ -23,7 +24,8 @@ public class ArenaObject extends ZUtils implements Arena {
 	 * @param pos1
 	 * @param pos2
 	 */
-	public ArenaObject(Location pos1, Location pos2) {
+	public ArenaObject(String name, Location pos1, Location pos2) {
+		this.name = name;
 		this.id = UUID.randomUUID();
 		this.pos1 = changeLocationToStringEye(pos1);
 		this.pos2 = changeLocationToStringEye(pos2);
@@ -36,7 +38,8 @@ public class ArenaObject extends ZUtils implements Arena {
 	 * @param pos1
 	 * @param pos2
 	 */
-	public ArenaObject(UUID uuid, Location pos1, Location pos2) {
+	public ArenaObject(String name, UUID uuid, Location pos1, Location pos2) {
+		this.name = name;
 		this.id = uuid;
 		this.pos1 = changeLocationToStringEye(pos1);
 		this.pos2 = changeLocationToStringEye(pos2);
@@ -48,8 +51,9 @@ public class ArenaObject extends ZUtils implements Arena {
 	 * @param pos1
 	 * @param pos2
 	 */
-	public ArenaObject(UUID id, String pos1, String pos2) {
+	public ArenaObject(UUID id, String name, String pos1, String pos2) {
 		super();
+		this.name = name;
 		this.id = id;
 		this.pos1 = pos1;
 		this.pos2 = pos2;
@@ -120,6 +124,21 @@ public class ArenaObject extends ZUtils implements Arena {
 	@Override
 	public String getPos2String() {
 		return pos2;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public UUID getUniqueId() {
+		return id;
 	}
 
 }

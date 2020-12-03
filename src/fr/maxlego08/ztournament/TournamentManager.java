@@ -243,12 +243,12 @@ public class TournamentManager extends ZUtils implements Tournament {
 	}
 
 	@Override
-	public void createArena(CommandSender sender, Location pos1, Location pos2) {
+	public void createArena(CommandSender sender, String name, Location pos1, Location pos2) {
 		if (isStart) {
 			message(sender, Message.TOURNAMENT_ENABLE);
 			return;
 		}
-		ArenaObject arena = new ArenaObject(pos1, pos2);
+		ArenaObject arena = new ArenaObject(name, pos1, pos2);
 		arenas.add(arena);
 		message(sender, Message.TOURNAMENT_ARENA_CREATE);
 	}
@@ -265,25 +265,31 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		TextComponent message = buildTextComponent("§eList of arenas§8: §6");
+		TextComponent message = buildTextComponent(Message.PREFIX.getMessage() + " §fList of arenas§8: §a");
 		for (int a = 0; a != arenas.size(); a++) {
 			if (a == arenas.size() - 1 && a != 0) {
-				message.addExtra("§7 et §6");
+				message.addExtra("§7 et §a");
 			} else if (a != 0) {
-				message.addExtra("§7, §6");
+				message.addExtra("§7, §a");
 			}
 			Arena arena = arenas.get(a);
-			TextComponent component = new TextComponent("§6" + arena.getId());
-			component.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/ztournament delete " + arena.getId()));
-			component.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
-					new BaseComponent[] { new TextComponent("§8» §7Click to delete this arena\n"),
-							new TextComponent(
-									"§8» §7Location 1: §f" + arena.getPos1String().replace(",", " §8,§f ") + "\n"),
-							new TextComponent(
-									"§8» §7Location 2: §f" + arena.getPos2String().replace(",", " §8,§f ")) }));
+			TextComponent component = new TextComponent("§a" + arena.getName());
+
+			component.setClickEvent(
+					new ClickEvent(Action.SUGGEST_COMMAND, "/ztournament delete " + arena.getUniqueId()));
+			component.setHoverEvent(
+					new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT, getLore(arena)));
 			message.addExtra(component);
 		}
 		player.spigot().sendMessage(message);
+	}
+
+	private BaseComponent[] getLore(Arena arena) {
+		BaseComponent[] lore = new BaseComponent[3];
+		lore[0] = new TextComponent("§8» §7Click to delete this arena\n");
+		lore[1] = new TextComponent("§8» §7Location 1: §f" + arena.getPos1String().replace(",", " §8,§f ") + "\n");
+		lore[2] = new TextComponent("§8» §7Location 2: §f" + arena.getPos2String().replace(",", " §8,§f "));
+		return lore;
 	}
 
 	@Override
@@ -1258,7 +1264,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		list.addAll(this.teams);
 		list.addAll(this.eliminatedTeams);
 		return list.stream().filter(team -> team.match(player)).findFirst();
-		
+
 	}
 
 }

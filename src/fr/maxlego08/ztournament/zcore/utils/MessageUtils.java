@@ -35,6 +35,15 @@ public class MessageUtils {
 	protected void messageWO(CommandSender player, Message message) {
 		player.sendMessage(message.msg());
 	}
+	
+	/**
+	 * 
+	 * @param player
+	 * @param message
+	 */
+	protected void messageWO(CommandSender player, String message) {
+		player.sendMessage(message);
+	}
 
 	/**
 	 * 

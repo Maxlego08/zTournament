@@ -23,6 +23,7 @@ public class ArenaAdapter extends TypeAdapter<Arena> {
 	private static String POS1 = "pos1";
 	private static String POS2 = "pos2";
 	private static String UUID = "uuid";
+	private static String NAME = "name";
 
 	public ArenaAdapter() {
 	}
@@ -47,9 +48,10 @@ public class ArenaAdapter extends TypeAdapter<Arena> {
 
 	private String getRaw(Arena arena) {
 		Map<String, Object> serial = new HashMap<String, Object>();
-		serial.put(UUID, arena.getId());
+		serial.put(UUID, arena.getUniqueId());
 		serial.put(POS1, arena.getPos1String());
 		serial.put(POS2, arena.getPos2String());
+		serial.put(NAME, arena.getName());
 		return ZPlugin.z().getGson().toJson(serial);
 	}
 
@@ -59,8 +61,9 @@ public class ArenaAdapter extends TypeAdapter<Arena> {
 
 		String pos1 = (String) keys.get(POS1);
 		String pos2 = (String) keys.get(POS2);
+		String name = (String) keys.get(NAME);
 
-		return new ArenaObject(uuid, pos1, pos2);
+		return new ArenaObject(uuid, name, pos1, pos2);
 	}
 
 }
