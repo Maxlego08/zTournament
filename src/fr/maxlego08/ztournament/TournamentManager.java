@@ -5,12 +5,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -51,12 +53,14 @@ import fr.maxlego08.ztournament.nms.NMS_1_12;
 import fr.maxlego08.ztournament.nms.NMS_1_13;
 import fr.maxlego08.ztournament.nms.NMS_1_14;
 import fr.maxlego08.ztournament.nms.NMS_1_15;
-import fr.maxlego08.ztournament.nms.NMS_1_16;
+import fr.maxlego08.ztournament.nms.NMS_1_16_R1;
+import fr.maxlego08.ztournament.nms.NMS_1_16_R2;
 import fr.maxlego08.ztournament.nms.NMS_1_7;
 import fr.maxlego08.ztournament.nms.NMS_1_8;
 import fr.maxlego08.ztournament.nms.NMS_1_9;
 import fr.maxlego08.ztournament.save.Config;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
+import fr.maxlego08.ztournament.zcore.enums.EnumVersion;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
@@ -123,9 +127,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 		else if (nms == 1.15)
 			this.nms = new NMS_1_15();
 		else if (nms == 1.16)
-			this.nms = new NMS_1_16();
+			this.nms = ItemDecoder.getVersion().equals(EnumVersion.V_16_R1) ? new NMS_1_16_R1() : new NMS_1_16_R2();
 
-		
 		this.kits = kits;
 
 		Logger.info("Loaded NMS " + nms + " !", LogType.INFO);
@@ -276,7 +279,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 					new BaseComponent[] { new TextComponent("§8» §7Click to delete this arena\n"),
 							new TextComponent(
 									"§8» §7Location 1: §f" + arena.getPos1String().replace(",", " §8,§f ") + "\n"),
-							new TextComponent("§8» §7Location 2: §f" + arena.getPos2String().replace(",", " §8,§f ")) }));
+							new TextComponent(
+									"§8» §7Location 2: §f" + arena.getPos2String().replace(",", " §8,§f ")) }));
 			message.addExtra(component);
 		}
 		player.spigot().sendMessage(message);
@@ -1124,6 +1128,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			broadcast(Message.TOURNAMENT_STOP);
 			teams.forEach(e -> {
 				e.clear();
+				e.show();
 				e.getRealPlayers().forEach(p -> {
 					if (p.isOnline()) {
 						p.getPlayer().teleport(getLocation());
@@ -1245,6 +1250,15 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public Kit getKit() {
 		return kit;
+	}
+
+	@Override
+	public Optional<Team> getByOfflinePlayer(OfflinePlayer player) {
+		List<Team> list = new ArrayList<>();
+		list.addAll(this.teams);
+		list.addAll(this.eliminatedTeams);
+		return list.stream().filter(team -> team.match(player)).findFirst();
+		
 	}
 
 }

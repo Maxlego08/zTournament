@@ -226,4 +226,11 @@ public interface Team {
 	 */
 	Kit getKit();
 
+	/**
+	 * 
+	 * @param player
+	 * @return
+	 */
+	boolean match(OfflinePlayer player);
+
 }

@@ -13,19 +13,21 @@ import org.bukkit.inventory.ItemStack;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
+import fr.maxlego08.ztournament.zcore.enums.EnumVersion;
+
 public class ItemDecoder {
 
 	private static volatile Map<ItemStack, String> itemstackSerialized = new HashMap<ItemStack, String>();
-	
+
 	public static String serializeItemStack(ItemStack paramItemStack) {
 
 		if (paramItemStack == null) {
 			return "null";
 		}
-		
+
 		if (itemstackSerialized.containsKey(paramItemStack))
 			return itemstackSerialized.get(paramItemStack);
-		
+
 		ByteArrayOutputStream localByteArrayOutputStream = null;
 		try {
 			Class<?> localClass = getNMSClass("NBTTagCompound");
@@ -70,7 +72,8 @@ public class ItemDecoder {
 				localObject2 = localConstructor.newInstance(new Object[] { localObject1 });
 			}
 
-			else if (getNMSVersion() == 1.13D || getNMSVersion() == 1.14D || getNMSVersion() == 1.15D) {
+			else if (getNMSVersion() == 1.13D || getNMSVersion() == 1.14D || getNMSVersion() == 1.15D
+					|| getNMSVersion() == 1.16D) {
 				localObject2 = localClass2.getMethod("a", new Class[] { localClass1 }).invoke(null,
 						new Object[] { localObject1 });
 			} else {
@@ -115,12 +118,7 @@ public class ItemDecoder {
 	}
 
 	public static double version;
-	
-	public static boolean isNewVersion() {
-		double version = getNMSVersion();
-		return version == 1.13 || version == 1.14 || version == 1.15 || version == 1.16;
-	}
-	
+
 	public static double getNMSVersion() {
 		if (version != 0)
 			return version;
@@ -129,5 +127,18 @@ public class ItemDecoder {
 		String var2 = arrayOfString[0].replace("v", "");
 		String var3 = arrayOfString[1];
 		return version = Double.parseDouble(var2 + "." + var3);
+	}
+
+	public static EnumVersion getVersion() {
+		String var1 = Bukkit.getServer().getClass().getPackage().getName();
+		String[] arrayOfString = var1.replace(".", ",").split(",")[3].split("_");
+		String var2 = arrayOfString[2];
+		// System.out.println(var1 + " -- " + Arrays.asList(arrayOfString));
+		return EnumVersion.getVersion(getNMSVersion(), var2);
+	}
+
+	public static boolean isNewVersion() {
+		double version = getNMSVersion();
+		return version == 1.13 || version == 1.14 || version == 1.15 || version == 1.16;
 	}
 }

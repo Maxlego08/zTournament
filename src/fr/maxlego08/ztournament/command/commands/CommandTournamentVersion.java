@@ -19,12 +19,12 @@ public class CommandTournamentVersion extends VCommand {
 	@Override
 	protected CommandType perform(ZTournamentPlugin main) {
 
-		sender.sendMessage("§7(§bzShop§7) §aVersion du plugin§7: §2" + main.getDescription().getVersion());
-		sender.sendMessage("§7(§bzShop§7) §aAuteur§7: §2Maxlego08");
-		sender.sendMessage("§7(§bzShop§7) §aDiscord§7: §2http://discord.groupez.xyz/");
-		sender.sendMessage("§7(§bzShop§7) §aBuy it for §d15€§7: §2https://www.spigotmc.org/resources/81959/");
+		message(sender, "§aVersion du plugin§7: §2" + main.getDescription().getVersion());
+		message(sender, "§aAuteur§7: §2Maxlego08");
+		message(sender, "§aDiscord§7: §2http://discord.groupez.xyz/");
+		message(sender, "§aBuy it for §d15€§7: §2https://www.spigotmc.org/resources/81959/");
 		String user = "%%__USER__%%";
-		sender.sendMessage("§7(§bzShop§7) §aUser account§7: §2https://www.spigotmc.org/members/" + user);
+		message(sender, "§aUser account§7: §2https://www.spigotmc.org/members/" + user);
 
 		return CommandType.SUCCESS;
 	}

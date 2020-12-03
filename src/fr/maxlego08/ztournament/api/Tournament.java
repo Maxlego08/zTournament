@@ -1,8 +1,10 @@
 package fr.maxlego08.ztournament.api;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -24,6 +26,13 @@ public interface Tournament extends Saveable {
 	 * @return
 	 */
 	Team getByPlayer(Player player);
+	
+	/**
+	 * 
+	 * @param player
+	 * @return
+	 */
+	Optional<Team> getByOfflinePlayer(OfflinePlayer player);
 
 	/**
 	 * 

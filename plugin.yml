@@ -1,6 +1,8 @@
 name: zTournament
 author: Maxlego08
 main: fr.maxlego08.ztournament.ZTournamentPlugin
-version: 1.0.0.4
+version: 1.0.0.8
+softdepend:
+- PlaceholderAPI
 api-version: 1.13
 commands:

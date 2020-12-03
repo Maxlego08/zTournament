@@ -12,6 +12,7 @@ import fr.maxlego08.ztournament.inventory.InventoryManager;
 import fr.maxlego08.ztournament.inventory.inventories.InventoryKitEdit;
 import fr.maxlego08.ztournament.inventory.inventories.InventoryKitShow;
 import fr.maxlego08.ztournament.listener.AdapterListener;
+import fr.maxlego08.ztournament.placeholder.TournamentExpansion;
 import fr.maxlego08.ztournament.save.Config;
 import fr.maxlego08.ztournament.save.Lang;
 import fr.maxlego08.ztournament.scoreboard.ScoreBoardManager;
@@ -20,6 +21,7 @@ import fr.maxlego08.ztournament.zcore.enums.Inventory;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.utils.Metrics;
 import fr.maxlego08.ztournament.zcore.utils.UpdateChecker;
+import fr.maxlego08.ztournament.zcore.utils.plugins.Plugins;
 
 /**
  * System to create your plugins very simply Projet:
@@ -73,6 +75,14 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
+		if (isEnable(Plugins.PLACEHOLDER)){
+		
+			TournamentExpansion expansion = new TournamentExpansion(this);
+			expansion.register();
+			Logger.info("Successful loading of PlaceholderAPI.");
+			
+		}
+		
 		new Metrics(this);
 
 		UpdateChecker checker = new UpdateChecker(this, 81959);

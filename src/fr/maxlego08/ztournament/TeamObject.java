@@ -400,4 +400,9 @@ public class TeamObject extends ZUtils implements Team {
 		return kit;
 	}
 
+	@Override
+	public boolean match(OfflinePlayer player) {
+		return realPlayers.contains(player);
+	}
+
 }

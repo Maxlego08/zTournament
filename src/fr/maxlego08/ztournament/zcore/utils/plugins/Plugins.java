@@ -3,7 +3,8 @@ package fr.maxlego08.ztournament.zcore.utils.plugins;
 public enum Plugins {
 
 	VAULT("Vault"),
-	ESSENTIALS("Essentials"),
+	ESSENTIALS("Essentials"), 
+	PLACEHOLDER("PlaceholderAPI"),
 	
 	;
 

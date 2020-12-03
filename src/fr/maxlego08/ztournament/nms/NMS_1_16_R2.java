@@ -9,7 +9,7 @@ import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 import net.minecraft.server.v1_16_R2.PacketPlayOutTitle;
 import net.minecraft.server.v1_16_R2.PacketPlayOutTitle.EnumTitleAction;
 
-public class NMS_1_16 extends ZUtils implements NMS {
+public class NMS_1_16_R2 extends ZUtils implements NMS {
 
 	@Override
 	public void sendTitle(Player player, String title, String subtitle, int start, int time, int end) {
