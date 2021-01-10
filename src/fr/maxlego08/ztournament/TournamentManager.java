@@ -265,15 +265,15 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		TextComponent message = buildTextComponent(Message.PREFIX.getMessage() + " §fList of arenas§8: §a");
+		TextComponent message = buildTextComponent(Message.PREFIX.getMessage() + " Â§fList of arenasÂ§8: Â§a");
 		for (int a = 0; a != arenas.size(); a++) {
 			if (a == arenas.size() - 1 && a != 0) {
-				message.addExtra("§7 et §a");
+				message.addExtra("Â§7 et Â§a");
 			} else if (a != 0) {
-				message.addExtra("§7, §a");
+				message.addExtra("Â§7, Â§a");
 			}
 			Arena arena = arenas.get(a);
-			TextComponent component = new TextComponent("§a" + arena.getName());
+			TextComponent component = new TextComponent("Â§a" + arena.getName());
 
 			component.setClickEvent(
 					new ClickEvent(Action.SUGGEST_COMMAND, "/ztournament delete " + arena.getUniqueId()));
@@ -286,9 +286,9 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 	private BaseComponent[] getLore(Arena arena) {
 		BaseComponent[] lore = new BaseComponent[3];
-		lore[0] = new TextComponent("§8» §7Click to delete this arena\n");
-		lore[1] = new TextComponent("§8» §7Location 1: §f" + arena.getPos1String().replace(",", " §8,§f ") + "\n");
-		lore[2] = new TextComponent("§8» §7Location 2: §f" + arena.getPos2String().replace(",", " §8,§f "));
+		lore[0] = new TextComponent("Â§8Â» Â§7Click to delete this arena\n");
+		lore[1] = new TextComponent("Â§8Â» Â§7Location 1: Â§f" + arena.getPos1String().replace(",", " Â§8,Â§f ") + "\n");
+		lore[2] = new TextComponent("Â§8Â» Â§7Location 2: Â§f" + arena.getPos2String().replace(",", " Â§8,Â§f "));
 		return lore;
 	}
 
@@ -568,7 +568,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		if (event.isCancelled())
 			return;
 
-		// Si il y a un nombre impair d'équipe
+		// Si il y a un nombre impair d'Ã©quipe
 		if (bypassTeam != null)
 			Message.TOURNAMENT_WAVE_AUTO.getMessages().forEach(e -> bypassTeam.message(e));
 
@@ -699,7 +699,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			pagination.paginateReverse(eliminatedTeams, 3, 1).forEach(team -> {
 
 				String position = Config.rankingPosition.getOrDefault(team.getPosition(),
-						"Impossible de trouver la position, message de vérifier votre configuration.");
+						"Impossible de trouver la position, message de vÃ©rifier votre configuration.");
 
 				String msg = Message.TOURNAMENT_CLASSEMENT.replace("%team%", team.getName()).replace("%position%",
 						position);
@@ -776,7 +776,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		// Verif si le mec a déjà une team
+		// Verif si le mec a dÃ©jÃ  une team
 		Team team = getByPlayer(player);
 		if (team != null) {
 			message(player, Message.TOURNAMENT_CREATE_ERROR_PLAYER);
@@ -1264,7 +1264,6 @@ public class TournamentManager extends ZUtils implements Tournament {
 		list.addAll(this.teams);
 		list.addAll(this.eliminatedTeams);
 		return list.stream().filter(team -> team.match(player)).findFirst();
-
 	}
-
+	
 }

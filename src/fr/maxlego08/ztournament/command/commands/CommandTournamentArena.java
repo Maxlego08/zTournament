@@ -1,9 +1,13 @@
 package fr.maxlego08.ztournament.command.commands;
 
+import java.util.Optional;
+
 import org.bukkit.Location;
 
 import fr.maxlego08.ztournament.ZTournamentPlugin;
+import fr.maxlego08.ztournament.api.Selection;
 import fr.maxlego08.ztournament.command.VCommand;
+import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
@@ -13,8 +17,6 @@ public class CommandTournamentArena extends VCommand {
 		this.setPermission(Permission.ZTOURNAMENT_ARENA);
 		this.addSubCommand("arena");
 		this.addRequireArg("name");
-		this.addRequireArg("world,x,y,z,yaw,pitch");
-		this.addRequireArg("world,x,y,z,yaw,pitch");
 		this.setConsoleCanUse(false);
 	}
 
@@ -22,9 +24,23 @@ public class CommandTournamentArena extends VCommand {
 	protected CommandType perform(ZTournamentPlugin main) {
 
 		String name = argAsString(0);
-		Location location = argAsLocation(1);
-		Location location2 = argAsLocation(2);
-		tournament.createArena(sender, name, location, location2);
+		Optional<Selection> optional = plugin.getListener().getSelection(player.getUniqueId());
+
+		if (!optional.isPresent()) {
+			message(sender, Message.TOURNAMENT_CREATE_ERROR_SELECTION);
+			return CommandType.DEFAULT;
+		}
+
+		Selection selection = optional.get();
+
+		if (!selection.isValid()) {
+			message(sender, Message.TOURNAMENT_CREATE_ERROR_SELECTION);
+			return CommandType.DEFAULT;
+		}
+
+		Location minLocation = selection.getRightLocation();
+		Location maxLocation = selection.getLeftLocation();
+		tournament.createArena(sender, name, minLocation, maxLocation);
 
 		return CommandType.SUCCESS;
 	}

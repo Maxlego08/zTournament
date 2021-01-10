@@ -22,9 +22,8 @@ public class CommandTournamentVersion extends VCommand {
 		message(sender, "§aVersion du plugin§7: §2" + main.getDescription().getVersion());
 		message(sender, "§aAuteur§7: §2Maxlego08");
 		message(sender, "§aDiscord§7: §2http://discord.groupez.xyz/");
-		message(sender, "§aBuy it for §d15€§7: §2https://www.spigotmc.org/resources/81959/");
-		String user = "%%__USER__%%";
-		message(sender, "§aUser account§7: §2https://www.spigotmc.org/members/" + user);
+		message(sender, "§aBuy it for §d15€§7: §2https://groupez.xyz/resources/zTournament.3");
+		message(sender, "§aGift code of §d5%§8: §fZTOURNAMENT-2021");
 
 		return CommandType.SUCCESS;
 	}

@@ -34,6 +34,7 @@ public class ZTournamentPlugin extends ZPlugin {
 
 	private Kits kits;
 	private Tournament tournament;
+	private TournamentListener listener;
 
 	@Override
 	public void onEnable() {
@@ -60,8 +61,6 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		/* Add Listener */
 
-		TournamentListener listener;
-
 		addListener(new AdapterListener(this));
 		addListener(inventoryManager);
 		addListener(listener = new TournamentListener(tournament));
@@ -75,20 +74,25 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
-		if (isEnable(Plugins.PLACEHOLDER)){
-		
+		if (isEnable(Plugins.PLACEHOLDER)) {
+
 			TournamentExpansion expansion = new TournamentExpansion(this);
 			expansion.register();
 			Logger.info("Successful loading of PlaceholderAPI.");
-			
+
 		}
-		
+
 		new Metrics(this);
 
 		UpdateChecker checker = new UpdateChecker(this, 81959);
 		AtomicBoolean atomicBoolean = new AtomicBoolean();
 		checker.getVersion(version -> {
-			atomicBoolean.set(this.getDescription().getVersion().equalsIgnoreCase(version));
+
+			int current = Integer.valueOf(this.getDescription().getVersion().replace(".", ""));
+			int newVersion = Integer.valueOf(version.replace(".", ""));
+
+			atomicBoolean.set(current >= newVersion);
+
 			listener.setUseLastVersion(atomicBoolean.get());
 			if (atomicBoolean.get())
 				Logger.info("There is not a new update available.");
@@ -116,6 +120,10 @@ public class ZTournamentPlugin extends ZPlugin {
 
 	public Tournament getTournament() {
 		return tournament;
+	}
+
+	public TournamentListener getListener() {
+		return listener;
 	}
 
 }

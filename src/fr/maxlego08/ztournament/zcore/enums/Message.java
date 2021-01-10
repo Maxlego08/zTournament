@@ -179,6 +179,7 @@ public enum Message {
 			"§6» §f/tournament wave §8- §7Start next wave.",
 			"§6» §f/tournament start §f<§atype§f> §f<§bkit name§f>§8- §7Start tournament.",
 			"§6» §f/tournament kit §8- §7Show kit commands.",
+			"§6» §f/tournament axe §8- §7Get selection axe.",
 			"§6» §f/tournament reload §8- §7Reload the plugin."),
 	
 	TOURNAMENT_HELP_ADMIN_KIT(
@@ -217,8 +218,10 @@ public enum Message {
 	TOURNAMENT_LEAVE_ARENA("§eYou cannot leave the arena."), 
 	DROP_ITEM("§cYou may not throw items on the ground."), 
 	
-
-	;
+	TOURNAMENT_AXE_POS1("§7You have just put the first position in §f%world%§7, §f%x%§7, §f%y%§7, §f%z%§7."),
+	TOURNAMENT_AXE_POS2("§7You have just put the second position in §f%world%§7, §f%x%§7, §f%y%§7, §f%z%§7."), 
+	TOURNAMENT_CREATE_ERROR_SELECTION("§cYou must select a zone with the command §f/zkoth axe§c."),
+	
 
 	;
 
