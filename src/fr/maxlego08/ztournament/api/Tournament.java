@@ -271,5 +271,14 @@ public interface Tournament extends Saveable {
 	 * @return current kit use
 	 */
 	Kit getKit();
+
+	/**
+	 * 
+	 * @param b
+	 * @param sender
+	 * @param name
+	 * @param location
+	 */
+	void setPosition(boolean isPos1, CommandSender sender, String name, Location location);
 	
 }

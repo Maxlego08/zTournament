@@ -11,7 +11,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-import fr.maxlego08.ztournament.ArenaObject;
+import fr.maxlego08.ztournament.ZArena;
 import fr.maxlego08.ztournament.api.Arena;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
 
@@ -63,7 +63,7 @@ public class ArenaAdapter extends TypeAdapter<Arena> {
 		String pos2 = (String) keys.get(POS2);
 		String name = (String) keys.get(NAME);
 
-		return new ArenaObject(uuid, name, pos1, pos2);
+		return new ZArena(uuid, name, pos1, pos2);
 	}
 
 }

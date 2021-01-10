@@ -220,7 +220,10 @@ public enum Message {
 	
 	TOURNAMENT_AXE_POS1("§7You have just put the first position in §f%world%§7, §f%x%§7, §f%y%§7, §f%z%§7."),
 	TOURNAMENT_AXE_POS2("§7You have just put the second position in §f%world%§7, §f%x%§7, §f%y%§7, §f%z%§7."), 
-	TOURNAMENT_CREATE_ERROR_SELECTION("§cYou must select a zone with the command §f/zkoth axe§c."),
+	TOURNAMENT_CREATE_ERROR_SELECTION("§cYou must select a zone with the command §f/zkoth axe§c."), 
+	TOURNAMENT_ARENA_POS1_CHANGE("§aYou have just changed the first position of the arena."),
+	TOURNAMENT_ARENA_POS2_CHANGE("§aYou have just changed the second position of the arena."), 
+	TOURNAMENT_ARENA_ALREADY_EXIST("§cImpossible to create an arena with this name, it already exists."),
 	
 
 	;

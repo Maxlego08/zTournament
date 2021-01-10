@@ -10,12 +10,12 @@ import fr.maxlego08.ztournament.api.Arena;
 import fr.maxlego08.ztournament.api.Duel;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 
-public class ArenaObject extends ZUtils implements Arena {
+public class ZArena extends ZUtils implements Arena {
 
 	private String name;
 	private final UUID id;
-	private final String pos1;
-	private final String pos2;
+	private String pos1;
+	private String pos2;
 	private transient List<Duel> teams = new ArrayList<Duel>();
 
 	/**
@@ -24,7 +24,7 @@ public class ArenaObject extends ZUtils implements Arena {
 	 * @param pos1
 	 * @param pos2
 	 */
-	public ArenaObject(String name, Location pos1, Location pos2) {
+	public ZArena(String name, Location pos1, Location pos2) {
 		this.name = name;
 		this.id = UUID.randomUUID();
 		this.pos1 = changeLocationToStringEye(pos1);
@@ -38,7 +38,7 @@ public class ArenaObject extends ZUtils implements Arena {
 	 * @param pos1
 	 * @param pos2
 	 */
-	public ArenaObject(String name, UUID uuid, Location pos1, Location pos2) {
+	public ZArena(String name, UUID uuid, Location pos1, Location pos2) {
 		this.name = name;
 		this.id = uuid;
 		this.pos1 = changeLocationToStringEye(pos1);
@@ -51,7 +51,7 @@ public class ArenaObject extends ZUtils implements Arena {
 	 * @param pos1
 	 * @param pos2
 	 */
-	public ArenaObject(UUID id, String name, String pos1, String pos2) {
+	public ZArena(UUID id, String name, String pos1, String pos2) {
 		super();
 		this.name = name;
 		this.id = id;
@@ -139,6 +139,16 @@ public class ArenaObject extends ZUtils implements Arena {
 	@Override
 	public UUID getUniqueId() {
 		return id;
+	}
+
+	@Override
+	public void setPos1(Location location) {
+		this.pos1 = changeLocationToStringEye(location);
+	}
+
+	@Override
+	public void setPos2(Location location) {
+		this.pos2 = changeLocationToStringEye(location);
 	}
 
 }

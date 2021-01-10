@@ -293,4 +293,8 @@ public class TournamentListener extends ListenerAdapter {
 
 	}
 
+	public void clearSelection(Player player) {
+		this.selections.remove(player.getUniqueId());
+	}
+
 }

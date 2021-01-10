@@ -77,7 +77,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class TournamentManager extends ZUtils implements Tournament {
 
-	private static List<ArenaObject> arenas = new ArrayList<ArenaObject>();
+	private static List<ZArena> arenas = new ArrayList<ZArena>();
 	private static String location;
 	private transient List<Team> teams = new ArrayList<>();
 	private transient List<Team> eliminatedTeams = new ArrayList<>();
@@ -238,17 +238,28 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		if (team == null || opponant == null)
 			return;
-		duels.add(new DuelObject(team, opponant));
+		duels.add(new ZDuel(team, opponant));
 		countTeam -= 2;
 	}
 
 	@Override
 	public void createArena(CommandSender sender, String name, Location pos1, Location pos2) {
+
 		if (isStart) {
 			message(sender, Message.TOURNAMENT_ENABLE);
 			return;
 		}
-		ArenaObject arena = new ArenaObject(name, pos1, pos2);
+
+		Arena a = arenas.stream().filter(arena -> {
+			return arena.getName().equals(name);
+		}).findAny().orElse(null);
+
+		if (a != null) {
+			message(sender, Message.TOURNAMENT_ARENA_ALREADY_EXIST);
+			return;
+		}
+
+		ZArena arena = new ZArena(name, pos1, pos2);
 		arenas.add(arena);
 		message(sender, Message.TOURNAMENT_ARENA_CREATE);
 	}
@@ -818,8 +829,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 			return;
 		}
 
-		TournamentTeamCreateEvent event = new TournamentTeamCreateEvent(
-				new TeamObject(name, type.getMax(), player, kit), player, name);
+		TournamentTeamCreateEvent event = new TournamentTeamCreateEvent(new ZTeam(name, type.getMax(), player, kit),
+				player, name);
 		event.callEvent();
 
 		if (event.isCancelled())
@@ -827,7 +838,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		name = event.getName();
 
-		team = new TeamObject(name, type.getMax(), player, kit);
+		team = new ZTeam(name, type.getMax(), player, kit);
 		this.teams.add(team);
 		player.teleport(getLocation());
 		clearPlayer(player);
@@ -1265,5 +1276,27 @@ public class TournamentManager extends ZUtils implements Tournament {
 		list.addAll(this.eliminatedTeams);
 		return list.stream().filter(team -> team.match(player)).findFirst();
 	}
-	
+
+	@Override
+	public void setPosition(boolean isPos1, CommandSender sender, String name, Location location) {
+
+		Arena arena = arenas.stream().filter(e -> {
+			return e.getName().equals(name);
+		}).findAny().orElse(null);
+
+		if (arena == null) {
+			message(sender, Message.TOURNAMENT_ARENA_NOT_FOUND);
+			return;
+		}
+
+		if (isPos1) {
+			arena.setPos1(location);
+			message(sender, Message.TOURNAMENT_ARENA_POS1_CHANGE);
+		} else {
+			arena.setPos2(location);
+			message(sender, Message.TOURNAMENT_ARENA_POS2_CHANGE);
+		}
+
+	}
+
 }

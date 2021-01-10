@@ -26,6 +26,8 @@ public class CommandTournament extends VCommand {
 		this.addSubCommand(new CommandTournamentReload());
 		this.addSubCommand(new CommandTournamentKits());
 		this.addSubCommand(new CommandTournamentAxe());
+		this.addSubCommand(new CommandTournamentPos1());
+		this.addSubCommand(new CommandTournamentPos2());
 	}
 
 	@Override

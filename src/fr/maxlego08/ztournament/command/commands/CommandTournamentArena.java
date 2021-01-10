@@ -40,6 +40,7 @@ public class CommandTournamentArena extends VCommand {
 
 		Location minLocation = selection.getRightLocation();
 		Location maxLocation = selection.getLeftLocation();
+		plugin.getListener().clearSelection(player);
 		tournament.createArena(sender, name, minLocation, maxLocation);
 
 		return CommandType.SUCCESS;

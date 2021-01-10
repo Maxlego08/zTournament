@@ -8,13 +8,13 @@ import fr.maxlego08.ztournament.api.Duel;
 import fr.maxlego08.ztournament.api.Team;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 
-public class DuelObject extends ZUtils implements Duel {
+public class ZDuel extends ZUtils implements Duel {
 
 	private final Team team;
 	private final Team opponant;
 	private Arena arena;
 
-	public DuelObject(Team team, Team opponant) {
+	public ZDuel(Team team, Team opponant) {
 		this.team = team;
 		this.opponant = opponant;
 	}

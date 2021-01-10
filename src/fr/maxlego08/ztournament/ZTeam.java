@@ -16,7 +16,7 @@ import fr.maxlego08.ztournament.api.Team;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 
-public class TeamObject extends ZUtils implements Team {
+public class ZTeam extends ZUtils implements Team {
 
 	private final String name;
 	private final int maxPlayers;
@@ -35,7 +35,7 @@ public class TeamObject extends ZUtils implements Team {
 	 * @param name
 	 * @param maxPlayers
 	 */
-	public TeamObject(String name, int maxPlayers, Player owner, fr.maxlego08.ztournament.api.Kit kit) {
+	public ZTeam(String name, int maxPlayers, Player owner, fr.maxlego08.ztournament.api.Kit kit) {
 		super();
 		this.name = name;
 		this.maxPlayers = maxPlayers;
