@@ -55,6 +55,7 @@ import fr.maxlego08.ztournament.nms.NMS_1_14;
 import fr.maxlego08.ztournament.nms.NMS_1_15;
 import fr.maxlego08.ztournament.nms.NMS_1_16_R1;
 import fr.maxlego08.ztournament.nms.NMS_1_16_R2;
+import fr.maxlego08.ztournament.nms.NMS_1_16_R3;
 import fr.maxlego08.ztournament.nms.NMS_1_7;
 import fr.maxlego08.ztournament.nms.NMS_1_8;
 import fr.maxlego08.ztournament.nms.NMS_1_9;
@@ -126,8 +127,26 @@ public class TournamentManager extends ZUtils implements Tournament {
 			this.nms = new NMS_1_14();
 		else if (nms == 1.15)
 			this.nms = new NMS_1_15();
-		else if (nms == 1.16)
-			this.nms = ItemDecoder.getVersion().equals(EnumVersion.V_16_R1) ? new NMS_1_16_R1() : new NMS_1_16_R2();
+		else if (nms == 1.16) {
+			EnumVersion nmsVersion = ItemDecoder.getVersion();
+			switch (nmsVersion) {
+			case UNKOWN:
+				break;
+			case V_16_R1:
+				this.nms = new NMS_1_16_R1();
+				break;
+			case V_16_R2:
+				this.nms = new NMS_1_16_R2();
+				break;
+			case V_16_R3:
+				this.nms = new NMS_1_16_R3();
+				break;
+			case V_1_7_10:
+			default:
+				break;
+
+			}
+		}
 
 		this.kits = kits;
 
