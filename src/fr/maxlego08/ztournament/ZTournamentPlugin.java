@@ -1,7 +1,5 @@
 package fr.maxlego08.ztournament;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.bukkit.plugin.ServicePriority;
 
 import fr.maxlego08.ztournament.api.Kits;
@@ -20,8 +18,8 @@ import fr.maxlego08.ztournament.zcore.ZPlugin;
 import fr.maxlego08.ztournament.zcore.enums.Inventory;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.utils.Metrics;
-import fr.maxlego08.ztournament.zcore.utils.UpdateChecker;
 import fr.maxlego08.ztournament.zcore.utils.plugins.Plugins;
+import fr.maxlego08.ztournament.zcore.utils.plugins.VersionChecker;
 
 /**
  * System to create your plugins very simply Projet:
@@ -84,22 +82,8 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		new Metrics(this);
 
-		UpdateChecker checker = new UpdateChecker(this, 81959);
-		AtomicBoolean atomicBoolean = new AtomicBoolean();
-		checker.getVersion(version -> {
-
-			int current = Integer.valueOf(this.getDescription().getVersion().replace(".", ""));
-			int newVersion = Integer.valueOf(version.replace(".", ""));
-
-			atomicBoolean.set(current >= newVersion);
-
-			listener.setUseLastVersion(atomicBoolean.get());
-			if (atomicBoolean.get())
-				Logger.info("There is not a new update available.");
-			else
-				Logger.info("There is a new update available. Your version: " + this.getDescription().getVersion()
-						+ ", Laste version: " + version);
-		});
+		VersionChecker checker = new VersionChecker(this, 3);
+		checker.useLastVersion();
 
 		postEnable();
 

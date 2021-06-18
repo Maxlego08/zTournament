@@ -42,6 +42,8 @@ import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.builder.CooldownBuilder;
 import fr.maxlego08.ztournament.zcore.utils.builder.ItemBuilder;
 import fr.maxlego08.ztournament.zcore.utils.builder.TimerBuilder;
+import fr.maxlego08.ztournament.zcore.utils.nms.ItemStackUtils;
+import fr.maxlego08.ztournament.zcore.utils.nms.NMSUtils;
 import fr.maxlego08.ztournament.zcore.utils.players.ActionBar;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -173,7 +175,7 @@ public abstract class ZUtils extends MessageUtils {
 	 * @return the encoded item
 	 */
 	protected String encode(ItemStack item) {
-		return ItemDecoder.serializeItemStack(item);
+		return ItemStackUtils.serializeItemStack(item);
 	}
 
 	/**
@@ -181,7 +183,7 @@ public abstract class ZUtils extends MessageUtils {
 	 * @return the decoded item
 	 */
 	protected ItemStack decode(String item) {
-		return ItemDecoder.deserializeItemStack(item);
+		return ItemStackUtils.deserializeItemStack(item);
 	}
 
 	/**
@@ -241,7 +243,7 @@ public abstract class ZUtils extends MessageUtils {
 	private static transient Material[] byId;
 
 	static {
-		if (!ItemDecoder.isNewVersion()) {
+		if (!NMSUtils.isNewVersion()) {
 			byId = new Material[0];
 			for (Material material : Material.values()) {
 				if (byId.length > material.getId()) {
@@ -256,7 +258,7 @@ public abstract class ZUtils extends MessageUtils {
 
 
 	protected ItemStack getGlass() {
-		if (ItemDecoder.isNewVersion())
+		if (NMSUtils.isNewVersion())
 			return new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 		return new ItemBuilder(getMaterial(160), 1, 8).build();
 	}

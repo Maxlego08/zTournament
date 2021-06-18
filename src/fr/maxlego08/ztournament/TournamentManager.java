@@ -56,6 +56,7 @@ import fr.maxlego08.ztournament.nms.NMS_1_15;
 import fr.maxlego08.ztournament.nms.NMS_1_16_R1;
 import fr.maxlego08.ztournament.nms.NMS_1_16_R2;
 import fr.maxlego08.ztournament.nms.NMS_1_16_R3;
+import fr.maxlego08.ztournament.nms.NMS_1_17;
 import fr.maxlego08.ztournament.nms.NMS_1_7;
 import fr.maxlego08.ztournament.nms.NMS_1_8;
 import fr.maxlego08.ztournament.nms.NMS_1_9;
@@ -65,10 +66,10 @@ import fr.maxlego08.ztournament.zcore.enums.EnumVersion;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
-import fr.maxlego08.ztournament.zcore.utils.ItemDecoder;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 import fr.maxlego08.ztournament.zcore.utils.builder.TimerBuilder;
 import fr.maxlego08.ztournament.zcore.utils.inventory.Pagination;
+import fr.maxlego08.ztournament.zcore.utils.nms.NMSUtils;
 import fr.maxlego08.ztournament.zcore.utils.storage.Persist;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -107,7 +108,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 	public TournamentManager(Kits kits) {
 
-		double nms = ItemDecoder.getNMSVersion();
+		double nms = NMSUtils.getNMSVersion();
 
 		if (nms == 1.7)
 			this.nms = new NMS_1_7();
@@ -127,8 +128,10 @@ public class TournamentManager extends ZUtils implements Tournament {
 			this.nms = new NMS_1_14();
 		else if (nms == 1.15)
 			this.nms = new NMS_1_15();
+		else if (nms == 1.17)
+			this.nms = new NMS_1_17();
 		else if (nms == 1.16) {
-			EnumVersion nmsVersion = ItemDecoder.getVersion();
+			EnumVersion nmsVersion = NMSUtils.getVersion();
 			switch (nmsVersion) {
 			case UNKOWN:
 				break;
