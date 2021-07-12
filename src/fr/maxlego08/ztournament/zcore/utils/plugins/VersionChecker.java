@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import fr.maxlego08.ztournament.save.Config;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 
@@ -72,7 +73,7 @@ public class VersionChecker implements Listener {
 	@EventHandler
 	public void onConnect(PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
-		if (!useLastVersion && event.getPlayer().hasPermission("zplugin.notifs")) {
+		if (!useLastVersion && event.getPlayer().hasPermission("zplugin.notifs") && Config.enableUpdateNotification) {
 			new BukkitRunnable() {
 				@Override
 				public void run() {

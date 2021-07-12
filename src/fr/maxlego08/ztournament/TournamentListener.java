@@ -40,7 +40,6 @@ import fr.maxlego08.ztournament.zcore.utils.builder.ItemBuilder;
 public class TournamentListener extends ListenerAdapter {
 
 	private final Tournament tournament;
-	private boolean useLastVersion = true;
 	private final transient String itemName = "§6✤ §zTournament axe §6✤";
 	private final transient Map<UUID, Selection> selections = new HashMap<UUID, Selection>();
 	private final transient List<Entity> entities = new ArrayList<Entity>();
@@ -51,10 +50,6 @@ public class TournamentListener extends ListenerAdapter {
 	public TournamentListener(Tournament tournament) {
 		super();
 		this.tournament = tournament;
-	}
-
-	public void setUseLastVersion(boolean useLastVersion) {
-		this.useLastVersion = useLastVersion;
 	}
 
 	public Map<UUID, Selection> getSelections() {
@@ -298,15 +293,6 @@ public class TournamentListener extends ListenerAdapter {
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
 						+ " §eCeci est une version de développement et non de production.");
 			}
-
-			if (!useLastVersion && ((player.hasPermission(Permission.ZTOURNAMENT_RELOAD.getPermission())
-					|| event.getPlayer().getName().startsWith("Maxlego08")
-					|| event.getPlayer().getName().startsWith("Sak")))) {
-				message(player,
-						"§cYou are not using the latest version of the plugin, remember to update the plugin quickly.");
-				message(player, "§cDownload link: §fhttps://www.spigotmc.org/resources/81959/");
-			}
-
 		});
 
 	}
