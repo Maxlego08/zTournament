@@ -15,6 +15,7 @@ public class Config implements Saveable {
 	public static boolean sendMessageInAction = true;
 	public static boolean restartTeamSearch = true;
 	public static boolean showRanking = true;
+	public static boolean enableDropItems = false;
 
 	public static int rankingSize = 3;
 	public static Map<Integer, String> rankingPosition = new HashMap<Integer, String>();

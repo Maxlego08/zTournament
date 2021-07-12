@@ -610,8 +610,10 @@ public class TournamentManager extends ZUtils implements Tournament {
 					String.valueOf(duels.size())));
 		});
 
-		wave++;
-		duels.forEach(currentDuel -> {
+		
+		this.plugin.getListener().clearItems();
+		this.wave++;
+		this.duels.forEach(currentDuel -> {
 
 			if (getAvaibleArenaCount() == 0)
 				maxTeamPerArena++;

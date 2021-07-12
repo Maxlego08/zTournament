@@ -1,12 +1,16 @@
 package fr.maxlego08.ztournament;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -16,6 +20,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,18 +29,21 @@ import fr.maxlego08.ztournament.api.Selection;
 import fr.maxlego08.ztournament.api.Team;
 import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.listener.ListenerAdapter;
+import fr.maxlego08.ztournament.save.Config;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.ZSelection;
 import fr.maxlego08.ztournament.zcore.utils.builder.ItemBuilder;
 
+@SuppressWarnings("deprecation")
 public class TournamentListener extends ListenerAdapter {
 
 	private final Tournament tournament;
 	private boolean useLastVersion = true;
 	private final transient String itemName = "§6✤ §zTournament axe §6✤";
 	private final transient Map<UUID, Selection> selections = new HashMap<UUID, Selection>();
+	private final transient List<Entity> entities = new ArrayList<Entity>();
 
 	/**
 	 * @param tournament
@@ -76,6 +84,7 @@ public class TournamentListener extends ListenerAdapter {
 
 	@Override
 	protected void onMove(PlayerMoveEvent event, Player player) {
+
 		if (!tournament.isStart())
 			return;
 
@@ -95,6 +104,12 @@ public class TournamentListener extends ListenerAdapter {
 	}
 
 	@Override
+	public void onPickUp(PlayerPickupItemEvent event, Player player) {
+		if (Config.enableDropItems && entities.contains(event.getItem()))
+			entities.remove(event.getItem());
+	}
+
+	@Override
 	public void onDrop(PlayerDropItemEvent event, Player player) {
 
 		if (tournament.isStart() && !tournament.isWaiting()) {
@@ -103,8 +118,12 @@ public class TournamentListener extends ListenerAdapter {
 			if (team == null)
 				return;
 
-			event.setCancelled(true);
-			message(player, Message.DROP_ITEM);
+			if (Config.enableDropItems) {
+				entities.add(event.getItemDrop());
+			} else {
+				event.setCancelled(true);
+				message(player, Message.DROP_ITEM);
+			}
 
 		}
 
@@ -240,7 +259,6 @@ public class TournamentListener extends ListenerAdapter {
 
 	@Override
 	protected void onInteract(PlayerInteractEvent event, Player player) {
-		@SuppressWarnings("deprecation")
 		ItemStack itemStack = player.getItemInHand();
 		if (itemStack != null && event.getClickedBlock() != null && same(itemStack, itemName)) {
 
@@ -295,6 +313,16 @@ public class TournamentListener extends ListenerAdapter {
 
 	public void clearSelection(Player player) {
 		this.selections.remove(player.getUniqueId());
+	}
+
+	public void clearItems() {
+		Iterator<Entity> iterator = this.entities.iterator();
+		while (iterator.hasNext()) {
+			Entity entity = iterator.next();
+			if (entity.isValid())
+				entity.remove();
+		}
+		this.entities.clear();
 	}
 
 }
