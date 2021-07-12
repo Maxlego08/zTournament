@@ -531,7 +531,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 			}
 
-		}.runTaskTimer(ZPlugin.z(), 0, Config.enableDebug ? 5 : 20);
+		}.runTaskTimer(ZPlugin.z(), 0, Config.enableDebug ? 2 : 20);
 
 	}
 
@@ -611,7 +611,6 @@ public class TournamentManager extends ZUtils implements Tournament {
 		});
 
 		
-		this.plugin.getListener().clearItems();
 		this.wave++;
 		this.duels.forEach(currentDuel -> {
 
@@ -1111,6 +1110,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 			arenas.forEach(Arena::clear);
 			broadcast(Message.TOURNAMENT_WAVE_NEXT_TIME);
 
+			this.plugin.getListener().clearItems();
+			
 			isTimeBetweenWave = true;
 			new BukkitRunnable() {
 
