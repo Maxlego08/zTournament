@@ -531,7 +531,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 			}
 
-		}.runTaskTimer(ZPlugin.z(), 0, 20);
+		}.runTaskTimer(ZPlugin.z(), 0, Config.enableDebug ? 5 : 20);
 
 	}
 

@@ -90,4 +90,11 @@ public interface Duel {
 	 * @return
 	 */
 	Arena getArena();
+
+	/**
+	 * 
+	 * @param player
+	 * @return
+	 */
+	boolean contains(Player player);
 }

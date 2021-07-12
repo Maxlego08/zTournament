@@ -17,6 +17,8 @@ public class Config implements Saveable {
 	public static boolean showRanking = true;
 	public static boolean enableDropItems = false;
 	public static boolean enableUpdateNotification = true;
+	public static boolean disablePotionAndPearl = true;
+	public static boolean enableDebug = false;
 
 	public static int rankingSize = 3;
 	public static Map<Integer, String> rankingPosition = new HashMap<Integer, String>();

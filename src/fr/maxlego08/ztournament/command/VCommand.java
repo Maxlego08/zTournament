@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import fr.maxlego08.ztournament.ZTournamentPlugin;
 import fr.maxlego08.ztournament.api.Tournament;
+import fr.maxlego08.ztournament.save.Config;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.commands.Arguments;
@@ -49,7 +50,6 @@ public abstract class VCommand extends Arguments {
 	 */
 	private boolean ignoreParent = false;
 	private boolean ignoreArgs = false;
-	protected boolean DEBUG = true;
 	protected boolean runAsync = false;
 	protected CommandType tabCompleter = CommandType.DEFAULT;
 	protected Tournament tournament;
@@ -344,7 +344,7 @@ public abstract class VCommand extends Arguments {
 		// On met à jour le nombre d'argument en fonction du nombre de parent
 
 		tournament = main.getTournament();
-		
+
 		parentCount = parentCount(0);
 		argsMaxLength = requireArgs.size() + optionalArgs.size() + parentCount;
 		argsMinLength = requireArgs.size() + parentCount;
@@ -376,7 +376,7 @@ public abstract class VCommand extends Arguments {
 		try {
 			return perform(main);
 		} catch (Exception e) {
-			if (DEBUG)
+			if (Config.enableDebug)
 				e.printStackTrace();
 			return CommandType.SYNTAX_ERROR;
 		}

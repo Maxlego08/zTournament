@@ -93,4 +93,9 @@ public class ZDuel extends ZUtils implements Duel {
 		return arena;
 	}
 
+	@Override
+	public boolean contains(Player player) {
+		return this.team.contains(player) || this.opponant.contains(player);
+	}
+
 }

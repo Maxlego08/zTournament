@@ -4,5 +4,6 @@ main: fr.maxlego08.ztournament.ZTournamentPlugin
 version: 1.0.1.4
 softdepend:
 - PlaceholderAPI
+- ProtocolLib
 api-version: 1.13
 commands:

@@ -7,11 +7,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -78,6 +80,16 @@ public class AdapterListener extends ZUtils implements Listener {
 	@EventHandler
 	public void onCommand(PlayerCommandPreprocessEvent event) {
 		template.getListenerAdapters().forEach(adapter -> adapter.onCommand(event, event.getPlayer(), event.getMessage()));
+	}
+	
+	@EventHandler
+	public void onCommand(PlayerEggThrowEvent event) {
+		template.getListenerAdapters().forEach(adapter -> adapter.onEgg(event, event.getPlayer(), event.getEgg()));
+	}
+	
+	@EventHandler
+	public void onCommand(ProjectileLaunchEvent event) {
+		template.getListenerAdapters().forEach(adapter -> adapter.onProjectilLaunch(event, event.getEntity()));
 	}
 
 	@EventHandler
