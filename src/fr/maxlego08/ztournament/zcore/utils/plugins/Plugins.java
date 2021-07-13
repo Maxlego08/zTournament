@@ -5,6 +5,7 @@ public enum Plugins {
 	VAULT("Vault"),
 	ESSENTIALS("Essentials"), 
 	PLACEHOLDER("PlaceholderAPI"),
+	PROTOCOLLIB("ProtocolLib"),
 	
 	;
 

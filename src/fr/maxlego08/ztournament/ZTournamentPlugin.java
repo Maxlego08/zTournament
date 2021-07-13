@@ -68,7 +68,7 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
-		if (Config.disablePotionAndPearl)
+		if (Config.disablePotionAndPearl && isEnable(Plugins.PROTOCOLLIB))
 			this.entityHider = new EntityHider(this, Policy.BLACKLIST);
 
 		/* Add Listener */
