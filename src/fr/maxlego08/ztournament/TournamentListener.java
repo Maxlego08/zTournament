@@ -8,17 +8,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -27,7 +23,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.projectiles.ProjectileSource;
 
 import fr.maxlego08.ztournament.api.Duel;
 import fr.maxlego08.ztournament.api.Selection;
@@ -44,7 +39,6 @@ import fr.maxlego08.ztournament.zcore.utils.builder.ItemBuilder;
 @SuppressWarnings("deprecation")
 public class TournamentListener extends ListenerAdapter {
 
-	private final EntityHider entityHider;
 	private final Tournament tournament;
 	private final transient String itemName = "§6✤ §zTournament axe §6✤";
 	private final transient Map<UUID, Selection> selections = new HashMap<UUID, Selection>();
@@ -53,10 +47,9 @@ public class TournamentListener extends ListenerAdapter {
 	/**
 	 * @param tournament
 	 */
-	public TournamentListener(EntityHider entityHider, Tournament tournament) {
+	public TournamentListener(Tournament tournament) {
 		super();
 		this.tournament = tournament;
-		this.entityHider = entityHider;
 	}
 
 	public Map<UUID, Selection> getSelections() {
@@ -82,35 +75,6 @@ public class TournamentListener extends ListenerAdapter {
 		builder.addLine("");
 		builder.addLine("§8§m-+------------------------------+-");
 		return builder.build();
-	}
-
-	@Override
-	public void onProjectilLaunch(ProjectileLaunchEvent event, Projectile entity) {
-
-		if (!Config.disablePotionAndPearl)
-			return;
-
-		if (!tournament.isStart())
-			return;
-
-		Projectile projectile = event.getEntity();
-		ProjectileSource source = projectile.getShooter();
-		if ((projectile.getType().equals(EntityType.ENDER_PEARL)
-				|| projectile.getType().equals(EntityType.SPLASH_POTION)) && source instanceof Player) {
-
-			Player shooter = (Player) source;
-			Team team = tournament.getByPlayer(shooter);
-			if (team != null) {
-				Duel duel = tournament.getDuel(team);
-				if (duel != null) {
-					for (Player player : Bukkit.getOnlinePlayers()) {
-						if (!duel.contains(player))
-							this.entityHider.setVisibility(player, projectile.getEntityId(), false);
-					}
-				}
-			}
-
-		}
 	}
 
 	@Override

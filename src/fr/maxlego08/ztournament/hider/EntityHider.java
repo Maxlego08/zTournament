@@ -1,8 +1,10 @@
-package fr.maxlego08.ztournament;
+package fr.maxlego08.ztournament.hider;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -12,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.plugin.Plugin;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -23,13 +26,14 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
-import fr.maxlego08.ztournament.api.Tournament;
+public abstract class EntityHider implements Listener {
 
-public class EntityHider implements Listener {
+	protected Map<UUID, Integer> potions = new HashMap<UUID, Integer>();
 	protected Table<Integer, Integer, Boolean> observerEntityMap = HashBasedTable.create();
 
-	// Packets that update remote player entities
+	protected boolean enable = false;
 
+	// Packets that update remote player entities
 	private static final PacketType[] ENTITY_PACKETS = { PacketType.Play.Server.ENTITY_EQUIPMENT,
 			PacketType.Play.Server.ENTITY_LOOK, PacketType.Play.Server.NAMED_ENTITY_SPAWN,
 			PacketType.Play.Server.COLLECT, PacketType.Play.Server.VEHICLE_MOVE, PacketType.Play.Server.SPAWN_ENTITY,
@@ -41,7 +45,7 @@ public class EntityHider implements Listener {
 			PacketType.Play.Server.ENTITY_METADATA, PacketType.Play.Server.ENTITY_EFFECT,
 			PacketType.Play.Server.REMOVE_ENTITY_EFFECT, PacketType.Play.Server.BLOCK_BREAK_ANIMATION,
 			PacketType.Play.Server.ANIMATION, PacketType.Play.Server.WORLD_PARTICLES,
-			PacketType.Play.Server.WORLD_EVENT, };
+			PacketType.Play.Server.WORLD_EVENT, PacketType.Play.Server.SPAWN_ENTITY_LIVING, };
 
 	/**
 	 * The current entity visibility policy.
@@ -79,7 +83,7 @@ public class EntityHider implements Listener {
 	 * @param policy
 	 *            - the default visibility policy.
 	 */
-	public EntityHider(ZTournamentPlugin plugin, Policy policy) {
+	public EntityHider(Plugin plugin, Policy policy) {
 		Preconditions.checkNotNull(plugin, "plugin cannot be NULL.");
 
 		// Save policy
@@ -231,18 +235,13 @@ public class EntityHider implements Listener {
 	 *            - the parent plugin.
 	 * @return The packet listener.
 	 */
-	private PacketAdapter constructProtocol(ZTournamentPlugin plugin) {
-		Tournament tournament = plugin.getTournament();
+	private PacketAdapter constructProtocol(Plugin plugin) {
+
 		return new PacketAdapter(plugin, ENTITY_PACKETS) {
 			@Override
 			public void onPacketSending(PacketEvent event) {
 				int entityID = event.getPacket().getIntegers().read(0);
-				if (event.getPacket().getType() == PacketType.Play.Server.WORLD_EVENT) {
-					if (tournament.isStart())
-						event.setCancelled(true);
-				}
 				if (!isVisible(event.getPlayer(), entityID)) {
-
 					event.setCancelled(true);
 				}
 			}

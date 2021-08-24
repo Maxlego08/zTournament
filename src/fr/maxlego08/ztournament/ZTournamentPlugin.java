@@ -2,11 +2,11 @@ package fr.maxlego08.ztournament;
 
 import org.bukkit.plugin.ServicePriority;
 
-import fr.maxlego08.ztournament.EntityHider.Policy;
 import fr.maxlego08.ztournament.api.Kits;
 import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.command.CommandManager;
 import fr.maxlego08.ztournament.command.commands.CommandTournament;
+import fr.maxlego08.ztournament.hider.EntityListener;
 import fr.maxlego08.ztournament.inventory.InventoryManager;
 import fr.maxlego08.ztournament.inventory.inventories.InventoryKitEdit;
 import fr.maxlego08.ztournament.inventory.inventories.InventoryKitShow;
@@ -34,7 +34,6 @@ public class ZTournamentPlugin extends ZPlugin {
 	private Kits kits;
 	private Tournament tournament;
 	private TournamentListener listener;
-	private EntityHider entityHider;
 
 	@Override
 	public void onEnable() {
@@ -69,13 +68,13 @@ public class ZTournamentPlugin extends ZPlugin {
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
 		if (Config.disablePotionAndPearl && isEnable(Plugins.PROTOCOLLIB))
-			this.entityHider = new EntityHider(this, Policy.BLACKLIST);
+			this.addListener(new EntityListener(this));
 
 		/* Add Listener */
 
 		addListener(new AdapterListener(this));
 		addListener(this.inventoryManager);
-		addListener(this.listener = new TournamentListener(this.entityHider, this.tournament));
+		addListener(this.listener = new TournamentListener(this.tournament));
 
 		if (isEnable(Plugins.PLACEHOLDER)) {
 
@@ -101,9 +100,6 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		tournament.onPluginDisable();
 
-		if (Config.disablePotionAndPearl && this.entityHider != null)
-			this.entityHider.close();
-
 		getSavers().forEach(saver -> saver.save(getPersist()));
 
 		postDisable();
@@ -116,10 +112,6 @@ public class ZTournamentPlugin extends ZPlugin {
 
 	public TournamentListener getListener() {
 		return listener;
-	}
-
-	public EntityHider getEntityHider() {
-		return entityHider;
 	}
 
 }
