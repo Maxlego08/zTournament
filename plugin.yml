@@ -1,9 +1,10 @@
 name: zTournament
 author: Maxlego08
 main: fr.maxlego08.ztournament.ZTournamentPlugin
-version: 1.0.1.6
+version: 1.0.3.2
 softdepend:
 - PlaceholderAPI
 - ProtocolLib
+- CombatTagPlus
 api-version: 1.13
 commands:

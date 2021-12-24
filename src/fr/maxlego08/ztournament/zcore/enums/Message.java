@@ -152,6 +152,14 @@ public enum Message {
 	TOURNAMENT_CREATE_ERROR_PLAYER("§cYou already have a team, you cannot create another."),
 
 	TOURNAMENT_CREATE_ERROR("§cYou cannot create a team at this time."),
+	
+	TOURNAMENT_KICK_ERROR("§cYou cannot kick a player at this time."),
+	
+	TOURNAMENT_KICK_ERROR_PLAYER("§cThe player has no team, you cannot expel him."),
+	
+	TOURNAMENT_KICK_ERROR_DUEL("§cThe player has no duel, you cannot expel him."),
+	
+	TOURNAMENT_KICK_SUCCESS("§aYou have just expelled the player."),
 
 	TOURNAMENT_WIN_ERROR("§cNobody has won the tournament event!"),
 
@@ -220,7 +228,7 @@ public enum Message {
 	
 	TOURNAMENT_AXE_POS1("§7You have just put the first position in §f%world%§7, §f%x%§7, §f%y%§7, §f%z%§7."),
 	TOURNAMENT_AXE_POS2("§7You have just put the second position in §f%world%§7, §f%x%§7, §f%y%§7, §f%z%§7."), 
-	TOURNAMENT_CREATE_ERROR_SELECTION("§cYou must select a zone with the command §f/zkoth axe§c."), 
+	TOURNAMENT_CREATE_ERROR_SELECTION("§cYou must select a zone with the command §f/ztournament axe§c."), 
 	TOURNAMENT_ARENA_POS1_CHANGE("§aYou have just changed the first position of the arena."),
 	TOURNAMENT_ARENA_POS2_CHANGE("§aYou have just changed the second position of the arena."), 
 	TOURNAMENT_ARENA_ALREADY_EXIST("§cImpossible to create an arena with this name, it already exists."),

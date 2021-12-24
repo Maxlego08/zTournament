@@ -63,8 +63,10 @@ public interface Tournament extends Saveable {
 	 * 
 	 * @param player
 	 */
-	void clearPlayer(Player player);
+	void clearPlayer(Player player, ClearReason reason);
 
+	void givePotions(Player player);
+	
 	/**
 	 * 
 	 * @return
@@ -280,5 +282,7 @@ public interface Tournament extends Saveable {
 	 * @param location
 	 */
 	void setPosition(boolean isPos1, CommandSender sender, String name, Location location);
+
+	void kick(CommandSender sender, Player player);
 	
 }

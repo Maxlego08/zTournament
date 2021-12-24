@@ -22,6 +22,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.ztournament.api.Duel;
@@ -35,6 +36,7 @@ import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.ZSelection;
 import fr.maxlego08.ztournament.zcore.utils.builder.ItemBuilder;
+import fr.maxlego08.ztournament.zcore.utils.nms.NMSUtils;
 
 @SuppressWarnings("deprecation")
 public class TournamentListener extends ListenerAdapter {
@@ -154,6 +156,13 @@ public class TournamentListener extends ListenerAdapter {
 
 		if (tournament.isStart() && !tournament.isWaiting()) {
 
+			Team damagerTeam = this.tournament.getByPlayer(damager);
+
+			if (damagerTeam == null && !damager.hasPermission(Permission.ZTOURNAMENT_BYPASS.getPermission())) {
+				event.setCancelled(true);
+				return;
+			}
+			
 			Team team = tournament.getByPlayer(player);
 
 			if (team == null)
@@ -168,7 +177,7 @@ public class TournamentListener extends ListenerAdapter {
 			if (team.contains(damager)) {
 
 				event.setCancelled(true);
-				actionMessage(player, Message.TEAM_DAMAGE);
+				this.actionMessage(player, Message.TEAM_DAMAGE);
 
 			} else {
 
@@ -183,12 +192,27 @@ public class TournamentListener extends ListenerAdapter {
 	public void onPlayerDamage(EntityDamageEvent event, DamageCause cause, double damage, Player player) {
 
 		if (tournament.isStart() && !tournament.isWaiting() && player.getHealth() - event.getFinalDamage() <= 0) {
-			Team team = tournament.getByPlayer(player);
+
+			if (NMSUtils.getNMSVersion() != 1.8) {
+
+				Inventory inventory = player.getInventory();
+				int[] slots = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 40 };
+				for (int a : slots) {
+					ItemStack itemStack = inventory.getItem(a);
+					if (itemStack != null && itemStack.getType()
+							.equals(NMSUtils.isOldVersion() ? getMaterial(449) : Material.TOTEM_OF_UNDYING)) {
+						return;
+					}
+				}
+
+			}
+
+			Team team = this.tournament.getByPlayer(player);
 
 			if (team == null)
 				return;
 
-			Duel duel = tournament.getDuel(team);
+			Duel duel = this.tournament.getDuel(team);
 			if (duel == null)
 				return;
 
@@ -196,9 +220,9 @@ public class TournamentListener extends ListenerAdapter {
 				return;
 
 			event.setCancelled(true);
-			player.teleport(tournament.getLocation());
+			player.teleport(this.tournament.getLocation());
 
-			tournament.loose(team, duel, player);
+			this.tournament.loose(team, duel, player);
 		}
 	}
 

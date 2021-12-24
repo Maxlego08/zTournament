@@ -18,6 +18,7 @@ import fr.maxlego08.ztournament.scoreboard.ScoreBoardManager;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
 import fr.maxlego08.ztournament.zcore.enums.Inventory;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
+import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
 import fr.maxlego08.ztournament.zcore.utils.Metrics;
 import fr.maxlego08.ztournament.zcore.utils.plugins.Plugins;
 import fr.maxlego08.ztournament.zcore.utils.plugins.VersionChecker;
@@ -67,8 +68,10 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
-		if (Config.disablePotionAndPearl && isEnable(Plugins.PROTOCOLLIB))
+		if (Config.disablePotionAndPearl && isEnable(Plugins.PROTOCOLLIB)){
+			Logger.info("Activation of the entity hider!", LogType.SUCCESS);
 			this.addListener(new EntityListener(this));
+		}
 
 		/* Add Listener */
 

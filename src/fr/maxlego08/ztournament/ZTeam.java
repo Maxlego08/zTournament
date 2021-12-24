@@ -15,6 +15,7 @@ import org.bukkit.inventory.PlayerInventory;
 import fr.maxlego08.ztournament.api.Team;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
+import net.minelink.ctplus.CombatTagPlus;
 
 public class ZTeam extends ZUtils implements Team {
 
@@ -64,8 +65,17 @@ public class ZTeam extends ZUtils implements Team {
 	 */
 	public void teleport(Location location) {
 		players.forEach(player -> {
-			if (player.isOnline())
+
+			if (Bukkit.getServer().getPluginManager().isPluginEnabled("CombatTagPlus")) {
+
+				CombatTagPlus plugin = (CombatTagPlus) Bukkit.getServer().getPluginManager().getPlugin("CombatTagPlus");
+				plugin.getTagManager().untag(player.getUniqueId());
+
+			}
+
+			if (player.isOnline()) {
 				player.teleport(location);
+			}
 		});
 	}
 

@@ -24,6 +24,7 @@ public class CommandTournamentVersion extends VCommand {
 		message(sender, "§aDiscord§7: §2http://discord.groupez.dev/");
 		message(sender, "§aBuy it for §d15€§7: §2https://groupez.dev/resources/zTournament.3");
 		message(sender, "§aGift code of §d5%§8: §fZTOURNAMENT-2021");
+		message(sender, "§aSponsor§7: §chttps://serveur-minecraft-vote.fr/?ref=345");
 
 		return CommandType.SUCCESS;
 	}

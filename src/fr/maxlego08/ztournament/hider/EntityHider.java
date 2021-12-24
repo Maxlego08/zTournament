@@ -36,7 +36,7 @@ public abstract class EntityHider implements Listener {
 	// Packets that update remote player entities
 	private static final PacketType[] ENTITY_PACKETS = { PacketType.Play.Server.ENTITY_EQUIPMENT,
 			PacketType.Play.Server.ENTITY_LOOK, PacketType.Play.Server.NAMED_ENTITY_SPAWN,
-			PacketType.Play.Server.COLLECT, PacketType.Play.Server.VEHICLE_MOVE, PacketType.Play.Server.SPAWN_ENTITY,
+			PacketType.Play.Server.COLLECT, PacketType.Play.Server.SPAWN_ENTITY,
 			PacketType.Play.Server.SPAWN_ENTITY_PAINTING, PacketType.Play.Server.SPAWN_ENTITY_EXPERIENCE_ORB,
 			PacketType.Play.Server.EXPERIENCE, PacketType.Play.Server.ENTITY_VELOCITY,
 			PacketType.Play.Server.ENTITY_TELEPORT, PacketType.Play.Server.ENTITY_HEAD_ROTATION,
