@@ -3,7 +3,6 @@ package fr.maxlego08.ztournament;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -72,6 +71,7 @@ import fr.maxlego08.ztournament.zcore.enums.EnumVersion;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
+import fr.maxlego08.ztournament.zcore.utils.ZPotionEffect;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 import fr.maxlego08.ztournament.zcore.utils.builder.TimerBuilder;
 import fr.maxlego08.ztournament.zcore.utils.inventory.Pagination;
@@ -105,6 +105,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	private transient Kit kit;
 
 	private transient Map<UUID, Collection<PotionEffect>> potions = new HashMap<UUID, Collection<PotionEffect>>();
+	private static Map<UUID, List<ZPotionEffect>> playerPotions = new HashMap<UUID, List<ZPotionEffect>>();
 
 	private transient final HashSet<String> substanceChars = new HashSet<String>(Arrays.asList(new String[] { "0", "1",
 			"2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
@@ -172,6 +173,11 @@ public class TournamentManager extends ZUtils implements Tournament {
 	public void load(Persist p) {
 		p.loadOrSaveDefault(this, TournamentManager.class, "tournaments");
 		Logger.info("Number of arenas available: " + arenas.size(), LogType.SUCCESS);
+		playerPotions.forEach((uuid, effects) -> {
+			List<PotionEffect> potions = new ArrayList<>();
+			effects.forEach(e -> potions.add(e.toPotionEffect()));
+			this.potions.put(uuid, potions);
+		});
 	}
 
 	/**
@@ -179,6 +185,13 @@ public class TournamentManager extends ZUtils implements Tournament {
 	 */
 	@Override
 	public void save(Persist p) {
+		this.potions.forEach((player, potions) -> {
+			List<ZPotionEffect> effets = new ArrayList<>();
+			potions.forEach(e -> {
+				effets.add(new ZPotionEffect(e.getType().getName(), e.getDuration(), e.getAmplifier()));
+			});
+			playerPotions.put(player, effets);
+		});
 		p.save(this, "tournaments");
 	}
 
@@ -233,6 +246,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		player.getPlayer().getActivePotionEffects().forEach(e -> {
 			player.getPlayer().removePotionEffect(e.getType());
 		});
+
 	}
 
 	@Override
@@ -241,6 +255,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 			Collection<PotionEffect> collection = this.potions.getOrDefault(player.getUniqueId(), new ArrayList<>());
 			collection.forEach(effect -> player.addPotionEffect(effect));
+			this.potions.remove(player.getUniqueId());
 
 		}
 	}
@@ -686,16 +701,16 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 					cancel();
 					broadcast(Message.TOURNAMENT_WAVE_END);
-					
+
 					if (Config.randomLooseTeam) {
-						
+
 						Iterator<Duel> iterator = new ArrayList<>(duels).iterator();
-						while(iterator.hasNext()){
+						while (iterator.hasNext()) {
 							Duel duel = iterator.next();
-							Team team = new Random().nextBoolean() ? duel.getTeam() : duel.getOpponant();							
+							Team team = new Random().nextBoolean() ? duel.getTeam() : duel.getOpponant();
 							loose(team, duel, team.getPlayers().get(0));
 						}
-						
+
 						canStartNextWave();
 						return;
 					}
@@ -728,7 +743,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 				}
 
 			}
-		}.runTaskTimer(ZPlugin.z(), 0, Config.enableDebug ? 1 : 20);
+		}.runTaskTimer(ZPlugin.z(), 0, Config.enableDebug ? 2 : 20);
 	}
 
 	@Override
@@ -1078,16 +1093,19 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 	@Override
 	public void leave(Player player, boolean message) {
-		if (isStart && !isWaiting) {
-			if (message)
+
+		if (this.isStart && !this.isWaiting) {
+			if (message) {
 				message(player, Message.TOURNAMENT_TEAM_LEAVE_ERROR);
+			}
 			return;
 		}
 
-		Team team = getByPlayer(player);
+		Team team = this.getByPlayer(player);
 		if (team == null) {
-			if (message)
+			if (message) {
 				message(player, Message.TOURNAMENT_TEAM_PLAYER_ERROR);
+			}
 			return;
 		}
 
@@ -1096,8 +1114,9 @@ public class TournamentManager extends ZUtils implements Tournament {
 			TournamentTeamDisbandEvent event = new TournamentTeamDisbandEvent(team, player);
 			event.callEvent();
 
-			if (event.isCancelled())
+			if (event.isCancelled()) {
 				return;
+			}
 
 			team.disband();
 			this.teams.remove(team);
@@ -1107,18 +1126,22 @@ public class TournamentManager extends ZUtils implements Tournament {
 			TournamentTeamLeaveEvent event = new TournamentTeamLeaveEvent(team, player);
 			event.callEvent();
 
-			if (event.isCancelled())
+			if (event.isCancelled()) {
 				return;
+			}
 
-			if (message)
+			if (message) {
 				message(player, Message.TOURNAMENT_TEAM_LEAVE);
+			}
+
 			team.leave(player);
 			player.teleport(getLocation());
-			clearPlayer(player, ClearReason.LEAVE);
+			this.clearPlayer(player, ClearReason.LEAVE);
 
 		}
 
 		this.givePotions(player);
+
 	}
 
 	@Override
@@ -1130,9 +1153,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 		event.callEvent();
 
 		duel.message(Message.TOURNAMENT_PLAYER_LOOSE.replace("%player%", player.getName()));
-		player.teleport(getLocation());
-
-		clearPlayer(player, ClearReason.GAME);
+		player.teleport(this.getLocation());
+		this.clearPlayer(player, ClearReason.GAME);
 
 		if (duel.hasWinner() && duel.isDuel()) {
 
@@ -1145,14 +1167,14 @@ public class TournamentManager extends ZUtils implements Tournament {
 			winner.reMap();
 			winner.show();
 			winner.heal();
-			winner.teleport(getLocation());
+			winner.teleport(this.getLocation());
 
 			Team looser = duel.getLooser();
 			looser.setInDuel(false);
 			looser.clear();
 			looser.heal();
 			looser.show();
-			looser.teleport(getLocation());
+			looser.teleport(this.getLocation());
 
 			looser.getRealPlayers().forEach(offlinePlayer -> {
 				if (offlinePlayer.isOnline()) {
@@ -1160,20 +1182,22 @@ public class TournamentManager extends ZUtils implements Tournament {
 				}
 			});
 
-			looser.setPosition(currentTeams--);
+			looser.setPosition(this.currentTeams--);
 			Message.TOURNAMENT_DUEL_LOOSE.getMessages().forEach(e -> {
 				looser.message(e.replace("%position%", String.valueOf(looser.getPosition())).replace("%team%",
-						String.valueOf(maxTeams)));
+						String.valueOf(this.maxTeams)));
 			});
 
-			if (!eliminatedTeams.contains(looser))
-				eliminatedTeams.add(looser);
+			if (!this.eliminatedTeams.contains(looser)) {
+				this.eliminatedTeams.add(looser);
+			}
 
-			teams.remove(looser);
-			duels.remove(duel);
+			this.teams.remove(looser);
+			this.duels.remove(duel);
 
-			canStartNextWave();
+			this.canStartNextWave();
 		}
+
 	}
 
 	@Override
@@ -1191,10 +1215,10 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		} else if (duels.size() == 0) {
 
-			if (!this.isStart){
+			if (!this.isStart) {
 				return;
 			}
-			
+
 			teams.forEach(Team::show);
 			arenas.forEach(Arena::clear);
 			broadcast(Message.TOURNAMENT_WAVE_NEXT_TIME);

@@ -80,7 +80,7 @@ public class ZTeam extends ZUtils implements Team {
 	}
 
 	public void clear() {
-		realPlayers.forEach(player -> {
+		this.realPlayers.forEach(player -> {
 			if (player.isOnline()) {
 				player.getPlayer().getInventory().clear();
 				player.getPlayer().getInventory().setBoots(null);

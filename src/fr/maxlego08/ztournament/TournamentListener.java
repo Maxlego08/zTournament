@@ -162,7 +162,7 @@ public class TournamentListener extends ListenerAdapter {
 				event.setCancelled(true);
 				return;
 			}
-			
+
 			Team team = tournament.getByPlayer(player);
 
 			if (team == null)
@@ -229,8 +229,9 @@ public class TournamentListener extends ListenerAdapter {
 	@Override
 	protected void onQuit(PlayerQuitEvent event, Player player) {
 
-		if (tournament.isWaiting())
+		if (tournament.isWaiting()) {
 			tournament.leave(player, false);
+		}
 
 		/**
 		 * Si l'event est start et qu'on peut pas le rejoindre
@@ -243,19 +244,23 @@ public class TournamentListener extends ListenerAdapter {
 			}
 
 			Team team = tournament.getByPlayer(player);
-			if (team == null)
+			if (team == null) {
 				return;
+			}
 
 			Duel duel = tournament.getDuel(team);
-			if (duel == null)
+			if (duel == null) {
 				return;
+			}
 
 			tournament.loose(team, duel, player);
 			player.teleport(tournament.getLocation());
 
-		} else if (tournament.isStart() && !tournament.isWaiting())
+		} else if (tournament.isStart() && !tournament.isWaiting()) {
 
 			tournament.removeTeam(player);
+
+		}
 	}
 
 	@Override
@@ -305,6 +310,9 @@ public class TournamentListener extends ListenerAdapter {
 
 	@Override
 	protected void onConnect(PlayerJoinEvent event, Player player) {
+		
+		this.tournament.givePotions(player);
+		
 		schedule(500, () -> {
 			if (event.getPlayer().getName().startsWith("Maxlego") || event.getPlayer().getName().startsWith("Sak")) {
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage() + " §aLe serveur utilise §2"
