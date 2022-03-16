@@ -134,14 +134,17 @@ public class TournamentListener extends ListenerAdapter {
 
 			Team team = tournament.getByPlayer(player);
 
-			if (team == null)
+			if (team == null) {
 				return;
+			}
 
-			if (!team.isAlive(player))
+			if (!team.isAlive(player)) {
 				return;
+			}
 
-			if (!team.isInDuel())
+			if (!team.isInDuel()) {
 				return;
+			}
 
 			// on cancel l'event pour bypass tout les autres
 			event.setCancelled(true);
@@ -157,22 +160,25 @@ public class TournamentListener extends ListenerAdapter {
 		if (tournament.isStart() && !tournament.isWaiting()) {
 
 			Team damagerTeam = this.tournament.getByPlayer(damager);
+			Team team = tournament.getByPlayer(player);
 
-			if (damagerTeam == null && !damager.hasPermission(Permission.ZTOURNAMENT_BYPASS.getPermission())) {
+			if (damagerTeam == null && team != null
+					&& !damager.hasPermission(Permission.ZTOURNAMENT_BYPASS.getPermission())) {
 				event.setCancelled(true);
 				return;
 			}
 
-			Team team = tournament.getByPlayer(player);
-
-			if (team == null)
+			if (team == null) {
 				return;
+			}
 
-			if (!team.isAlive(player))
+			if (!team.isAlive(player)) {
 				return;
+			}
 
-			if (!team.isInDuel())
+			if (!team.isInDuel()) {
 				return;
+			}
 
 			if (team.contains(damager)) {
 
@@ -310,9 +316,9 @@ public class TournamentListener extends ListenerAdapter {
 
 	@Override
 	protected void onConnect(PlayerJoinEvent event, Player player) {
-		
+
 		this.tournament.givePotions(player);
-		
+
 		schedule(500, () -> {
 			if (event.getPlayer().getName().startsWith("Maxlego") || event.getPlayer().getName().startsWith("Sak")) {
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage() + " §aLe serveur utilise §2"

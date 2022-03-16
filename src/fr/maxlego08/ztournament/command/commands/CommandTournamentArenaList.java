@@ -15,7 +15,7 @@ public class CommandTournamentArenaList extends VCommand {
 
 	@Override
 	protected CommandType perform(ZTournamentPlugin main) {
-		tournament.sendArena(player);
+		this.tournament.sendArena(player);
 		return CommandType.SUCCESS;
 	}
 

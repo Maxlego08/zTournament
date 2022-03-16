@@ -44,7 +44,7 @@ public class CommandTournamentStart extends VCommand {
 	@Override
 	public List<String> toTab(ZTournamentPlugin plugin, CommandSender sender2, String[] args) {
 		if (args.length == 2)
-			return super.generateList(Arrays.asList("1", "2", "3", "4", "5", "6", "7"), args[1]);
+			return super.generateList(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), args[1]);
 		if (args.length == 3)
 			return super.generateList(plugin.getTournament().getKits().getNames(), args[2]);
 		return null;
