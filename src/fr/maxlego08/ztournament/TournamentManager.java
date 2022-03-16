@@ -119,27 +119,27 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		double nms = NMSUtils.getNMSVersion();
 
-		if (nms == 1.7)
+		if (nms == 1.7) {
 			this.nms = new NMS_1_7();
-		else if (nms == 1.8)
+		} else if (nms == 1.8) {
 			this.nms = new NMS_1_8();
-		else if (nms == 1.9)
+		} else if (nms == 1.9) {
 			this.nms = new NMS_1_9();
-		else if (nms == 1.10)
+		} else if (nms == 1.10) {
 			this.nms = new NMS_1_10();
-		else if (nms == 1.11)
+		} else if (nms == 1.11) {
 			this.nms = new NMS_1_11();
-		else if (nms == 1.12)
+		} else if (nms == 1.12) {
 			this.nms = new NMS_1_12();
-		else if (nms == 1.13)
+		} else if (nms == 1.13) {
 			this.nms = new NMS_1_13();
-		else if (nms == 1.14)
+		} else if (nms == 1.14) {
 			this.nms = new NMS_1_14();
-		else if (nms == 1.15)
+		} else if (nms == 1.15) {
 			this.nms = new NMS_1_15();
-		else if (nms == 1.17 || nms == 1.18)
+		} else if (nms == 1.17 || nms == 1.18) {
 			this.nms = new NMS_1_17();
-		else if (nms == 1.16) {
+		} else if (nms == 1.16) {
 			EnumVersion nmsVersion = NMSUtils.getVersion();
 			switch (nmsVersion) {
 			case UNKOWN:
@@ -1350,21 +1350,21 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 	@Override
 	public boolean isTimeBetweenWave() {
-		return isTimeBetweenWave;
+		return this.isTimeBetweenWave;
 	}
 
 	@Override
 	public NMS getNMS() {
-		return nms;
+		return this.nms;
 	}
 
 	@Override
 	public void onPluginDisable() {
 
-		if (isWaiting) {
+		if (this.isWaiting) {
 
-			isStart = false;
-			isWaiting = false;
+			this.isStart = false;
+			this.isWaiting = false;
 			broadcast(Message.TOURNAMENT_STOP);
 			return;
 
@@ -1372,10 +1372,10 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		if (isStart) {
 
-			isStart = false;
-			isWaiting = false;
+			this.isStart = false;
+			this.isWaiting = false;
 			broadcast(Message.TOURNAMENT_STOP);
-			teams.forEach(e -> {
+			this.teams.forEach(e -> {
 				e.clear();
 				e.getRealPlayers().forEach(p -> {
 					if (p.isOnline()) {

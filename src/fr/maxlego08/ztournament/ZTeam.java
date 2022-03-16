@@ -64,7 +64,7 @@ public class ZTeam extends ZUtils implements Team {
 	 * @param location
 	 */
 	public void teleport(Location location) {
-		players.forEach(player -> {
+		this.realPlayers.forEach(player -> {
 
 			if (Bukkit.getServer().getPluginManager().isPluginEnabled("CombatTagPlus")) {
 
@@ -74,7 +74,7 @@ public class ZTeam extends ZUtils implements Team {
 			}
 
 			if (player.isOnline()) {
-				player.teleport(location);
+				player.getPlayer().teleport(location);
 			}
 		});
 	}
