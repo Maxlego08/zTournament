@@ -1,5 +1,8 @@
 package fr.maxlego08.ztournament.api;
 
+import java.util.Map;
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -97,4 +100,6 @@ public interface Duel {
 	 * @return
 	 */
 	boolean contains(Player player);
+
+	Team getRandomTeamLessDamage(Map<UUID, Double> playerDamageCount);
 }

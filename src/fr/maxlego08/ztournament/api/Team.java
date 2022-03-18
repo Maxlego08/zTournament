@@ -1,6 +1,7 @@
 package fr.maxlego08.ztournament.api;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -232,5 +233,7 @@ public interface Team {
 	 * @return
 	 */
 	boolean match(OfflinePlayer player);
+
+	boolean contains(UUID key);
 
 }

@@ -20,6 +20,7 @@ public class Config implements Saveable {
 	public static boolean disablePotionAndPearl = false;
 	public static boolean enableDebug = false;
 	public static boolean enableAutoUpdate = false;
+	public static boolean enableEliminationOfThePlayerWhoMadeTheFewestDamage = false;
 
 	public static int rankingSize = 3;
 	public static Map<Integer, String> rankingPosition = new HashMap<Integer, String>();

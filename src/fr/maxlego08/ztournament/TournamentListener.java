@@ -187,6 +187,7 @@ public class TournamentListener extends ListenerAdapter {
 
 			} else {
 
+				this.tournament.countDamage(damager, event.getFinalDamage());
 				event.setCancelled(false);
 
 			}

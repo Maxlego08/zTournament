@@ -276,13 +276,27 @@ public interface Tournament extends Saveable {
 
 	/**
 	 * 
-	 * @param b
+	 * @param isPos1
 	 * @param sender
 	 * @param name
 	 * @param location
 	 */
 	void setPosition(boolean isPos1, CommandSender sender, String name, Location location);
 
+	/**
+	 * Permet de kick un membre
+	 * 
+	 * @param sender
+	 * @param player
+	 */
 	void kick(CommandSender sender, Player player);
+
+	/**
+	 * Permet d'appliquer les damages
+	 * 
+	 * @param damager
+	 * @param finalDamage
+	 */
+	void countDamage(Player damager, double finalDamage);
 	
 }

@@ -1,5 +1,8 @@
 package fr.maxlego08.ztournament;
 
+import java.util.Map;
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -96,6 +99,17 @@ public class ZDuel extends ZUtils implements Duel {
 	@Override
 	public boolean contains(Player player) {
 		return this.team.contains(player) || this.opponant.contains(player);
+	}
+
+	@Override
+	public Team getRandomTeamLessDamage(Map<UUID, Double> playerDamageCount) {
+
+		double teamDamage = playerDamageCount.entrySet().stream().filter(e -> this.team.contains(e.getKey()))
+				.map(e -> e.getValue()).reduce(0d, Double::sum);
+		double opponantDamage = playerDamageCount.entrySet().stream().filter(e -> this.opponant.contains(e.getKey()))
+				.map(e -> e.getValue()).reduce(0d, Double::sum);
+
+		return teamDamage > opponantDamage ? this.opponant : this.team;
 	}
 
 }

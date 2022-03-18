@@ -3,6 +3,7 @@ package fr.maxlego08.ztournament;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -413,6 +414,11 @@ public class ZTeam extends ZUtils implements Team {
 	@Override
 	public boolean match(OfflinePlayer player) {
 		return realPlayers.contains(player);
+	}
+
+	@Override
+	public boolean contains(UUID key) {
+		return this.realPlayers.stream().anyMatch(e -> e.getUniqueId().equals(key));
 	}
 
 }
