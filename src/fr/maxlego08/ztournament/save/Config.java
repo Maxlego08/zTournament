@@ -31,9 +31,9 @@ public class Config implements Saveable {
 	public static int timeWaveEndInSecond = 300;
 	public static int timeWaveNextInSecond = 10;
 	public static List<Integer> displayTournamentInformations = Arrays.asList(1, 2, 3, 4, 5, 10, 15, 30, 60, 120, 180,
-			260, 300);
-	public static List<Integer> displayWaveEndInformations = Arrays.asList(1, 2, 3, 4, 5, 10, 15, 30, 60, 120, 180, 260,
-			300);
+			4 * 60, 300);
+	public static List<Integer> displayWaveEndInformations = Arrays.asList(1, 2, 3, 4, 5, 10, 15, 30, 60, 120, 180,
+			4 * 60, 300);
 
 	public static List<Reward> rewards = new ArrayList<Reward>();
 	public static boolean randomLooseTeam = false;

@@ -218,8 +218,10 @@ public interface Team {
 	/**
 	 * 
 	 * @param message
+	 * @param string2 
+	 * @param string 
 	 */
-	void message(Message message);
+	void message(Message message, Object... args);
 	
 	/**
 	 * 

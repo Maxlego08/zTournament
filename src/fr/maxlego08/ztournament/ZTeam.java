@@ -54,9 +54,10 @@ public class ZTeam extends ZUtils implements Team {
 	 * @param args
 	 */
 	public void message(String message, Object... args) {
-		realPlayers.forEach(player -> {
-			if (player.isOnline())
+		this.realPlayers.forEach(player -> {
+			if (player.isOnline()) {
 				super.message(player.getPlayer(), message, args);
+			}
 		});
 	}
 
@@ -404,8 +405,8 @@ public class ZTeam extends ZUtils implements Team {
 	}
 
 	@Override
-	public void message(Message message) {
-		this.message(message.getMessage());
+	public void message(Message message, Object... args) {
+		this.players.forEach(player -> this.message(player, message, args));
 	}
 
 	@Override

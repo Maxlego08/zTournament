@@ -35,13 +35,14 @@ public class TimerBuilder {
 	}
 
 	public static String getStringTime(long second) {
-		if (second < 60)
+		if (second < 60) {
 			return (TimerBuilder.getFormatLongSecondes(second * 1000l));
-		else if (second >= 60 && second < 3600)
+		} else if (second >= 60 && second < 3600) {
 			return (TimerBuilder.getFormatLongMinutes(second * 1000l));
-		else if (second >= 3600 && second < 86400)
+		} else if (second >= 3600 && second < 86400) {
 			return (TimerBuilder.getFormatLongHours(second * 1000l));
-		else
+		} else {
 			return (TimerBuilder.getFormatLongDays(second * 1000l));
+		}
 	}
 }

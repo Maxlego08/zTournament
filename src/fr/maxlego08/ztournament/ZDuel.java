@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import fr.maxlego08.ztournament.api.Arena;
 import fr.maxlego08.ztournament.api.Duel;
 import fr.maxlego08.ztournament.api.Team;
+import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 
 public class ZDuel extends ZUtils implements Duel {
@@ -70,9 +71,9 @@ public class ZDuel extends ZUtils implements Duel {
 		return team.hasLoose() ? team : opponant.hasLoose() ? opponant : null;
 	}
 
-	public void message(String string) {
-		team.message(string);
-		opponant.message(string);
+	public void message(Message message, Object... objects) {
+		team.message(message);
+		opponant.message(message);
 	}
 
 	public void heal() {

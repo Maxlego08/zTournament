@@ -213,13 +213,13 @@ public class KitManager extends ZUtils implements Kits {
 	public void createKit(CommandSender sender, String name) {
 
 		if (existKit(name)) {
-			message(sender, Message.TOURNAMENT_KIT_ALREADY_EXIST.replace("%name%", name));
+			message(sender, Message.TOURNAMENT_KIT_ALREADY_EXIST, "%name%", name);
 			return;
 		}
 
 		Kit kit = new fr.maxlego08.ztournament.Kit(name, null, null, null, null, new HashMap<>());
 		kits.put(name, kit);
-		message(sender, Message.TOURNAMENT_KIT_CREATE.replace("%name%", name));
+		message(sender, Message.TOURNAMENT_KIT_CREATE, "%name%", name);
 
 	}
 
@@ -227,7 +227,7 @@ public class KitManager extends ZUtils implements Kits {
 	public void editKit(Player player, String name) {
 
 		if (!existKit(name)) {
-			message(player, Message.TOURNAMENT_KIT_NOT_EXIST.replace("%name%", name));
+			message(player, Message.TOURNAMENT_KIT_NOT_EXIST, "%name%", name);
 			return;
 		}
 
@@ -238,7 +238,7 @@ public class KitManager extends ZUtils implements Kits {
 	@Override
 	public void showKit(Player player, String name) {
 		if (!existKit(name)) {
-			message(player, Message.TOURNAMENT_KIT_NOT_EXIST.replace("%name%", name));
+			message(player, Message.TOURNAMENT_KIT_NOT_EXIST, "%name%", name);
 			return;
 		}
 
@@ -248,14 +248,14 @@ public class KitManager extends ZUtils implements Kits {
 	@Override
 	public void deleteKit(CommandSender sender, String name) {
 		if (!existKit(name)) {
-			message(sender, Message.TOURNAMENT_KIT_NOT_EXIST.replace("%name%", name));
+			message(sender, Message.TOURNAMENT_KIT_NOT_EXIST, "%name%", name);
 			return;
 		}
 
 		Kit kit = getKit(name);
 		kits.remove(kit.getName());
 
-		message(sender, Message.TOURNAMENT_KIT_DELETE.replace("%name%", name));
+		message(sender, Message.TOURNAMENT_KIT_DELETE, "%name%", name);
 	}
 
 	@Override

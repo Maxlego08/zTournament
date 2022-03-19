@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import fr.maxlego08.ztournament.zcore.enums.Message;
+
 public interface Duel {
 
 	/**
@@ -60,9 +62,11 @@ public interface Duel {
 
 	/**
 	 * 
+	 * @param tournamentPlayerLoose
 	 * @param string
+	 * @param string2
 	 */
-	void message(String string);
+	void message(Message tournamentPlayerLoose, Object... objects);
 
 	/**
 	 * 

@@ -13,7 +13,7 @@ import fr.maxlego08.ztournament.inventory.inventories.InventoryKitShow;
 import fr.maxlego08.ztournament.listener.AdapterListener;
 import fr.maxlego08.ztournament.placeholder.TournamentExpansion;
 import fr.maxlego08.ztournament.save.Config;
-import fr.maxlego08.ztournament.save.Lang;
+import fr.maxlego08.ztournament.save.MessageLoader;
 import fr.maxlego08.ztournament.scoreboard.ScoreBoardManager;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
 import fr.maxlego08.ztournament.zcore.enums.Inventory;
@@ -35,6 +35,7 @@ public class ZTournamentPlugin extends ZPlugin {
 	private Kits kits;
 	private Tournament tournament;
 	private TournamentListener listener;
+	private final MessageLoader messages = new MessageLoader(this);
 
 	@Override
 	public void onEnable() {
@@ -61,7 +62,7 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		/* Add Saver */
 		addSave(Config.getInstance());
-		addSave(Lang.getInstance());
+		addSave(messages);
 		// addSave(new CooldownBuilder());
 		addSave(this.tournament);
 		addSave(this.kits);
@@ -117,4 +118,8 @@ public class ZTournamentPlugin extends ZPlugin {
 		return listener;
 	}
 
+	public MessageLoader getMessages() {
+		return messages;
+	}
+	
 }
