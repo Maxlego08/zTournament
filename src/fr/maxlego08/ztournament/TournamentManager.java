@@ -571,7 +571,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 			}
 
-		}.runTaskTimer(ZPlugin.z(), 0, Config.enableDebug ? 2 : 20);
+		}.runTaskTimer(ZPlugin.z(), 0, Config.enableDebug ? 6 : 20);
 
 	}
 
@@ -714,11 +714,12 @@ public class TournamentManager extends ZUtils implements Tournament {
 							if (Config.enableEliminationOfThePlayerWhoMadeTheFewestDamage) {
 
 								team = duel.getRandomTeamLessDamage(playerDamageCount);
-								
+
 							} else {
 								team = new Random().nextBoolean() ? duel.getTeam() : duel.getOpponant();
 							}
-							loose(team, duel, team.getPlayers().get(0));
+							Team finalTeam = team;
+							new ArrayList<>(team.getPlayers()).forEach(e -> loose(finalTeam, duel, e));
 						}
 
 						canStartNextWave();
@@ -753,12 +754,12 @@ public class TournamentManager extends ZUtils implements Tournament {
 				}
 
 			}
-		}.runTaskTimer(ZPlugin.z(), 0, Config.enableDebug ? 2 : 20);
+		}.runTaskTimer(ZPlugin.z(), 0, Config.enableDebug ? 6 : 20);
 	}
 
 	@Override
 	public void end() {
-		
+
 		if (this.teams.size() == 0) {
 			broadcast(Message.TOURNAMENT_WIN_ERROR);
 			return;
@@ -1214,31 +1215,36 @@ public class TournamentManager extends ZUtils implements Tournament {
 	}
 
 	@Override
-	public void canStartNextWave() {
+	public synchronized void canStartNextWave() {
+
 		/**
 		 * On termine l'event s'il reste qu'une seul team Sinon on commence une
 		 * nouvelle manche
 		 */
 
-		if (teams.size() == 1) {
+		if (this.teams.size() == 1) {
 
-			teams.forEach(Team::show);
+			this.teams.forEach(Team::show);
 			arenas.forEach(Arena::clear);
 			end();
 
 		} else if (duels.size() == 0) {
 
+			if (this.isTimeBetweenWave) {
+				return;
+			}
+
 			if (!this.isStart) {
 				return;
 			}
 
-			teams.forEach(Team::show);
+			this.teams.forEach(Team::show);
 			arenas.forEach(Arena::clear);
 			broadcast(Message.TOURNAMENT_WAVE_NEXT_TIME);
 
 			this.plugin.getListener().clearItems();
+			this.isTimeBetweenWave = true;
 
-			isTimeBetweenWave = true;
 			new BukkitRunnable() {
 
 				@Override
@@ -1306,8 +1312,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 				});
 			});
 
-			teams.clear();
-			duels.clear();
+			this.teams.clear();
+			this.duels.clear();
 		}
 	}
 

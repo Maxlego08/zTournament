@@ -167,19 +167,19 @@ public class ZTeam extends ZUtils implements Team {
 	public void show(Team team) {
 
 		Bukkit.getOnlinePlayers().forEach(p -> {
-			realPlayers.forEach(e -> {
+			this.realPlayers.forEach(e -> {
 				if (e.isOnline())
 					e.getPlayer().showPlayer(p);
 			});
 		});
 
 		hide();
-		realPlayers.forEach(player -> {
+		this.realPlayers.forEach(player -> {
 			team.getRealPlayers().forEach(zPlayer -> {
 				if (player.isOnline())
 					player.getPlayer().showPlayer(zPlayer.getPlayer());
 			});
-			realPlayers.forEach(currentPlayer -> {
+			this.realPlayers.forEach(currentPlayer -> {
 				if (player.isOnline())
 					player.getPlayer().showPlayer(currentPlayer.getPlayer());
 			});
@@ -195,19 +195,19 @@ public class ZTeam extends ZUtils implements Team {
 	public void hide(Team team) {
 
 		Bukkit.getOnlinePlayers().forEach(p -> {
-			realPlayers.forEach(e -> {
+			this.realPlayers.forEach(e -> {
 				if (e.isOnline())
 					e.getPlayer().hidePlayer(p);
 			});
 		});
 
 		show();
-		realPlayers.forEach(player -> {
+		this.realPlayers.forEach(player -> {
 			team.getRealPlayers().forEach(zPlayer -> {
 				if (player.isOnline())
 					player.getPlayer().hidePlayer(zPlayer.getPlayer());
 			});
-			realPlayers.forEach(currentPlayer -> {
+			this.realPlayers.forEach(currentPlayer -> {
 				if (player.isOnline())
 					player.getPlayer().hidePlayer(currentPlayer.getPlayer());
 			});
@@ -215,7 +215,7 @@ public class ZTeam extends ZUtils implements Team {
 	}
 
 	public void heal() {
-		realPlayers.forEach(player -> {
+		this.realPlayers.forEach(player -> {
 			if (player.isOnline()) {
 				player.getPlayer().setHealth(20.0);
 				player.getPlayer().setFoodLevel(20);
@@ -232,14 +232,14 @@ public class ZTeam extends ZUtils implements Team {
 	 * 
 	 */
 	public void show() {
-		realPlayers.forEach(player -> show(player));
+		this.realPlayers.forEach(player -> show(player));
 	}
 
 	/**
 	 * 
 	 */
 	public void hide() {
-		realPlayers.forEach(player -> hide(player));
+		this.realPlayers.forEach(player -> hide(player));
 	}
 
 	/**
@@ -248,8 +248,9 @@ public class ZTeam extends ZUtils implements Team {
 	 */
 	@SuppressWarnings("deprecation")
 	private void show(OfflinePlayer e) {
-		if (e.isOnline())
+		if (e.isOnline()) {
 			Bukkit.getOnlinePlayers().forEach(player -> e.getPlayer().showPlayer(player));
+		}
 	}
 
 	/**
@@ -258,8 +259,9 @@ public class ZTeam extends ZUtils implements Team {
 	 */
 	@SuppressWarnings("deprecation")
 	private void hide(OfflinePlayer e) {
-		if (e.isOnline())
+		if (e.isOnline()) {
 			Bukkit.getOnlinePlayers().forEach(player -> e.getPlayer().hidePlayer(player));
+		}
 	}
 
 	/**

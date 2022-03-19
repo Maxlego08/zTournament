@@ -113,4 +113,8 @@ public abstract class ListenerAdapter extends ZUtils {
 	public void onProjectilLaunch(ProjectileLaunchEvent event, Projectile entity) {
 	}
 
+	public void onPlayerDamageByArrow(EntityDamageByEntityEvent event, @NotNull DamageCause cause, double damage,
+			Projectile projectile, Player entity) {
+	}
+
 }

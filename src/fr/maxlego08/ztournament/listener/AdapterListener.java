@@ -1,6 +1,7 @@
 package fr.maxlego08.ztournament.listener;
 
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -76,17 +77,18 @@ public class AdapterListener extends ZUtils implements Listener {
 	public void onDrop(PlayerDropItemEvent event) {
 		template.getListenerAdapters().forEach(adapter -> adapter.onDrop(event, event.getPlayer()));
 	}
-	
+
 	@EventHandler
 	public void onCommand(PlayerCommandPreprocessEvent event) {
-		template.getListenerAdapters().forEach(adapter -> adapter.onCommand(event, event.getPlayer(), event.getMessage()));
+		template.getListenerAdapters()
+				.forEach(adapter -> adapter.onCommand(event, event.getPlayer(), event.getMessage()));
 	}
-	
+
 	@EventHandler
 	public void onCommand(PlayerEggThrowEvent event) {
 		template.getListenerAdapters().forEach(adapter -> adapter.onEgg(event, event.getPlayer(), event.getEgg()));
 	}
-	
+
 	@EventHandler
 	public void onCommand(ProjectileLaunchEvent event) {
 		template.getListenerAdapters().forEach(adapter -> adapter.onProjectilLaunch(event, event.getEntity()));
@@ -94,24 +96,36 @@ public class AdapterListener extends ZUtils implements Listener {
 
 	@EventHandler
 	public void onDamage(EntityDamageEvent event) {
-		if (event.getEntity() instanceof Player)
-			template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamage(event, event.getCause(),
+
+		if (event.getEntity() instanceof Player) {
+			this.template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamage(event, event.getCause(),
 					event.getDamage(), (Player) event.getEntity()));
+		}
+
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onDamage4(EntityDamageByEntityEvent event) {
 
-		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player)
-			template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamage(event, event.getCause(),
+		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
+			this.template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamage(event, event.getCause(),
 					event.getDamage(), (Player) event.getDamager(), (Player) event.getEntity()));
+		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onDamageLow(EntityDamageByEntityEvent event) {
-		
-		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player)
-			template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamageLow(event, event.getCause(),
+
+		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
+			this.template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamageLow(event, event.getCause(),
 					event.getDamage(), (Player) event.getDamager(), (Player) event.getEntity()));
+		} else if (event.getEntity() instanceof Player && event.getDamager() instanceof Projectile) {
+			
+			Projectile projectile = (Projectile) event.getDamager();
+			
+			this.template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamageByArrow(event, event.getCause(),
+					event.getDamage(), projectile, (Player) event.getEntity()));
+			
+		}
 	}
 }
