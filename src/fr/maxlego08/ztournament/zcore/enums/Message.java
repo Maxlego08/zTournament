@@ -24,11 +24,23 @@ public enum Message {
 					false), INVENTORY_BUTTON_PREVIOUS("§f» §7Page précédente",
 							false), INVENTORY_BUTTON_NEXT("§f» §7Page suivante", false),
 
-	TIME_DAY("%02d day(s) %02d hour(s) %02d minute(s) %02d second(s)"),
-	TIME_HOUR("%02d hour(s) %02d minute(s) %02d second(s)"),
+	TIME_DAY("%02d %day% %02d %hour% %02d %minute% %02d %second%"),
+	TIME_HOUR("%02d %hour% %02d minute(s) %02d %second%"),
 	TIME_HOUR_SIMPLE("%02d:%02d:%02d"),
-	TIME_MINUTE("%02d minute(s) %02d second(s)"),
-	TIME_SECOND("%02d second(s)"),
+	TIME_MINUTE("%02d %minute% %02d %second%"),
+	TIME_SECOND("%02d %second%"),
+	
+	FORMAT_SECOND("second"),
+	FORMAT_SECONDS("seconds"),	
+	
+	FORMAT_MINUTE("minute"),
+	FORMAT_MINUTES("minutes"),
+	
+	FORMAT_HOUR("hour"),
+	FORMAT_HOURS("hours"),
+	
+	FORMAT_DAY("d"),
+	FORMAT_DAYS("days"),
 
 	COMMAND_SYNTAXE_ERROR("§cYou must execute the command like this§7: §2%command%"),
 	COMMAND_NO_PERMISSION("§cYou don't have the permission permission to use that!"),

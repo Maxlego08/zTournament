@@ -563,7 +563,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 			}
 
-		}.runTaskTimer(ZPlugin.z(), 0, Config.enableDebug ? 6 : 20);
+		}.runTaskTimer(ZPlugin.z(), 0, Config.enableDebug ? 4 : 20);
 
 	}
 
@@ -749,7 +749,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 				}
 
 			}
-		}.runTaskTimer(ZPlugin.z(), 0, Config.enableDebug ? 6 : 20);
+		}.runTaskTimer(ZPlugin.z(), 0, Config.enableDebug ? 4 : 20);
 	}
 
 	@Override
