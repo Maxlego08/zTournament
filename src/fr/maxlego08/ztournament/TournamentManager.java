@@ -27,7 +27,6 @@ import fr.maxlego08.ztournament.api.ClearReason;
 import fr.maxlego08.ztournament.api.Duel;
 import fr.maxlego08.ztournament.api.Kit;
 import fr.maxlego08.ztournament.api.Kits;
-import fr.maxlego08.ztournament.api.NMS;
 import fr.maxlego08.ztournament.api.Team;
 import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.api.TournoisType;
@@ -52,22 +51,8 @@ import fr.maxlego08.ztournament.api.events.TournamentTeamRewardEvent;
 import fr.maxlego08.ztournament.api.events.TournamentWareArenaEvent;
 import fr.maxlego08.ztournament.api.events.TournamentWaveCommandNextEvent;
 import fr.maxlego08.ztournament.api.events.TournamentWinEvent;
-import fr.maxlego08.ztournament.nms.NMS_1_10;
-import fr.maxlego08.ztournament.nms.NMS_1_11;
-import fr.maxlego08.ztournament.nms.NMS_1_12;
-import fr.maxlego08.ztournament.nms.NMS_1_13;
-import fr.maxlego08.ztournament.nms.NMS_1_14;
-import fr.maxlego08.ztournament.nms.NMS_1_15;
-import fr.maxlego08.ztournament.nms.NMS_1_16_R1;
-import fr.maxlego08.ztournament.nms.NMS_1_16_R2;
-import fr.maxlego08.ztournament.nms.NMS_1_16_R3;
-import fr.maxlego08.ztournament.nms.NMS_1_17;
-import fr.maxlego08.ztournament.nms.NMS_1_7;
-import fr.maxlego08.ztournament.nms.NMS_1_8;
-import fr.maxlego08.ztournament.nms.NMS_1_9;
 import fr.maxlego08.ztournament.save.Config;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
-import fr.maxlego08.ztournament.zcore.enums.EnumVersion;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.logger.Logger;
 import fr.maxlego08.ztournament.zcore.logger.Logger.LogType;
@@ -75,7 +60,6 @@ import fr.maxlego08.ztournament.zcore.utils.ZPotionEffect;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 import fr.maxlego08.ztournament.zcore.utils.builder.TimerBuilder;
 import fr.maxlego08.ztournament.zcore.utils.inventory.Pagination;
-import fr.maxlego08.ztournament.zcore.utils.nms.NMSUtils;
 import fr.maxlego08.ztournament.zcore.utils.storage.Persist;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -100,7 +84,6 @@ public class TournamentManager extends ZUtils implements Tournament {
 	private transient int countTeam;
 	private transient int timer = 300;
 	private transient boolean asNewTimer = false;
-	private transient NMS nms;
 	private transient final Kits kits;
 	private transient Kit kit;
 
@@ -117,54 +100,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	private transient boolean isTimeBetweenWave;
 
 	public TournamentManager(Kits kits) {
-
-		double nms = NMSUtils.getNMSVersion();
-
-		if (nms == 1.7) {
-			this.nms = new NMS_1_7();
-		} else if (nms == 1.8) {
-			this.nms = new NMS_1_8();
-		} else if (nms == 1.9) {
-			this.nms = new NMS_1_9();
-		} else if (nms == 1.10) {
-			this.nms = new NMS_1_10();
-		} else if (nms == 1.11) {
-			this.nms = new NMS_1_11();
-		} else if (nms == 1.12) {
-			this.nms = new NMS_1_12();
-		} else if (nms == 1.13) {
-			this.nms = new NMS_1_13();
-		} else if (nms == 1.14) {
-			this.nms = new NMS_1_14();
-		} else if (nms == 1.15) {
-			this.nms = new NMS_1_15();
-		} else if (nms == 1.17 || nms == 1.18) {
-			this.nms = new NMS_1_17();
-		} else if (nms == 1.16) {
-			EnumVersion nmsVersion = NMSUtils.getVersion();
-			switch (nmsVersion) {
-			case UNKOWN:
-				break;
-			case V_16_R1:
-				this.nms = new NMS_1_16_R1();
-				break;
-			case V_16_R2:
-				this.nms = new NMS_1_16_R2();
-				break;
-			case V_16_R3:
-				this.nms = new NMS_1_16_R3();
-				break;
-			case V_1_7_10:
-			default:
-				break;
-
-			}
-		}
-
 		this.kits = kits;
-
-		Logger.info("Loaded NMS " + nms + " !", LogType.INFO);
-
 	}
 
 	/**
@@ -1346,11 +1282,6 @@ public class TournamentManager extends ZUtils implements Tournament {
 	@Override
 	public boolean isTimeBetweenWave() {
 		return this.isTimeBetweenWave;
-	}
-
-	@Override
-	public NMS getNMS() {
-		return this.nms;
 	}
 
 	@Override

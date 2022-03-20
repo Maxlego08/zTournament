@@ -246,12 +246,6 @@ public interface Tournament extends Saveable {
 	
 	/**
 	 * 
-	 * @return
-	 */
-	NMS getNMS();
-	
-	/**
-	 * 
 	 */
 	void onPluginDisable();
 
