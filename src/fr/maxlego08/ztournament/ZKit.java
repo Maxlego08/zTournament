@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.bukkit.inventory.ItemStack;
 
-public class Kit implements fr.maxlego08.ztournament.api.Kit {
+public class ZKit implements fr.maxlego08.ztournament.api.Kit {
 
 	private final String name;
 	private ItemStack helmet;
@@ -21,7 +21,7 @@ public class Kit implements fr.maxlego08.ztournament.api.Kit {
 	 * @param boots
 	 * @param items
 	 */
-	public Kit(String name, ItemStack helmet, ItemStack chestplate, ItemStack leggings, ItemStack boots,
+	public ZKit(String name, ItemStack helmet, ItemStack chestplate, ItemStack leggings, ItemStack boots,
 			Map<Integer, ItemStack> items) {
 		super();
 		this.name = name;

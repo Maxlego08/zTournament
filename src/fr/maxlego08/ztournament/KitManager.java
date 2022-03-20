@@ -136,7 +136,7 @@ public class KitManager extends ZUtils implements Kits {
 
 			}
 
-			Kit kit = new fr.maxlego08.ztournament.Kit(name, helmet, chestplate, leggings, boots, itemstacks);
+			Kit kit = new fr.maxlego08.ztournament.ZKit(name, helmet, chestplate, leggings, boots, itemstacks);
 			kits.put(kit.getName(), kit);
 
 		}
@@ -162,7 +162,7 @@ public class KitManager extends ZUtils implements Kits {
 
 		items.put(9, new ItemStack(Material.ARROW, 8));
 
-		Kit kit = new fr.maxlego08.ztournament.Kit("default", new ItemStack(Material.LEATHER_HELMET),
+		Kit kit = new fr.maxlego08.ztournament.ZKit("default", new ItemStack(Material.LEATHER_HELMET),
 				new ItemStack(Material.LEATHER_CHESTPLATE), new ItemStack(Material.LEATHER_LEGGINGS), new ItemStack(Material.LEATHER_BOOTS),
 				items);
 
@@ -193,7 +193,7 @@ public class KitManager extends ZUtils implements Kits {
 				.build();
 		ItemStack boots = new ItemBuilder(Material.IRON_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
 
-		kit = new fr.maxlego08.ztournament.Kit("iron", helmet, chestplate, leggings, boots, items);
+		kit = new fr.maxlego08.ztournament.ZKit("iron", helmet, chestplate, leggings, boots, items);
 
 		kits.put("iron", kit);
 
@@ -217,7 +217,7 @@ public class KitManager extends ZUtils implements Kits {
 			return;
 		}
 
-		Kit kit = new fr.maxlego08.ztournament.Kit(name, null, null, null, null, new HashMap<>());
+		Kit kit = new fr.maxlego08.ztournament.ZKit(name, null, null, null, null, new HashMap<>());
 		kits.put(name, kit);
 		message(sender, Message.TOURNAMENT_KIT_CREATE, "%name%", name);
 

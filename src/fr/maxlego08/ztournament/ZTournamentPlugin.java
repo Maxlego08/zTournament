@@ -2,11 +2,14 @@ package fr.maxlego08.ztournament;
 
 import org.bukkit.plugin.ServicePriority;
 
+import fr.maxlego08.ztournament.api.Hider;
 import fr.maxlego08.ztournament.api.Kits;
 import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.command.CommandManager;
 import fr.maxlego08.ztournament.command.commands.CommandTournament;
 import fr.maxlego08.ztournament.hider.EntityListener;
+import fr.maxlego08.ztournament.hider.ProtocolHider;
+import fr.maxlego08.ztournament.hider.SpigotHider;
 import fr.maxlego08.ztournament.inventory.InventoryManager;
 import fr.maxlego08.ztournament.inventory.inventories.InventoryKitEdit;
 import fr.maxlego08.ztournament.inventory.inventories.InventoryKitShow;
@@ -36,6 +39,8 @@ public class ZTournamentPlugin extends ZPlugin {
 	private Tournament tournament;
 	private TournamentListener listener;
 	private final MessageLoader messages = new MessageLoader(this);
+
+	private Hider hider = new SpigotHider();
 
 	@Override
 	public void onEnable() {
@@ -69,9 +74,14 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
-		if (Config.disablePotionAndPearl && isEnable(Plugins.PROTOCOLLIB)){
+		if (Config.disablePotionAndPearl && isEnable(Plugins.PROTOCOLLIB)) {
 			Logger.info("Activation of the entity hider!", LogType.SUCCESS);
 			this.addListener(new EntityListener(this));
+		}
+
+		if (isEnable(Plugins.PROTOCOLLIB)) {
+			this.hider = new ProtocolHider(this);
+			Logger.info("Use ProtocolLib entity hider !", LogType.SUCCESS);
 		}
 
 		/* Add Listener */
@@ -102,8 +112,7 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		preDisable();
 
-		tournament.onPluginDisable();
-
+		this.tournament.onPluginDisable();
 		getSavers().forEach(saver -> saver.save(getPersist()));
 
 		postDisable();
@@ -118,8 +127,12 @@ public class ZTournamentPlugin extends ZPlugin {
 		return listener;
 	}
 
+	public Hider getHider() {
+		return hider;
+	}
+
 	public MessageLoader getMessages() {
 		return messages;
 	}
-	
+
 }

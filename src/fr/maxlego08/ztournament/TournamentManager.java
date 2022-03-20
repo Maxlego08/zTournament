@@ -885,7 +885,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		}
 
 		TournamentTeamCreateEvent event = new TournamentTeamCreateEvent(
-				new ZTeam(name, this.type.getMax(), player, this.kit), player, name);
+				new ZTeam(this.plugin.getHider(), name, this.type.getMax(), player, this.kit), player, name);
 		event.callEvent();
 
 		if (event.isCancelled()) {
@@ -894,7 +894,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		name = event.getName();
 
-		team = new ZTeam(name, type.getMax(), player, kit);
+		team = new ZTeam(this.plugin.getHider(), name, this.type.getMax(), player, this.kit);
 		this.teams.add(team);
 		player.teleport(getLocation());
 		clearPlayer(player, ClearReason.JOIN);
