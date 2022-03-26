@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -24,6 +25,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
 
 import fr.maxlego08.ztournament.api.Duel;
 import fr.maxlego08.ztournament.api.Selection;
@@ -154,13 +156,76 @@ public class TournamentListener extends ListenerAdapter {
 	}
 
 	@Override
+	public void onPlayerDamageByArrow(EntityDamageByEntityEvent event, DamageCause cause, double damage,
+			Projectile projectile, Player player) {
+
+		if (this.tournament.isStart() && !this.tournament.isWaiting()) {
+
+			Team team = tournament.getByPlayer(player);
+			ProjectileSource source = projectile.getShooter();
+
+			if (team != null) {
+
+				if (source instanceof Player) {
+
+					Player damager = (Player) source;
+					Team damagerTeam = this.tournament.getByPlayer(damager);
+
+					if (damagerTeam != null) {
+
+						if (team.contains(damager)) {
+
+							event.setCancelled(true);
+							this.actionMessage(damager, Message.TEAM_DAMAGE);
+
+						} else {
+
+							if (!team.isInDuel()) {
+								event.setCancelled(true);
+								return;
+							}
+
+							this.tournament.countDamage(damager, event.getFinalDamage());
+							event.setCancelled(false);
+
+						}
+
+					} else {
+						event.setCancelled(true);
+					}
+
+				} else {
+					event.setCancelled(true);
+				}
+
+			} else if (source instanceof Player) {
+
+				Player damager = (Player) source;
+				Team damagerTeam = this.tournament.getByPlayer(damager);
+
+				if (damagerTeam != null) {
+					event.setCancelled(true);
+				}
+
+			}
+
+		}
+
+	}
+
+	@Override
 	public void onPlayerDamage(EntityDamageByEntityEvent event, DamageCause cause, double damage, Player damager,
 			Player player) {
 
-		if (tournament.isStart() && !tournament.isWaiting()) {
+		if (this.tournament.isStart() && !this.tournament.isWaiting()) {
 
 			Team damagerTeam = this.tournament.getByPlayer(damager);
 			Team team = tournament.getByPlayer(player);
+
+			// Le joueur est pas dans le duel
+			if (team == null && damagerTeam == null) {
+				return;
+			}
 
 			if (damagerTeam == null && team != null
 					&& !damager.hasPermission(Permission.ZTOURNAMENT_BYPASS.getPermission())) {
@@ -183,10 +248,11 @@ public class TournamentListener extends ListenerAdapter {
 			if (team.contains(damager)) {
 
 				event.setCancelled(true);
-				this.actionMessage(player, Message.TEAM_DAMAGE);
+				this.actionMessage(damager, Message.TEAM_DAMAGE);
 
 			} else {
 
+				this.tournament.countDamage(damager, event.getFinalDamage());
 				event.setCancelled(false);
 
 			}

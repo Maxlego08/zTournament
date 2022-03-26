@@ -2,18 +2,21 @@ package fr.maxlego08.ztournament;
 
 import org.bukkit.plugin.ServicePriority;
 
+import fr.maxlego08.ztournament.api.Hider;
 import fr.maxlego08.ztournament.api.Kits;
 import fr.maxlego08.ztournament.api.Tournament;
 import fr.maxlego08.ztournament.command.CommandManager;
 import fr.maxlego08.ztournament.command.commands.CommandTournament;
 import fr.maxlego08.ztournament.hider.EntityListener;
+import fr.maxlego08.ztournament.hider.ProtocolHider;
+import fr.maxlego08.ztournament.hider.SpigotHider;
 import fr.maxlego08.ztournament.inventory.InventoryManager;
 import fr.maxlego08.ztournament.inventory.inventories.InventoryKitEdit;
 import fr.maxlego08.ztournament.inventory.inventories.InventoryKitShow;
 import fr.maxlego08.ztournament.listener.AdapterListener;
 import fr.maxlego08.ztournament.placeholder.TournamentExpansion;
 import fr.maxlego08.ztournament.save.Config;
-import fr.maxlego08.ztournament.save.Lang;
+import fr.maxlego08.ztournament.save.MessageLoader;
 import fr.maxlego08.ztournament.scoreboard.ScoreBoardManager;
 import fr.maxlego08.ztournament.zcore.ZPlugin;
 import fr.maxlego08.ztournament.zcore.enums.Inventory;
@@ -35,6 +38,9 @@ public class ZTournamentPlugin extends ZPlugin {
 	private Kits kits;
 	private Tournament tournament;
 	private TournamentListener listener;
+	private MessageLoader messages;
+
+	private Hider hider = new SpigotHider();
 
 	@Override
 	public void onEnable() {
@@ -61,16 +67,21 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		/* Add Saver */
 		addSave(Config.getInstance());
-		addSave(Lang.getInstance());
+		addSave(messages = new MessageLoader(this));
 		// addSave(new CooldownBuilder());
 		addSave(this.tournament);
 		addSave(this.kits);
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
-		if (Config.disablePotionAndPearl && isEnable(Plugins.PROTOCOLLIB)){
+		if (Config.disablePotionAndPearl && isEnable(Plugins.PROTOCOLLIB)) {
 			Logger.info("Activation of the entity hider!", LogType.SUCCESS);
 			this.addListener(new EntityListener(this));
+		}
+
+		if (isEnable(Plugins.PROTOCOLLIB)) {
+			this.hider = new ProtocolHider(this);
+			Logger.info("Use ProtocolLib entity hider !", LogType.SUCCESS);
 		}
 
 		/* Add Listener */
@@ -101,8 +112,7 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		preDisable();
 
-		tournament.onPluginDisable();
-
+		this.tournament.onPluginDisable();
 		getSavers().forEach(saver -> saver.save(getPersist()));
 
 		postDisable();
@@ -115,6 +125,14 @@ public class ZTournamentPlugin extends ZPlugin {
 
 	public TournamentListener getListener() {
 		return listener;
+	}
+
+	public Hider getHider() {
+		return hider;
+	}
+
+	public MessageLoader getMessages() {
+		return messages;
 	}
 
 }

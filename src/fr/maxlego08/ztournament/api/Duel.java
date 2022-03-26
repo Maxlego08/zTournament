@@ -1,7 +1,12 @@
 package fr.maxlego08.ztournament.api;
 
+import java.util.Map;
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
+import fr.maxlego08.ztournament.zcore.enums.Message;
 
 public interface Duel {
 
@@ -57,9 +62,11 @@ public interface Duel {
 
 	/**
 	 * 
+	 * @param tournamentPlayerLoose
 	 * @param string
+	 * @param string2
 	 */
-	void message(String string);
+	void message(Message tournamentPlayerLoose, Object... objects);
 
 	/**
 	 * 
@@ -97,4 +104,6 @@ public interface Duel {
 	 * @return
 	 */
 	boolean contains(Player player);
+
+	Team getRandomTeamLessDamage(Map<UUID, Double> playerDamageCount);
 }

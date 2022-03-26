@@ -29,7 +29,7 @@ public class CommandTournamentStart extends VCommand {
 		String name = argAsString(1);
 
 		if (!tournament.getKits().existKit(name)) {
-			message(player, Message.TOURNAMENT_KIT_NOT_EXIST.replace("%name%", name));
+			message(player, Message.TOURNAMENT_KIT_NOT_EXIST, "%name%", name);
 			return CommandType.SUCCESS;
 		}
 

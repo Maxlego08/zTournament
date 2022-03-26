@@ -1,11 +1,15 @@
 package fr.maxlego08.ztournament;
 
+import java.util.Map;
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import fr.maxlego08.ztournament.api.Arena;
 import fr.maxlego08.ztournament.api.Duel;
 import fr.maxlego08.ztournament.api.Team;
+import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.utils.ZUtils;
 
 public class ZDuel extends ZUtils implements Duel {
@@ -67,9 +71,9 @@ public class ZDuel extends ZUtils implements Duel {
 		return team.hasLoose() ? team : opponant.hasLoose() ? opponant : null;
 	}
 
-	public void message(String string) {
-		team.message(string);
-		opponant.message(string);
+	public void message(Message message, Object... objects) {
+		team.message(message, objects);
+		opponant.message(message, objects);
 	}
 
 	public void heal() {
@@ -96,6 +100,17 @@ public class ZDuel extends ZUtils implements Duel {
 	@Override
 	public boolean contains(Player player) {
 		return this.team.contains(player) || this.opponant.contains(player);
+	}
+
+	@Override
+	public Team getRandomTeamLessDamage(Map<UUID, Double> playerDamageCount) {
+
+		double teamDamage = playerDamageCount.entrySet().stream().filter(e -> this.team.contains(e.getKey()))
+				.map(e -> e.getValue()).reduce(0d, Double::sum);
+		double opponantDamage = playerDamageCount.entrySet().stream().filter(e -> this.opponant.contains(e.getKey()))
+				.map(e -> e.getValue()).reduce(0d, Double::sum);
+
+		return teamDamage > opponantDamage ? this.opponant : this.team;
 	}
 
 }
