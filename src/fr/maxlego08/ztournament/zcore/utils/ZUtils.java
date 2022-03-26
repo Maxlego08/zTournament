@@ -636,7 +636,7 @@ public abstract class ZUtils extends MessageUtils {
 	 * @return
 	 */
 	protected String color(String message) {
-		return message.replace("&", "§");
+		return message != null ? message.replace("&", "§") : message;
 	}
 
 	/**
@@ -644,8 +644,8 @@ public abstract class ZUtils extends MessageUtils {
 	 * @param message
 	 * @return
 	 */
-	public String colorReverse(String message) {
-		return message.replace("§", "&");
+	public String colorReverse(String message) {	
+		return message != null ? message.replace("§", "&") : message;
 	}
 
 	/**

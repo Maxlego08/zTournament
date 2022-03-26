@@ -38,7 +38,7 @@ public class ZTournamentPlugin extends ZPlugin {
 	private Kits kits;
 	private Tournament tournament;
 	private TournamentListener listener;
-	private final MessageLoader messages = new MessageLoader(this);
+	private MessageLoader messages;
 
 	private Hider hider = new SpigotHider();
 
@@ -67,7 +67,7 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		/* Add Saver */
 		addSave(Config.getInstance());
-		addSave(messages);
+		addSave(messages = new MessageLoader(this));
 		// addSave(new CooldownBuilder());
 		addSave(this.tournament);
 		addSave(this.kits);

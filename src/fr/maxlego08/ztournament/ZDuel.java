@@ -72,8 +72,8 @@ public class ZDuel extends ZUtils implements Duel {
 	}
 
 	public void message(Message message, Object... objects) {
-		team.message(message);
-		opponant.message(message);
+		team.message(message, objects);
+		opponant.message(message, objects);
 	}
 
 	public void heal() {

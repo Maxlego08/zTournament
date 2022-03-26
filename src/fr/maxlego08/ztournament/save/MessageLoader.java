@@ -16,7 +16,6 @@ import fr.maxlego08.ztournament.zcore.utils.YamlUtils;
 import fr.maxlego08.ztournament.zcore.utils.storage.Persist;
 import fr.maxlego08.ztournament.zcore.utils.storage.Saveable;
 
-
 public class MessageLoader extends YamlUtils implements Saveable {
 
 	public MessageLoader(JavaPlugin plugin) {
@@ -114,6 +113,7 @@ public class MessageLoader extends YamlUtils implements Saveable {
 			MessageType messageType = MessageType.valueOf(configuration.getString(key + ".type").toUpperCase());
 			String keys = key.substring("messages.".length(), key.length());
 			Message enumMessage = Message.valueOf(keys.toUpperCase().replace(".", "_"));
+
 			enumMessage.setType(messageType);
 			switch (messageType) {
 			case ACTION: {
@@ -148,17 +148,20 @@ public class MessageLoader extends YamlUtils implements Saveable {
 				titles.put("end", fadeOutTime);
 				titles.put("isUse", true);
 				enumMessage.setTitles(titles);
+				System.out.println(enumMessage.getTitles());
 				break;
 			}
 			default:
 				break;
 			}
 
-			return;
 		}
 
-		for (String newKey : configuration.getConfigurationSection(key + ".").getKeys(false))
-			loadMessage(configuration, key + "." + newKey);
+		if (configuration.isConfigurationSection(key + ".")) {
+			for (String newKey : configuration.getConfigurationSection(key + ".").getKeys(false)) {
+				loadMessage(configuration, key + "." + newKey);
+			}
+		}
 	}
 
 }

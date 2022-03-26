@@ -23,7 +23,7 @@ public class CommandTournamentReload extends VCommand {
 
 		long end = Math.abs(System.currentTimeMillis() - ms);
 
-		message(sender, "§eReload in §6%s §ems", format(end));
+		message(sender, "§eReload in §6%s% §ems", "%s%", format(end));
 
 		return CommandType.SUCCESS;
 	}

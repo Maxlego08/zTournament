@@ -152,14 +152,14 @@ public enum Message {
 
 	TITLE_START("§a§kII§7 Tournament §a§kII", "§eA §f%type% §7tournament just start !", 10, 60, 10),
 
-	TITLE_JOIN_SUCCESS("§a§kII§7 Congratulations §a§kII§", "§7You joined the team §f%team% §7!", 10, 60, 10),
+	TITLE_JOIN_SUCCESS("§a§kII§7 Congratulations §a§kII", "§7You joined the team §f%team% §7!", 10, 60, 10),
 
-	TITLE_CREATE_SUCCESS("§a§kII§7 Congratulations §a§kII§",
+	TITLE_CREATE_SUCCESS("§a§kII§7 Congratulations §a§kII",
 			"§7You created a §fteam §7for the PVP tournament !", 10, 60, 10),
 
-	TITLE_START_INFO("§a§kII§7 Tournament §a§kII§", "§7Still §b%timer% §7before starting the tournament.", 0, 60, 10),
+	TITLE_START_INFO("§a§kII§7 Tournament §a§kII", "§7Still §b%timer% §7before starting the tournament.", 0, 60, 10),
 
-	TITLE_WIN("§a§kII§7 Tournament §a§kII§", "§7Congratulations to the §f%team% §7team for winning the tournament !", 10,
+	TITLE_WIN("§a§kII§7 Tournament §a§kII", "§7Congratulations to the §f%team% §7team for winning the tournament !", 10,
 			100, 30),
 
 	TITLE_START_ERROR_PLAYER("§cNot enough players to start the tournament",
@@ -342,5 +342,7 @@ public enum Message {
 	public void setItemStack(ItemStack itemStack) {
 		this.itemStack = itemStack;
 	}
+	
+	
 
 }
