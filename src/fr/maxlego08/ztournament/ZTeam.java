@@ -408,12 +408,12 @@ public class ZTeam extends ZUtils implements Team {
 
 			OfflinePlayer player = iterator.next();
 			if (!player.isOnline()) {
-				message("§f" + player.getName() + " §evient d'être disqualifé de votre équipe.");
-				players.remove(player);
+				message(Message.TOURNAMENT_TEAM_REMOVE, "%player%", player.getName());
+				this.players.remove(player);
 				iterator.remove();
 			} else if (player.isOnline() && !player.getPlayer().isValid()) {
-				message("§f" + player.getName() + " §evient d'être disqualifé de votre équipe.");
-				players.remove(player);
+				message(Message.TOURNAMENT_TEAM_REMOVE, "%player%", player.getName());
+				this.players.remove(player);
 				iterator.remove();
 			}
 

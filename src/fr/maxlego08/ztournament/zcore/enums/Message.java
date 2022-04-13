@@ -178,6 +178,7 @@ public enum Message {
 	TOURNAMENT_ARENA_ALREADY_EXIST("§cImpossible to create an arena with this name, it already exists."), 
 	
 	TOURNAMENT_TEAM_DISBAND("§cYour team has just been disbanded."),
+	TOURNAMENT_TEAM_REMOVE("§f%player% §chas just been disqualified from your team."),
 	
 
 	;
