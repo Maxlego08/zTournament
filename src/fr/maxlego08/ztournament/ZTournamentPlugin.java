@@ -79,7 +79,7 @@ public class ZTournamentPlugin extends ZPlugin {
 			this.addListener(new EntityListener(this));
 		}
 
-		if (isEnable(Plugins.PROTOCOLLIB)) {
+		if (isEnable(Plugins.PROTOCOLLIB) && Config.enableProtocollibEntityHider) {
 			this.hider = new ProtocolHider(this);
 			Logger.info("Use ProtocolLib entity hider !", LogType.SUCCESS);
 		}

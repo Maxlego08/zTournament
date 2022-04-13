@@ -81,6 +81,7 @@ public enum Message {
 	TOURNAMENT_DUEL_LOOSE("§7You lost the tournament, your team's just been disqualified.",
 			"§7You are at position §f%position% §7of §b%team%§7."),
 	TOURNAMENT_TEAM_LEAVE("§cYou are leaving your team."),
+	TOURNAMENT_TEAM_LEAVE_INFO("§f%player% §ehas just leave you team."),
 	TOURNAMENT_TEAM_LEAVE_ERROR("§cYou cannot leave your team during the fight."),
 	TOURNAMENT_TEAM_PLAYER_ERROR("§cYou are not in a team."),
 	TOURNAMENT_INVITE_ERROR("§cYou cannot invite a player at this time."),
@@ -174,7 +175,9 @@ public enum Message {
 	TOURNAMENT_CREATE_ERROR_SELECTION("§cYou must select a zone with the command §f/ztournament axe§c."), 
 	TOURNAMENT_ARENA_POS1_CHANGE("§aYou have just changed the first position of the arena."),
 	TOURNAMENT_ARENA_POS2_CHANGE("§aYou have just changed the second position of the arena."), 
-	TOURNAMENT_ARENA_ALREADY_EXIST("§cImpossible to create an arena with this name, it already exists."),
+	TOURNAMENT_ARENA_ALREADY_EXIST("§cImpossible to create an arena with this name, it already exists."), 
+	
+	TOURNAMENT_TEAM_DISBAND("§cYour team has just been disbanded."),
 	
 
 	;

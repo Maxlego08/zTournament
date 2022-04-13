@@ -18,6 +18,7 @@ public class Config implements Saveable {
 	public static boolean enableDropItems = false;
 	public static boolean enableUpdateNotification = true;
 	public static boolean disablePotionAndPearl = false;
+	public static boolean enableProtocollibEntityHider = false;
 	public static boolean enableDebug = false;
 	public static boolean enableAutoUpdate = false;
 	public static boolean enableEliminationOfThePlayerWhoMadeTheFewestDamage = false;
