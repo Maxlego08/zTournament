@@ -13,7 +13,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentArena extends VCommand {
 
-	public CommandTournamentArena() {
+	public CommandTournamentArena(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setPermission(Permission.ZTOURNAMENT_ARENA);
 		this.addSubCommand("arena");
 		this.addRequireArg("name");
@@ -41,7 +42,7 @@ public class CommandTournamentArena extends VCommand {
 		Location minLocation = selection.getRightLocation();
 		Location maxLocation = selection.getLeftLocation();
 		plugin.getListener().clearSelection(player);
-		tournament.createArena(sender, name, minLocation, maxLocation);
+		this.tournament.createArena(sender, name, minLocation, maxLocation);
 
 		return CommandType.SUCCESS;
 	}

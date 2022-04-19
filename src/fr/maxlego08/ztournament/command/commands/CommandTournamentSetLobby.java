@@ -7,7 +7,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentSetLobby extends VCommand {
 
-	public CommandTournamentSetLobby() {
+	public CommandTournamentSetLobby(ZTournamentPlugin plugin) {
+		super(plugin);
 
 		this.addSubCommand("setlobby");
 		this.setConsoleCanUse(false);

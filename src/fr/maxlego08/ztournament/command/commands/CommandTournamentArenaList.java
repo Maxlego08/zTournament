@@ -7,7 +7,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentArenaList extends VCommand {
 
-	public CommandTournamentArenaList() {
+	public CommandTournamentArenaList(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setPermission(Permission.ZTOURNAMENT_ARENA_SHOW);
 		this.addSubCommand("list");
 		this.setConsoleCanUse(false);

@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -103,6 +104,16 @@ public class TournamentManager extends ZUtils implements Tournament {
 		this.kits = kits;
 	}
 
+	/**
+	 * Return arenas names
+	 * 
+	 * @return names
+	 */
+	@Override
+	public List<String> getArenaNames() {
+		return arenas.stream().map(Arena::getName).collect(Collectors.toList());
+	}
+	
 	/**
 	 * Permet de load la class
 	 */

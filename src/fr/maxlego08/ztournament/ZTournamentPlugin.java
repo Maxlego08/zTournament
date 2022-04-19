@@ -60,7 +60,7 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		getServer().getServicesManager().register(Tournament.class, tournament, this, ServicePriority.High);
 
-		registerCommand("ztournament", new CommandTournament(), "tournois", "tournament");
+		registerCommand("ztournament", new CommandTournament(this), "tournois", "tournament");
 
 		registerInventory(Inventory.INVENTORY_KIT_SHOW, new InventoryKitShow());
 		registerInventory(Inventory.INVENTORY_KIT_CREATE, new InventoryKitEdit());

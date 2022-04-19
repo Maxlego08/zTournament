@@ -8,7 +8,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentReload extends VCommand {
 
-	public CommandTournamentReload() {
+	public CommandTournamentReload(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setPermission(Permission.ZTOURNAMENT_RELOAD);
 		this.addSubCommand("reload", "rl");
 	}

@@ -10,7 +10,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentAxe extends VCommand {
 
-	public CommandTournamentAxe() {
+	public CommandTournamentAxe(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setPermission(Permission.ZTOURNAMENT_AXE);
 		this.addSubCommand("axe");
 		this.setConsoleCanUse(false);

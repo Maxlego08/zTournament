@@ -1,9 +1,7 @@
 package fr.maxlego08.ztournament.command.commands;
 
 import java.util.Arrays;
-import java.util.List;
-
-import org.bukkit.command.CommandSender;
+import java.util.Optional;
 
 import fr.maxlego08.ztournament.ZTournamentPlugin;
 import fr.maxlego08.ztournament.api.Kit;
@@ -15,11 +13,12 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentStart extends VCommand {
 
-	public CommandTournamentStart() {
+	public CommandTournamentStart(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setPermission(Permission.ZTOURNAMENT_START);
 		this.addSubCommand("start");
-		this.addRequireArg("type");
-		this.addRequireArg("kit");
+		this.addRequireArg("type", (a, b) -> Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
+		this.addRequireArg("kit", (a, b) -> plugin.getTournament().getKits().getNames());
 		this.setTabCompletor();
 	}
 
@@ -28,25 +27,18 @@ public class CommandTournamentStart extends VCommand {
 
 		String name = argAsString(1);
 
-		if (!tournament.getKits().existKit(name)) {
+		Optional<Kit> optional = this.tournament.getKits().getKit(name);
+
+		if (!optional.isPresent()) {
 			message(player, Message.TOURNAMENT_KIT_NOT_EXIST, "%name%", name);
 			return CommandType.SUCCESS;
 		}
 
-		Kit kit = tournament.getKits().getKit(name);
+		Kit kit = optional.get();
 
 		TournoisType type = TournoisType.valueOf("V" + argAsInteger(0));
-		tournament.startTournois(sender, type, kit);
+		this.tournament.startTournois(sender, type, kit);
 
 		return CommandType.SUCCESS;
-	}
-
-	@Override
-	public List<String> toTab(ZTournamentPlugin plugin, CommandSender sender2, String[] args) {
-		if (args.length == 2)
-			return super.generateList(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), args[1]);
-		if (args.length == 3)
-			return super.generateList(plugin.getTournament().getKits().getNames(), args[2]);
-		return null;
 	}
 }

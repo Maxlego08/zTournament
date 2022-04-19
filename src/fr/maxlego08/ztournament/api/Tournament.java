@@ -1,5 +1,6 @@
 package fr.maxlego08.ztournament.api;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -292,5 +293,12 @@ public interface Tournament extends Saveable {
 	 * @param finalDamage
 	 */
 	void countDamage(Player damager, double finalDamage);
+	
+	/**
+	 * Return arena names
+	 * 
+	 * @return name
+	 */
+	public List<String> getArenaNames();
 	
 }

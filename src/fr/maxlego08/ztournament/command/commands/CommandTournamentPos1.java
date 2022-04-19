@@ -9,10 +9,11 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentPos1 extends VCommand {
 
-	public CommandTournamentPos1() {
+	public CommandTournamentPos1(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setConsoleCanUse(false);
 		this.addSubCommand("pos1");
-		this.addRequireArg("name");
+		this.addRequireArg("name", (a, b) -> plugin.getTournament().getArenaNames());
 		this.setPermission(Permission.ZTOURNAMENT_POS1);
 	}
 
@@ -21,8 +22,8 @@ public class CommandTournamentPos1 extends VCommand {
 
 		String name = argAsString(0);
 		Location location = player.getLocation();
-		tournament.setPosition(true, sender, name, location);
-		
+		this.tournament.setPosition(true, sender, name, location);
+
 		return CommandType.SUCCESS;
 	}
 

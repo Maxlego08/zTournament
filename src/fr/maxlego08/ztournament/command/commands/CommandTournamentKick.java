@@ -9,7 +9,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentKick extends VCommand {
 
-	public CommandTournamentKick() {
+	public CommandTournamentKick(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setPermission(Permission.ZTOURNAMENT_KICK);
 		this.addSubCommand("kick");
 		this.addRequireArg("player");

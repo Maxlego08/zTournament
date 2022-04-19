@@ -7,7 +7,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentWave extends VCommand {
 
-	public CommandTournamentWave() {
+	public CommandTournamentWave(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setPermission(Permission.ZTOURNAMENT_WAVE);
 		this.addSubCommand("wave");
 	}

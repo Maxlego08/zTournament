@@ -8,15 +8,16 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentKits extends VCommand {
 
-	public CommandTournamentKits() {
+	public CommandTournamentKits(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setPermission(Permission.ZTOURNAMENT_KIT_USE);
 		this.addSubCommand("kits");
 		this.addSubCommand("kit");
-		this.addSubCommand(new CommandTournamentKitsList());
-		this.addSubCommand(new CommandTournamentKitsShow());
-		this.addSubCommand(new CommandTournamentKitsCreate());
-		this.addSubCommand(new CommandTournamentKitsEdit());
-		this.addSubCommand(new CommandTournamentKitsDelete());
+		this.addSubCommand(new CommandTournamentKitsList(plugin));
+		this.addSubCommand(new CommandTournamentKitsShow(plugin));
+		this.addSubCommand(new CommandTournamentKitsCreate(plugin));
+		this.addSubCommand(new CommandTournamentKitsEdit(plugin));
+		this.addSubCommand(new CommandTournamentKitsDelete(plugin));
 	}
 
 	@Override

@@ -7,7 +7,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentKitsCreate extends VCommand {
 
-	public CommandTournamentKitsCreate() {
+	public CommandTournamentKitsCreate(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setPermission(Permission.ZTOURNAMENT_KIT_USE);
 		this.addSubCommand("create");
 		this.addRequireArg("kit");

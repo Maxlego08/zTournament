@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Material;
@@ -163,12 +164,11 @@ public class KitManager extends ZUtils implements Kits {
 		items.put(9, new ItemStack(Material.ARROW, 8));
 
 		Kit kit = new fr.maxlego08.ztournament.ZKit("default", new ItemStack(Material.LEATHER_HELMET),
-				new ItemStack(Material.LEATHER_CHESTPLATE), new ItemStack(Material.LEATHER_LEGGINGS), new ItemStack(Material.LEATHER_BOOTS),
-				items);
+				new ItemStack(Material.LEATHER_CHESTPLATE), new ItemStack(Material.LEATHER_LEGGINGS),
+				new ItemStack(Material.LEATHER_BOOTS), items);
 
-		kits.put("default", kit);
+		this.kits.put("default", kit);
 
-		
 		// 2
 		items = new HashMap<>();
 		items.put(0, new ItemBuilder(Material.DIAMOND_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).build());
@@ -187,11 +187,12 @@ public class KitManager extends ZUtils implements Kits {
 
 		ItemStack helmet = new ItemBuilder(Material.IRON_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
 				.build();
-		ItemStack chestplate = new ItemBuilder(Material.IRON_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
-				.build();
+		ItemStack chestplate = new ItemBuilder(Material.IRON_CHESTPLATE)
+				.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
 		ItemStack leggings = new ItemBuilder(Material.IRON_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
 				.build();
-		ItemStack boots = new ItemBuilder(Material.IRON_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+		ItemStack boots = new ItemBuilder(Material.IRON_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+				.build();
 
 		kit = new fr.maxlego08.ztournament.ZKit("iron", helmet, chestplate, leggings, boots, items);
 
@@ -200,13 +201,13 @@ public class KitManager extends ZUtils implements Kits {
 	}
 
 	@Override
-	public Kit getKit(String name) {
-		return kits.values().stream().filter(e -> e.getName().equalsIgnoreCase(name)).findAny().orElse(null);
+	public boolean existKit(String name) {
+		return kits.keySet().stream().anyMatch(e -> e.equalsIgnoreCase(name));
 	}
 
 	@Override
-	public boolean existKit(String name) {
-		return kits.keySet().stream().filter(e -> e.equalsIgnoreCase(name)).findAny().isPresent();
+	public Optional<Kit> getKit(String name) {
+		return kits.values().stream().filter(e -> e.getName().equalsIgnoreCase(name)).findAny();
 	}
 
 	@Override
@@ -247,12 +248,15 @@ public class KitManager extends ZUtils implements Kits {
 
 	@Override
 	public void deleteKit(CommandSender sender, String name) {
-		if (!existKit(name)) {
+
+		Optional<Kit> optional = this.getKit(name);
+
+		if (!optional.isPresent()) {
 			message(sender, Message.TOURNAMENT_KIT_NOT_EXIST, "%name%", name);
 			return;
 		}
 
-		Kit kit = getKit(name);
+		Kit kit = optional.get();
 		kits.remove(kit.getName());
 
 		message(sender, Message.TOURNAMENT_KIT_DELETE, "%name%", name);

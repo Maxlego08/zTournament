@@ -7,7 +7,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentTeamLeave extends VCommand {
 
-	public CommandTournamentTeamLeave() {
+	public CommandTournamentTeamLeave(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.addSubCommand("leave");
 		this.setConsoleCanUse(false);
 		this.setPermission(Permission.ZTOURNAMENT_TEAM_LEAVE);
