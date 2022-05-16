@@ -113,7 +113,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	public List<String> getArenaNames() {
 		return arenas.stream().map(Arena::getName).collect(Collectors.toList());
 	}
-	
+
 	/**
 	 * Permet de load la class
 	 */
@@ -491,6 +491,21 @@ public class TournamentManager extends ZUtils implements Tournament {
 							isStart = false;
 							isWaiting = false;
 							asNewTimer = false;
+
+							teams.forEach(e -> {
+								e.clear();
+								e.show();
+								e.getRealPlayers().forEach(p -> {
+									if (p.isOnline()) {
+										p.getPlayer().teleport(getLocation());
+										p.getPlayer().teleport(getLocation());
+										givePotions(p.getPlayer());
+									}
+								});
+							});
+
+							teams.clear();
+							duels.clear();
 
 							cancel();
 
