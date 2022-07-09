@@ -42,7 +42,7 @@ public enum Message {
 	FORMAT_DAY("d"),
 	FORMAT_DAYS("days"),
 
-	COMMAND_SYNTAXE_ERROR("§cYou must execute the command like this§7: §2%command%"),
+	COMMAND_SYNTAXE_ERROR("§cYou must execute the command like this§7: §2%syntax%"),
 	COMMAND_NO_PERMISSION("§cYou don't have the permission permission to use that!"),
 	COMMAND_NO_CONSOLE("§cOnly players can execute this command"),
 	COMMAND_NO_ARG("§cThis argument does not exist!"),
@@ -124,7 +124,7 @@ public enum Message {
 			"§6» §f/tournament invite §8<§aplayer§8> §8- §7Invite a player to your team.",
 			"§6» §f/tournament leave §8- §7Leave your team.",
 			"§6» §f/tournament version §8- §7Show plugin's version."),
-	TOURNAMENT_HELP_ADMIN("§6» §f/tournament arena §§8<§aname§8> §8<§aloc1§8> §8<§aloc2§8> §8- §7Create an arena.",
+	TOURNAMENT_HELP_ADMIN("§6» §f/tournament arena §§8<§aname§8> §8- §7Create an arena.",
 			"§6» §f/tournament delete §8<§auuid§8> §8- §7Allows you to delete an arena. Makes /ztournament list to retrieve the arena list (json message).",
 			"§6» §f/tournament list §8- §7Show an arena.",
 			"§6» §f/tournament setlobby §8- §7Set lobby's position.",
@@ -146,7 +146,9 @@ public enum Message {
 	TOURNAMENT_KIT_NOT_EXIST("§cKit §f%name% §cdoesn't exists"),
 	TOURNAMENT_KIT_CREATE("§aYou created kit §6%name%§a."),
 	TOURNAMENT_KIT_DELETE("§aYou deleted kit §6%name%§a."),
-	TOURNAMENT_KIT_EDIT("§aYou edited the kit §f%s§a."),
+	TOURNAMENT_KIT_EDIT("§aYou edited the kit §f%name%§a."),
+	TOURNAMENT_KIT_LIST("§eKit§8: §7%list%"),
+	RELOAD("§eReload in §6%ms% §ems"),
 	TEAM_DAMAGE("§cYou cannot do damage to a member of your team."),
 	
 	// title

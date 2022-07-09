@@ -1,5 +1,7 @@
 package fr.maxlego08.ztournament.inventory.inventories;
 
+import java.util.Optional;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -12,11 +14,17 @@ import fr.maxlego08.ztournament.zcore.utils.inventory.InventoryResult;
 
 public class InventoryKitShow extends VInventory {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public InventoryResult openInventory(ZTournamentPlugin main, Player player, int page, Object... args)
 			throws InventoryOpenException {
 
-		Kit kit = (Kit) args[0];
+		Optional<Kit> optional = (Optional<Kit>) args[0];
+		if (!optional.isPresent()){
+			return InventoryResult.ERROR;
+		}
+		
+		Kit kit = optional.get();
 
 		createInventory("§eKit", 54);
 

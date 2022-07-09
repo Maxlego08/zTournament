@@ -2,8 +2,6 @@ package fr.maxlego08.ztournament.zcore.utils.nms;
 
 import org.bukkit.Bukkit;
 
-import fr.maxlego08.ztournament.zcore.enums.EnumVersion;
-
 public class NMSUtils {
 
 	public static double version = getNMSVersion();
@@ -96,19 +94,19 @@ public class NMSUtils {
 	 * @return boolean
 	 */
 	public static boolean isNewNMSVersion() {
-		switch (String.valueOf(version)) {
-		case "1.17":
-			return true;
-		default:
-			return false;
-		}
+		final double version = getNMSVersion();
+		return !(version == 1.7 || version == 1.8 || version == 1.9 || version == 1.10 || version == 1.11
+				|| version == 1.12 || version == 1.13 || version == 1.14 || version == 1.15 || version == 1.16);
 	}
 
-	public static EnumVersion getVersion() {
-		String var1 = Bukkit.getServer().getClass().getPackage().getName();
-		String[] arrayOfString = var1.replace(".", ",").split(",")[3].split("_");
-		String var2 = arrayOfString[2];
-		return EnumVersion.getVersion(getNMSVersion(), var2);
+	/**
+	 * Allows to check if the version has the colors in hex
+	 * 
+	 * @return boolean
+	 */
+	public static boolean isHexColor() {
+		return !(version == 1.7 || version == 1.8 || version == 1.9 || version == 1.10 || version == 1.11
+				|| version == 1.12 || version == 1.13 || version == 1.14 || version == 1.15);
 	}
-
+	
 }
