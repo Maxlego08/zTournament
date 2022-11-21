@@ -92,10 +92,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	private transient Map<UUID, Double> playerDamageCount = new HashMap<>();
 	private static Map<UUID, List<ZPotionEffect>> playerPotions = new HashMap<UUID, List<ZPotionEffect>>();
 
-	private transient final HashSet<String> substanceChars = new HashSet<String>(Arrays.asList(new String[] { "0", "1",
-			"2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-			"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h",
-			"i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" }));
+	private transient final HashSet<String> substanceChars = new HashSet<String>(Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"));
 
 	private transient int maxTeamPerArena = 1;
 	private transient boolean isTimeBetweenWave;
@@ -202,7 +199,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		if (Config.giveEffectPotionsToPlayerAfter && player != null && player.isOnline()) {
 
 			Collection<PotionEffect> collection = this.potions.getOrDefault(player.getUniqueId(), new ArrayList<>());
-			collection.forEach(effect -> player.addPotionEffect(effect));
+			collection.forEach(player::addPotionEffect);
 			this.potions.remove(player.getUniqueId());
 
 		}
@@ -343,7 +340,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 	public boolean canHurt(Player player, Player damager) {
 		Team teamA = getByPlayer(player);
 		Team teamB = getByPlayer(damager);
-		return teamA == null ? true : teamB == null ? true : teamA.equals(teamB);
+		return teamA == null || (teamB == null || teamA.equals(teamB));
 	}
 
 	@Override
@@ -392,13 +389,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 	@Override
 	public void checkTeam() {
-		Iterator<Team> iterator = this.teams.iterator();
-		while (iterator.hasNext()) {
-			Team team = iterator.next();
-			if (!team.isValid()) {
-				iterator.remove();
-			}
-		}
+		this.teams.removeIf(team -> !team.isValid());
 	}
 
 	@Override
@@ -580,7 +571,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		this.countTeam = teams.size();
 		this.maxTeamPerArena = 1;
 
-		arenas.forEach(arena -> arena.clear());
+		arenas.forEach(ZArena::clear);
 
 		if (countTeam == 1) {
 			end();

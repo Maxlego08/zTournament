@@ -1,5 +1,6 @@
 package fr.maxlego08.ztournament.listener;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -27,105 +28,123 @@ public class AdapterListener extends ZUtils implements Listener {
 
 	private final ZTournamentPlugin template;
 
-	public AdapterListener(ZTournamentPlugin template) {
+	public AdapterListener (ZTournamentPlugin template)
+	{
 		this.template = template;
 	}
 
 	@EventHandler
-	public void onConnect(PlayerJoinEvent event) {
+	public void onConnect (PlayerJoinEvent event)
+	{
 		template.getListenerAdapters().forEach(adapter -> adapter.onConnect(event, event.getPlayer()));
 	}
 
 	@EventHandler
-	public void onQuit(PlayerQuitEvent event) {
+	public void onQuit (PlayerQuitEvent event)
+	{
 		template.getListenerAdapters().forEach(adapter -> adapter.onQuit(event, event.getPlayer()));
 	}
 
 	@EventHandler
-	public void onMove(PlayerMoveEvent event) {
+	public void onMove (PlayerMoveEvent event)
+	{
+		if (event.isCancelled()) return;
+		Location from = event.getFrom();
+		Location to = event.getTo();
+		if ((to.getBlockX() == from.getBlockX()) && (to.getBlockY() == from.getBlockY()) && (to.getBlockZ() == from.getBlockZ()))
+			return;
 		template.getListenerAdapters().forEach(adapter -> adapter.onMove(event, event.getPlayer()));
 	}
 
 	@EventHandler
-	public void onInventoryClick(InventoryClickEvent event) {
-		template.getListenerAdapters()
-				.forEach(adapter -> adapter.onInventoryClick(event, (Player) event.getWhoClicked()));
+	public void onInventoryClick (InventoryClickEvent event)
+	{
+		template.getListenerAdapters().forEach(adapter -> adapter.onInventoryClick(event, (Player) event.getWhoClicked()));
 	}
 
 	@EventHandler
-	public void onEntityDeath(EntityDeathEvent event) {
+	public void onEntityDeath (EntityDeathEvent event)
+	{
 		template.getListenerAdapters().forEach(adapter -> adapter.onEntityDeath(event, event.getEntity()));
 	}
 
 	@EventHandler
-	public void onInteract(PlayerInteractEvent event) {
+	public void onInteract (PlayerInteractEvent event)
+	{
 		template.getListenerAdapters().forEach(adapter -> adapter.onInteract(event, event.getPlayer()));
 	}
 
 	@EventHandler
-	public void onDrag(InventoryDragEvent event) {
-		template.getListenerAdapters()
-				.forEach(adapter -> adapter.onInventoryDrag(event, (Player) event.getWhoClicked()));
+	public void onDrag (InventoryDragEvent event)
+	{
+		template.getListenerAdapters().forEach(adapter -> adapter.onInventoryDrag(event, (Player) event.getWhoClicked()));
 	}
 
 	@EventHandler
-	public void onClose(InventoryCloseEvent event) {
+	public void onClose (InventoryCloseEvent event)
+	{
 		template.getListenerAdapters().forEach(adapter -> adapter.onInventoryClose(event, (Player) event.getPlayer()));
 	}
 
 	@EventHandler
-	public void onDrop(PlayerDropItemEvent event) {
+	public void onDrop (PlayerDropItemEvent event)
+	{
 		template.getListenerAdapters().forEach(adapter -> adapter.onDrop(event, event.getPlayer()));
 	}
 
 	@EventHandler
-	public void onCommand(PlayerCommandPreprocessEvent event) {
-		template.getListenerAdapters()
-				.forEach(adapter -> adapter.onCommand(event, event.getPlayer(), event.getMessage()));
+	public void onCommand (PlayerCommandPreprocessEvent event)
+	{
+		template.getListenerAdapters().forEach(adapter -> adapter.onCommand(event, event.getPlayer(), event.getMessage()));
 	}
 
 	@EventHandler
-	public void onCommand(PlayerEggThrowEvent event) {
+	public void onThrowEggEvent (PlayerEggThrowEvent event)
+	{
 		template.getListenerAdapters().forEach(adapter -> adapter.onEgg(event, event.getPlayer(), event.getEgg()));
 	}
 
 	@EventHandler
-	public void onCommand(ProjectileLaunchEvent event) {
+	public void onLaunch (ProjectileLaunchEvent event)
+	{
 		template.getListenerAdapters().forEach(adapter -> adapter.onProjectilLaunch(event, event.getEntity()));
 	}
 
 	@EventHandler
-	public void onDamage(EntityDamageEvent event) {
+	public void onDamage (EntityDamageEvent event)
+	{
 
-		if (event.getEntity() instanceof Player) {
-			this.template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamage(event, event.getCause(),
-					event.getDamage(), (Player) event.getEntity()));
+		if (event.getEntity() instanceof Player)
+		{
+			this.template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamage(event, event.getCause(), event.getDamage(), (Player) event.getEntity()));
 		}
 
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onDamage4(EntityDamageByEntityEvent event) {
+	public void onDamage4 (EntityDamageByEntityEvent event)
+	{
 
-		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
-			this.template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamage(event, event.getCause(),
-					event.getDamage(), (Player) event.getDamager(), (Player) event.getEntity()));
+		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player)
+		{
+			this.template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamage(event, event.getCause(), event.getDamage(), (Player) event.getDamager(), (Player) event.getEntity()));
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onDamageLow(EntityDamageByEntityEvent event) {
+	public void onDamageLow (EntityDamageByEntityEvent event)
+	{
 
-		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
-			this.template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamageLow(event, event.getCause(),
-					event.getDamage(), (Player) event.getDamager(), (Player) event.getEntity()));
-		} else if (event.getEntity() instanceof Player && event.getDamager() instanceof Projectile) {
-			
+		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player)
+		{
+			this.template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamageLow(event, event.getCause(), event.getDamage(), (Player) event.getDamager(), (Player) event.getEntity()));
+		} else if (event.getEntity() instanceof Player && event.getDamager() instanceof Projectile)
+		{
+
 			Projectile projectile = (Projectile) event.getDamager();
-			
-			this.template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamageByArrow(event, event.getCause(),
-					event.getDamage(), projectile, (Player) event.getEntity()));
-			
+
+			this.template.getListenerAdapters().forEach(adapter -> adapter.onPlayerDamageByArrow(event, event.getCause(), event.getDamage(), projectile, (Player) event.getEntity()));
+
 		}
 	}
 }

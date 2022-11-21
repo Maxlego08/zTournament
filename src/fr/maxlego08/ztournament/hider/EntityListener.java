@@ -66,10 +66,8 @@ public class EntityListener extends EntityHider implements Listener {
 		Projectile projectile = event.getEntity();
 		if (projectile.getShooter() instanceof Player) {
 			Player shooter = (Player) projectile.getShooter();
-			Collection<? extends Player> onlinePlayers = this.plugin.getServer().getOnlinePlayers();
-			onlinePlayers.stream().filter(p -> p != shooter && !shooter.canSee(p)).forEach(p -> {
-				this.hideEntity(p, projectile);
-			});
+			Collection<? extends Player> onlinePlayers = projectile.getWorld().getPlayers();
+			onlinePlayers.stream().filter(p -> p != shooter && !shooter.canSee(p)).forEach(p -> this.hideEntity(p, projectile));
 			this.soundListener(shooter);
 
 		}
@@ -94,9 +92,7 @@ public class EntityListener extends EntityHider implements Listener {
 	 */
 	protected void addListenerAndRemove(PacketListener listener, long removeTicks) {
 		ProtocolLibrary.getProtocolManager().addPacketListener(listener);
-		this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
-			ProtocolLibrary.getProtocolManager().removePacketListener(listener);
-		}, removeTicks);
+		this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> ProtocolLibrary.getProtocolManager().removePacketListener(listener), removeTicks);
 	}
 
 }
