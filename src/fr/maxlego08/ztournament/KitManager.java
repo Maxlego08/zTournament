@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -134,8 +135,9 @@ public class KitManager extends ZUtils implements Kits {
 
 			Map<Integer, ItemStack> itemstacks = new HashMap<>();
 
-			if (configuration.isConfigurationSection("kits." + kitId + ".items.")) {
-				for (String itemId : configuration.getConfigurationSection("kits." + kitId + ".items.")
+			ConfigurationSection section = configuration.getConfigurationSection("kits." + kitId + ".items.");
+			if (section != null) {
+				for (String itemId : section
 						.getKeys(false)) {
 
 					String currentPath = "kits." + kitId + ".items." + itemId + ".";
@@ -143,6 +145,8 @@ public class KitManager extends ZUtils implements Kits {
 					itemstacks.put(slot, loader.load(configuration, currentPath));
 
 				}
+			} else {
+				Logger.info("Impossible de trouver les items pour le kit" + kitId+".", LogType.ERROR);
 			}
 
 			Kit kit = new fr.maxlego08.ztournament.ZKit(name, helmet, chestplate, leggings, boots, itemstacks);

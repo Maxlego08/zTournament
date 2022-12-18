@@ -3,6 +3,7 @@ package fr.maxlego08.ztournament.command.commands;
 import fr.maxlego08.ztournament.ZTournamentPlugin;
 import fr.maxlego08.ztournament.command.VCommand;
 import fr.maxlego08.ztournament.command.commands.kits.CommandTournamentKits;
+import fr.maxlego08.ztournament.save.Config;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
@@ -29,6 +30,7 @@ public class CommandTournament extends VCommand {
 		this.addSubCommand(new CommandTournamentPos1(plugin));
 		this.addSubCommand(new CommandTournamentPos2(plugin));
 		this.addSubCommand(new CommandTournamentKick(plugin));
+		Config.commandAliases.forEach(cmd -> this.addSubCommand(cmd));
 	}
 
 	@Override

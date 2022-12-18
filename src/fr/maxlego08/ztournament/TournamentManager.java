@@ -808,7 +808,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 				reward.getCommands().forEach(command -> {
 
-					String finalCommand = command.replace("%team%", team.getName());
+					String finalCommand = command.replace("%team%", team.getName()).replace("%leader%", team.getOwner().getName());
 
 					if (finalCommand.contains("%player%")) {
 						team.getRealPlayers().forEach(player -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
