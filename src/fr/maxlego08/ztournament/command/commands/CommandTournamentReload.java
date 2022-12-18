@@ -3,12 +3,14 @@ package fr.maxlego08.ztournament.command.commands;
 import fr.maxlego08.ztournament.ZTournamentPlugin;
 import fr.maxlego08.ztournament.command.VCommand;
 import fr.maxlego08.ztournament.save.Config;
+import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentReload extends VCommand {
 
-	public CommandTournamentReload() {
+	public CommandTournamentReload(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setPermission(Permission.ZTOURNAMENT_RELOAD);
 		this.addSubCommand("reload", "rl");
 	}
@@ -23,7 +25,7 @@ public class CommandTournamentReload extends VCommand {
 
 		long end = Math.abs(System.currentTimeMillis() - ms);
 
-		message(sender, "§eReload in §6%s% §ems", "%s%", format(end));
+		message(this.sender, Message.RELOAD, "%ms%", format(end));
 
 		return CommandType.SUCCESS;
 	}

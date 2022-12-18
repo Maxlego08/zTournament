@@ -7,7 +7,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentKitsDelete extends VCommand {
 
-	public CommandTournamentKitsDelete() {
+	public CommandTournamentKitsDelete(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setPermission(Permission.ZTOURNAMENT_KIT_USE);
 		this.addSubCommand("delete");
 		this.addRequireArg("kit");

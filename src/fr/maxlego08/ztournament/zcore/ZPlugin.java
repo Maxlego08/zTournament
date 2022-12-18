@@ -2,6 +2,7 @@ package fr.maxlego08.ztournament.zcore;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -66,13 +67,16 @@ public abstract class ZPlugin extends JavaPlugin {
 
 	protected void postEnable() {
 
-		if (inventoryManager != null)
-			inventoryManager.sendLog();
+		if (this.inventoryManager != null) {
+			this.inventoryManager.sendLog();
+		}
 
-		if (commandManager != null)
-			commandManager.registerCommands();
+		if (this.commandManager != null) {
+			this.commandManager.validCommands();
+		}
 
-		log.log("=== ENABLE DONE <&>7(<&>6" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<&>7) <&>e===");
+		this.log.log(
+				"=== ENABLE DONE <&>7(<&>6" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<&>7) <&>e===");
 
 	}
 
@@ -98,7 +102,7 @@ public abstract class ZPlugin extends JavaPlugin {
 		return new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls()
 				.excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
 				.registerTypeAdapter(PotionEffect.class, new PotionEffectAdapter())
-//				.registerTypeAdapter(Arena.class, new ArenaAdapter())
+				// .registerTypeAdapter(Arena.class, new ArenaAdapter())
 				.registerTypeAdapter(Location.class, new LocationAdapter());
 	}
 
@@ -238,7 +242,7 @@ public abstract class ZPlugin extends JavaPlugin {
 	 * @param aliases
 	 */
 	protected void registerCommand(String command, VCommand vCommand, String... aliases) {
-		commandManager.registerCommand(command, vCommand, aliases);
+		this.commandManager.registerCommand(command, vCommand, Arrays.asList(aliases));
 	}
 
 	/**

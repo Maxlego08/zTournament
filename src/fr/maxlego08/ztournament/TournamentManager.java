@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -101,6 +102,16 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 	public TournamentManager(Kits kits) {
 		this.kits = kits;
+	}
+
+	/**
+	 * Return arenas names
+	 * 
+	 * @return names
+	 */
+	@Override
+	public List<String> getArenaNames() {
+		return arenas.stream().map(Arena::getName).collect(Collectors.toList());
 	}
 
 	/**
@@ -481,6 +492,21 @@ public class TournamentManager extends ZUtils implements Tournament {
 							isWaiting = false;
 							asNewTimer = false;
 
+							teams.forEach(e -> {
+								e.clear();
+								e.show();
+								e.getRealPlayers().forEach(p -> {
+									if (p.isOnline()) {
+										p.getPlayer().teleport(getLocation());
+										p.getPlayer().teleport(getLocation());
+										givePotions(p.getPlayer());
+									}
+								});
+							});
+
+							teams.clear();
+							duels.clear();
+
 							cancel();
 
 							broadcast(Message.TOURNAMENT_START_ERROR_PLAYER_CANCEL);
@@ -782,7 +808,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 				reward.getCommands().forEach(command -> {
 
-					String finalCommand = command.replace("%team%", team.getName());
+					String finalCommand = command.replace("%team%", team.getName()).replace("%leader%", team.getOwner().getName());
 
 					if (finalCommand.contains("%player%")) {
 						team.getRealPlayers().forEach(player -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
@@ -1187,10 +1213,19 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 	@Override
 	public void stopTournois(CommandSender sender) {
-		if (!isStart && !isWaiting) {
+
+		if (!this.isStart && !this.isWaiting) {
 			message(sender, Message.TOURNAMENT_NOT_ENABLE);
 			return;
 		}
+
+		this.potions.forEach((e, j) -> {
+			OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(e);
+			if (offlinePlayer.isOnline()) {
+				Player player = offlinePlayer.getPlayer();
+				j.forEach(b -> player.addPotionEffect(b));
+			}
+		});
 
 		if (isWaiting) {
 
@@ -1204,29 +1239,26 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		}
 
-		if (isStart) {
+		TournamentEvent event = new TournamentStopEvent();
+		event.callEvent();
 
-			TournamentEvent event = new TournamentStopEvent();
-			event.callEvent();
-
-			isStart = false;
-			isWaiting = false;
-			broadcast(Message.TOURNAMENT_STOP);
-			teams.forEach(e -> {
-				e.clear();
-				e.show();
-				e.getRealPlayers().forEach(p -> {
-					if (p.isOnline()) {
-						p.getPlayer().teleport(getLocation());
-						p.getPlayer().teleport(getLocation());
-						this.givePotions(p.getPlayer());
-					}
-				});
+		isStart = false;
+		isWaiting = false;
+		broadcast(Message.TOURNAMENT_STOP);
+		teams.forEach(e -> {
+			e.clear();
+			e.show();
+			e.getRealPlayers().forEach(p -> {
+				if (p.isOnline()) {
+					p.getPlayer().teleport(getLocation());
+					p.getPlayer().teleport(getLocation());
+					this.givePotions(p.getPlayer());
+				}
 			});
+		});
 
-			this.teams.clear();
-			this.duels.clear();
-		}
+		this.teams.clear();
+		this.duels.clear();
 	}
 
 	@Override

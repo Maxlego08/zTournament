@@ -256,13 +256,12 @@ public abstract class ZUtils extends MessageUtils {
 		}
 	}
 
-
 	protected ItemStack getGlass() {
 		if (NMSUtils.isNewVersion())
 			return new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 		return new ItemBuilder(getMaterial(160), 1, 8).build();
 	}
-	
+
 	/**
 	 * @param id
 	 * @return the material according to his id
@@ -587,6 +586,16 @@ public abstract class ZUtils extends MessageUtils {
 	}
 
 	/**
+	 * 
+	 * @param permissible
+	 * @param permission
+	 * @return
+	 */
+	protected boolean hasPermission(Permissible permissible, String permission) {
+		return permissible.hasPermission(permission);
+	}
+
+	/**
 	 * @param delay
 	 * @param runnable
 	 */
@@ -644,7 +653,7 @@ public abstract class ZUtils extends MessageUtils {
 	 * @param message
 	 * @return
 	 */
-	public String colorReverse(String message) {	
+	public String colorReverse(String message) {
 		return message != null ? message.replace("§", "&") : message;
 	}
 

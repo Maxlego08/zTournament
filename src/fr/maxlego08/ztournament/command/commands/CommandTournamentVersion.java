@@ -6,7 +6,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentVersion extends VCommand {
 
-	public CommandTournamentVersion() {
+	public CommandTournamentVersion(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.addSubCommand("version");
 		this.addSubCommand("v");
 		this.addSubCommand("ver");

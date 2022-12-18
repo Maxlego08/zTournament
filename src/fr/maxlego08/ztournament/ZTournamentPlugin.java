@@ -58,9 +58,7 @@ public class ZTournamentPlugin extends ZPlugin {
 		kits = new KitManager();
 		tournament = new TournamentManager(kits);
 
-		getServer().getServicesManager().register(Tournament.class, tournament, this, ServicePriority.High);
-
-		registerCommand("ztournament", new CommandTournament(), "tournois", "tournament");
+		getServer().getServicesManager().register(Tournament.class, tournament, this, ServicePriority.High);	
 
 		registerInventory(Inventory.INVENTORY_KIT_SHOW, new InventoryKitShow());
 		registerInventory(Inventory.INVENTORY_KIT_CREATE, new InventoryKitEdit());
@@ -79,7 +77,7 @@ public class ZTournamentPlugin extends ZPlugin {
 			this.addListener(new EntityListener(this));
 		}
 
-		if (isEnable(Plugins.PROTOCOLLIB)) {
+		if (isEnable(Plugins.PROTOCOLLIB) && Config.enableProtocollibEntityHider) {
 			this.hider = new ProtocolHider(this);
 			Logger.info("Use ProtocolLib entity hider !", LogType.SUCCESS);
 		}
@@ -98,6 +96,8 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		}
 
+		registerCommand("ztournament", new CommandTournament(this));
+		
 		new Metrics(this);
 
 		VersionChecker checker = new VersionChecker(this, 3);

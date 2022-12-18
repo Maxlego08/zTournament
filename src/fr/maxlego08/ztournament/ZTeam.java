@@ -331,7 +331,7 @@ public class ZTeam extends ZUtils implements Team {
 
 	public void disband() {
 
-		message("§eVotre team vient d'être dissoute.");
+		message(Message.TOURNAMENT_TEAM_DISBAND);
 
 	}
 
@@ -345,7 +345,7 @@ public class ZTeam extends ZUtils implements Team {
 		this.players.remove(player);
 		this.users.remove(player.getName());
 
-		message("§f%s §evient de quitter votre équipe.", player.getName());
+		message(Message.TOURNAMENT_TEAM_LEAVE_INFO, player.getName());
 
 	}
 
@@ -408,12 +408,12 @@ public class ZTeam extends ZUtils implements Team {
 
 			OfflinePlayer player = iterator.next();
 			if (!player.isOnline()) {
-				message("§f" + player.getName() + " §evient d'être disqualifé de votre équipe.");
-				players.remove(player);
+				message(Message.TOURNAMENT_TEAM_REMOVE, "%player%", player.getName());
+				this.players.remove(player);
 				iterator.remove();
 			} else if (player.isOnline() && !player.getPlayer().isValid()) {
-				message("§f" + player.getName() + " §evient d'être disqualifé de votre équipe.");
-				players.remove(player);
+				message(Message.TOURNAMENT_TEAM_REMOVE, "%player%", player.getName());
+				this.players.remove(player);
 				iterator.remove();
 			}
 

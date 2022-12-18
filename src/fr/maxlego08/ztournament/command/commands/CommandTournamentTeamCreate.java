@@ -7,7 +7,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentTeamCreate extends VCommand {
 
-	public CommandTournamentTeamCreate() {
+	public CommandTournamentTeamCreate(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.addSubCommand("create");
 		this.addRequireArg("nom de la team");
 		this.setConsoleCanUse(false);

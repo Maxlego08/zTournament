@@ -2,6 +2,7 @@ package fr.maxlego08.ztournament.inventory.inventories;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -29,27 +30,37 @@ public class InventoryKitEdit extends VInventory {
 	public InventoryResult openInventory(ZTournamentPlugin main, Player player, int page, Object... args)
 			throws InventoryOpenException {
 
-		kit = (Kit) args[0];
+		Optional<Kit> optional = (Optional<Kit>) args[0];
+		if (!optional.isPresent()){
+			return InventoryResult.ERROR;
+		}
+		
+		this.kit = optional.get();
 
 		createInventory("§eEdit", 54);
 
-		for (int a = 4; a != 18; a++)
+		for (int a = 4; a != 18; a++) {
 			addItem(a, getGlass()).setClick(e -> e.setCancelled(true));
+		}
 
-		if (kit.getHelmet() != null)
-			addItem(0, kit.getHelmet());
+		if (this.kit.getHelmet() != null) {
+			addItem(0, this.kit.getHelmet());
+		}
 
-		if (kit.getChestplate() != null)
-			addItem(1, kit.getChestplate());
+		if (this.kit.getChestplate() != null) {
+			addItem(1, this.kit.getChestplate());
+		}
 
-		if (kit.getLeggings() != null)
-			addItem(2, kit.getLeggings());
+		if (this.kit.getLeggings() != null) {
+			addItem(2, this.kit.getLeggings());
+		}
 
-		if (kit.getBoots() != null)
-			addItem(3, kit.getBoots());
+		if (this.kit.getBoots() != null) {
+			addItem(3, this.kit.getBoots());
+		}
 
 		int slot = 18;
-		kit.getItems().forEach((tmp, item) -> addItem(tmp + slot, item));
+		this.kit.getItems().forEach((tmp, item) -> addItem(tmp + slot, item));
 
 		return InventoryResult.SUCCESS;
 	}
@@ -64,10 +75,10 @@ public class InventoryKitEdit extends VInventory {
 		ItemStack leggings = inventory.getItem(2);
 		ItemStack boots = inventory.getItem(3);
 
-		kit.setHelmet(helmet);
-		kit.setChestplate(chestplate);
-		kit.setLeggings(leggings);
-		kit.setBoots(boots);
+		this.kit.setHelmet(helmet);
+		this.kit.setChestplate(chestplate);
+		this.kit.setLeggings(leggings);
+		this.kit.setBoots(boots);
 
 		ItemStack[] contents = inventory.getContents();
 		Map<Integer, ItemStack> map = new HashMap<Integer, ItemStack>();
@@ -79,9 +90,9 @@ public class InventoryKitEdit extends VInventory {
 
 		}
 
-		kit.setItems(map);
+		this.kit.setItems(map);
 
-		message(player, Message.TOURNAMENT_KIT_EDIT, kit.getName());
+		message(player, Message.TOURNAMENT_KIT_EDIT, "%name%", this.kit.getName());
 		plugin.getSavers().forEach(e -> e.save(plugin.getPersist()));
 	}
 

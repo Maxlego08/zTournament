@@ -7,7 +7,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentKitsShow extends VCommand {
 
-	public CommandTournamentKitsShow() {
+	public CommandTournamentKitsShow(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setPermission(Permission.ZTOURNAMENT_KIT_USE);
 		this.addSubCommand("show");
 		this.addRequireArg("kit");

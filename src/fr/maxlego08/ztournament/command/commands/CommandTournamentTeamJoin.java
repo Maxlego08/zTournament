@@ -7,7 +7,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentTeamJoin extends VCommand {
 
-	public CommandTournamentTeamJoin() {
+	public CommandTournamentTeamJoin(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.addSubCommand("join");
 		this.addRequireArg("name");
 		this.setConsoleCanUse(false);

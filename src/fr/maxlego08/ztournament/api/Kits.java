@@ -1,6 +1,7 @@
 package fr.maxlego08.ztournament.api;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,14 +15,8 @@ public interface Kits extends Saveable{
 	 * @param name
 	 * @return
 	 */
-	Kit getKit(String name);
-	
-	/**
-	 * 
-	 * @param name
-	 * @return
-	 */
 	boolean existKit(String name);
+	Optional<Kit> getKit(String name);
 	
 	/**
 	 * 

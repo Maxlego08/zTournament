@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -57,22 +59,26 @@ public class KitManager extends ZUtils implements Kits {
 
 			configuration.set(path + "name", kit.getName());
 
-			if (kit.getHelmet() != null)
+			if (kit.getHelmet() != null) {
 				loader.save(kit.getHelmet(), configuration, path + ".helmet.");
-			else
+			} else {
 				configuration.set(path + ".helmet", null);
-			if (kit.getChestplate() != null)
+			}
+			if (kit.getChestplate() != null) {
 				loader.save(kit.getChestplate(), configuration, path + ".chestplate.");
-			else
+			} else {
 				configuration.set(path + ".chestplate", null);
-			if (kit.getLeggings() != null)
+			}
+			if (kit.getLeggings() != null) {
 				loader.save(kit.getLeggings(), configuration, path + ".leggings.");
-			else
+			} else {
 				configuration.set(path + ".leggings", null);
-			if (kit.getBoots() != null)
+			}
+			if (kit.getBoots() != null) {
 				loader.save(kit.getBoots(), configuration, path + ".boots.");
-			else
+			} else {
 				configuration.set(path + ".boots", null);
+			}
 
 			kit.getItems().forEach((slot, item) -> {
 
@@ -80,8 +86,9 @@ public class KitManager extends ZUtils implements Kits {
 				if (item != null) {
 					loader.save(item, configuration, currentPath);
 					configuration.set(currentPath + "slot", slot);
-				} else
+				} else {
 					configuration.set(currentPath, null);
+				}
 
 			});
 
@@ -98,7 +105,7 @@ public class KitManager extends ZUtils implements Kits {
 	@Override
 	public void load(Persist persist) {
 
-		File file = new File(plugin.getDataFolder() + File.separator + "kits.yml");
+		File file = new File(this.plugin.getDataFolder() + File.separator + "kits.yml");
 
 		if (!file.exists()) {
 			// On va save les kits
@@ -128,12 +135,18 @@ public class KitManager extends ZUtils implements Kits {
 
 			Map<Integer, ItemStack> itemstacks = new HashMap<>();
 
-			for (String itemId : configuration.getConfigurationSection("kits." + kitId + ".items.").getKeys(false)) {
+			ConfigurationSection section = configuration.getConfigurationSection("kits." + kitId + ".items.");
+			if (section != null) {
+				for (String itemId : section
+						.getKeys(false)) {
 
-				String currentPath = "kits." + kitId + ".items." + itemId + ".";
-				int slot = configuration.getInt(currentPath + "slot", 0);
-				itemstacks.put(slot, loader.load(configuration, currentPath));
+					String currentPath = "kits." + kitId + ".items." + itemId + ".";
+					int slot = configuration.getInt(currentPath + "slot", 0);
+					itemstacks.put(slot, loader.load(configuration, currentPath));
 
+				}
+			} else {
+				Logger.info("Impossible de trouver les items pour le kit" + kitId+".", LogType.ERROR);
 			}
 
 			Kit kit = new fr.maxlego08.ztournament.ZKit(name, helmet, chestplate, leggings, boots, itemstacks);
@@ -163,12 +176,11 @@ public class KitManager extends ZUtils implements Kits {
 		items.put(9, new ItemStack(Material.ARROW, 8));
 
 		Kit kit = new fr.maxlego08.ztournament.ZKit("default", new ItemStack(Material.LEATHER_HELMET),
-				new ItemStack(Material.LEATHER_CHESTPLATE), new ItemStack(Material.LEATHER_LEGGINGS), new ItemStack(Material.LEATHER_BOOTS),
-				items);
+				new ItemStack(Material.LEATHER_CHESTPLATE), new ItemStack(Material.LEATHER_LEGGINGS),
+				new ItemStack(Material.LEATHER_BOOTS), items);
 
-		kits.put("default", kit);
+		this.kits.put("default", kit);
 
-		
 		// 2
 		items = new HashMap<>();
 		items.put(0, new ItemBuilder(Material.DIAMOND_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).build());
@@ -187,11 +199,12 @@ public class KitManager extends ZUtils implements Kits {
 
 		ItemStack helmet = new ItemBuilder(Material.IRON_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
 				.build();
-		ItemStack chestplate = new ItemBuilder(Material.IRON_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
-				.build();
+		ItemStack chestplate = new ItemBuilder(Material.IRON_CHESTPLATE)
+				.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
 		ItemStack leggings = new ItemBuilder(Material.IRON_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
 				.build();
-		ItemStack boots = new ItemBuilder(Material.IRON_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build();
+		ItemStack boots = new ItemBuilder(Material.IRON_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)
+				.build();
 
 		kit = new fr.maxlego08.ztournament.ZKit("iron", helmet, chestplate, leggings, boots, items);
 
@@ -200,13 +213,13 @@ public class KitManager extends ZUtils implements Kits {
 	}
 
 	@Override
-	public Kit getKit(String name) {
-		return kits.values().stream().filter(e -> e.getName().equalsIgnoreCase(name)).findAny().orElse(null);
+	public boolean existKit(String name) {
+		return kits.keySet().stream().anyMatch(e -> e.equalsIgnoreCase(name));
 	}
 
 	@Override
-	public boolean existKit(String name) {
-		return kits.keySet().stream().filter(e -> e.equalsIgnoreCase(name)).findAny().isPresent();
+	public Optional<Kit> getKit(String name) {
+		return kits.values().stream().filter(e -> e.getName().equalsIgnoreCase(name)).findAny();
 	}
 
 	@Override
@@ -218,7 +231,7 @@ public class KitManager extends ZUtils implements Kits {
 		}
 
 		Kit kit = new fr.maxlego08.ztournament.ZKit(name, null, null, null, null, new HashMap<>());
-		kits.put(name, kit);
+		this.kits.put(name, kit);
 		message(sender, Message.TOURNAMENT_KIT_CREATE, "%name%", name);
 
 	}
@@ -237,6 +250,7 @@ public class KitManager extends ZUtils implements Kits {
 
 	@Override
 	public void showKit(Player player, String name) {
+
 		if (!existKit(name)) {
 			message(player, Message.TOURNAMENT_KIT_NOT_EXIST, "%name%", name);
 			return;
@@ -247,13 +261,16 @@ public class KitManager extends ZUtils implements Kits {
 
 	@Override
 	public void deleteKit(CommandSender sender, String name) {
-		if (!existKit(name)) {
+
+		Optional<Kit> optional = this.getKit(name);
+
+		if (!optional.isPresent()) {
 			message(sender, Message.TOURNAMENT_KIT_NOT_EXIST, "%name%", name);
 			return;
 		}
 
-		Kit kit = getKit(name);
-		kits.remove(kit.getName());
+		Kit kit = optional.get();
+		this.kits.remove(kit.getName());
 
 		message(sender, Message.TOURNAMENT_KIT_DELETE, "%name%", name);
 	}

@@ -42,7 +42,7 @@ public enum Message {
 	FORMAT_DAY("d"),
 	FORMAT_DAYS("days"),
 
-	COMMAND_SYNTAXE_ERROR("§cYou must execute the command like this§7: §2%command%"),
+	COMMAND_SYNTAXE_ERROR("§cYou must execute the command like this§7: §2%syntax%"),
 	COMMAND_NO_PERMISSION("§cYou don't have the permission permission to use that!"),
 	COMMAND_NO_CONSOLE("§cOnly players can execute this command"),
 	COMMAND_NO_ARG("§cThis argument does not exist!"),
@@ -81,6 +81,7 @@ public enum Message {
 	TOURNAMENT_DUEL_LOOSE("§7You lost the tournament, your team's just been disqualified.",
 			"§7You are at position §f%position% §7of §b%team%§7."),
 	TOURNAMENT_TEAM_LEAVE("§cYou are leaving your team."),
+	TOURNAMENT_TEAM_LEAVE_INFO("§f%player% §ehas just leave you team."),
 	TOURNAMENT_TEAM_LEAVE_ERROR("§cYou cannot leave your team during the fight."),
 	TOURNAMENT_TEAM_PLAYER_ERROR("§cYou are not in a team."),
 	TOURNAMENT_INVITE_ERROR("§cYou cannot invite a player at this time."),
@@ -123,7 +124,7 @@ public enum Message {
 			"§6» §f/tournament invite §8<§aplayer§8> §8- §7Invite a player to your team.",
 			"§6» §f/tournament leave §8- §7Leave your team.",
 			"§6» §f/tournament version §8- §7Show plugin's version."),
-	TOURNAMENT_HELP_ADMIN("§6» §f/tournament arena §§8<§aname§8> §8<§aloc1§8> §8<§aloc2§8> §8- §7Create an arena.",
+	TOURNAMENT_HELP_ADMIN("§6» §f/tournament arena §§8<§aname§8> §8- §7Create an arena.",
 			"§6» §f/tournament delete §8<§auuid§8> §8- §7Allows you to delete an arena. Makes /ztournament list to retrieve the arena list (json message).",
 			"§6» §f/tournament list §8- §7Show an arena.",
 			"§6» §f/tournament setlobby §8- §7Set lobby's position.",
@@ -145,7 +146,9 @@ public enum Message {
 	TOURNAMENT_KIT_NOT_EXIST("§cKit §f%name% §cdoesn't exists"),
 	TOURNAMENT_KIT_CREATE("§aYou created kit §6%name%§a."),
 	TOURNAMENT_KIT_DELETE("§aYou deleted kit §6%name%§a."),
-	TOURNAMENT_KIT_EDIT("§aYou edited the kit §f%s§a."),
+	TOURNAMENT_KIT_EDIT("§aYou edited the kit §f%name%§a."),
+	TOURNAMENT_KIT_LIST("§eKit§8: §7%list%"),
+	RELOAD("§eReload in §6%ms% §ems"),
 	TEAM_DAMAGE("§cYou cannot do damage to a member of your team."),
 	
 	// title
@@ -174,7 +177,10 @@ public enum Message {
 	TOURNAMENT_CREATE_ERROR_SELECTION("§cYou must select a zone with the command §f/ztournament axe§c."), 
 	TOURNAMENT_ARENA_POS1_CHANGE("§aYou have just changed the first position of the arena."),
 	TOURNAMENT_ARENA_POS2_CHANGE("§aYou have just changed the second position of the arena."), 
-	TOURNAMENT_ARENA_ALREADY_EXIST("§cImpossible to create an arena with this name, it already exists."),
+	TOURNAMENT_ARENA_ALREADY_EXIST("§cImpossible to create an arena with this name, it already exists."), 
+	
+	TOURNAMENT_TEAM_DISBAND("§cYour team has just been disbanded."),
+	TOURNAMENT_TEAM_REMOVE("§f%player% §chas just been disqualified from your team."),
 	
 
 	;

@@ -3,41 +3,45 @@ package fr.maxlego08.ztournament.command.commands;
 import fr.maxlego08.ztournament.ZTournamentPlugin;
 import fr.maxlego08.ztournament.command.VCommand;
 import fr.maxlego08.ztournament.command.commands.kits.CommandTournamentKits;
+import fr.maxlego08.ztournament.save.Config;
 import fr.maxlego08.ztournament.zcore.enums.Message;
 import fr.maxlego08.ztournament.zcore.enums.Permission;
 import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournament extends VCommand {
 
-	public CommandTournament() {
-
-		this.addSubCommand(new CommandTournamentArena());
-		this.addSubCommand(new CommandTournamentArenaList());
-		this.addSubCommand(new CommandTournamentArenaDelete());
-		this.addSubCommand(new CommandTournamentStart());
-		this.addSubCommand(new CommandTournamentTeamCreate());
-		this.addSubCommand(new CommandTournamentTeamLeave());
-		this.addSubCommand(new CommandTournamentTeamJoin());
-		this.addSubCommand(new CommandTournamentSetLobby());
-		this.addSubCommand(new CommandTournamentTeamInvite());
-		this.addSubCommand(new CommandTournamentStop());
-		this.addSubCommand(new CommandTournamentWave());
-		this.addSubCommand(new CommandTournamentVersion());
-		this.addSubCommand(new CommandTournamentReload());
-		this.addSubCommand(new CommandTournamentKits());
-		this.addSubCommand(new CommandTournamentAxe());
-		this.addSubCommand(new CommandTournamentPos1());
-		this.addSubCommand(new CommandTournamentPos2());
-		this.addSubCommand(new CommandTournamentKick());
+	public CommandTournament(ZTournamentPlugin plugin) {
+		super(plugin);
+		this.addSubCommand(new CommandTournamentArena(plugin));
+		this.addSubCommand(new CommandTournamentArenaList(plugin));
+		this.addSubCommand(new CommandTournamentArenaDelete(plugin));
+		this.addSubCommand(new CommandTournamentStart(plugin));
+		this.addSubCommand(new CommandTournamentTeamCreate(plugin));
+		this.addSubCommand(new CommandTournamentTeamLeave(plugin));
+		this.addSubCommand(new CommandTournamentTeamJoin(plugin));
+		this.addSubCommand(new CommandTournamentSetLobby(plugin));
+		this.addSubCommand(new CommandTournamentTeamInvite(plugin));
+		this.addSubCommand(new CommandTournamentStop(plugin));
+		this.addSubCommand(new CommandTournamentWave(plugin));
+		this.addSubCommand(new CommandTournamentVersion(plugin));
+		this.addSubCommand(new CommandTournamentReload(plugin));
+		this.addSubCommand(new CommandTournamentKits(plugin));
+		this.addSubCommand(new CommandTournamentAxe(plugin));
+		this.addSubCommand(new CommandTournamentPos1(plugin));
+		this.addSubCommand(new CommandTournamentPos2(plugin));
+		this.addSubCommand(new CommandTournamentKick(plugin));
+		Config.commandAliases.forEach(cmd -> this.addSubCommand(cmd));
 	}
 
 	@Override
 	protected CommandType perform(ZTournamentPlugin main) {
 
-		messageWO(sender, Message.TOURNAMENT_HELP_HEADER);
-		Message.TOURNAMENT_HELP.getMessages().forEach(m -> messageWO(sender, m));
-		if (sender.hasPermission(Permission.ZTOURNAMENT_HELP.getPermission()))
-			Message.TOURNAMENT_HELP_ADMIN.getMessages().forEach(m -> messageWO(sender, m));
+		messageWO(this.sender, Message.TOURNAMENT_HELP_HEADER);
+		Message.TOURNAMENT_HELP.getMessages().forEach(m -> messageWO(this.sender, m));
+		if (this.sender.hasPermission(Permission.ZTOURNAMENT_HELP.getPermission())) {
+			Message.TOURNAMENT_HELP_ADMIN.getMessages().forEach(m -> messageWO(this.sender, m));
+		}
+		
 		return CommandType.SUCCESS;
 	}
 

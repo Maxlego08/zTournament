@@ -9,7 +9,8 @@ import fr.maxlego08.ztournament.zcore.utils.commands.CommandType;
 
 public class CommandTournamentArenaDelete extends VCommand {
 
-	public CommandTournamentArenaDelete() {
+	public CommandTournamentArenaDelete(ZTournamentPlugin plugin) {
+		super(plugin);
 		this.setPermission(Permission.ZTOURNAMENT_DELETE);
 		this.addSubCommand("delete");
 		this.addRequireArg("uuid");
