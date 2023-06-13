@@ -1039,7 +1039,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		TextComponent component = buildTextComponent(
 				Message.TOURNAMENT_INVITE_INFO_JSON.replace("%team%", team.getName()));
-		setClickAction(component, Action.RUN_COMMAND, "/tournois join " + team.getName());
+		setClickAction(component, Action.RUN_COMMAND, "/ztournament join " + team.getName());
 		setHoverMessage(component, Message.TOURNAMENT_INVITE_INFO_JSON_HOVER.replace("%team%", team.getName()));
 
 		target.spigot().sendMessage(component);
