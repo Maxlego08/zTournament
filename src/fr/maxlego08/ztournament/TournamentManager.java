@@ -278,6 +278,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 		message(sender, Message.TOURNAMENT_ARENA_CREATE);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void sendArena(Player player) {
 
@@ -808,7 +809,8 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 				reward.getCommands().forEach(command -> {
 
-					String finalCommand = command.replace("%team%", team.getName()).replace("%leader%", team.getOwner().getName());
+					String finalCommand = command.replace("%team%", team.getName()).replace("%leader%",
+							team.getOwner().getName());
 
 					if (finalCommand.contains("%player%")) {
 						team.getRealPlayers().forEach(player -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
@@ -922,11 +924,18 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		team = new ZTeam(this.plugin.getHider(), name, this.type.getMax(), player, this.kit);
 		this.teams.add(team);
-		player.teleport(getLocation());
 		clearPlayer(player, ClearReason.JOIN);
 
 		message(player, Message.TITLE_CREATE_SUCCESS, "%team%", name);
 		broadcast(Message.TOURNAMENT_CREATE_TEAM_BROADCAST, "%player%", player.getName(), "%team%", name);
+
+		if (Config.enableTeleportDelay) {
+			Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+				player.teleport(getLocation());
+			}, 20 * Config.teleportDelayInSeconds);
+		} else {
+			player.teleport(getLocation());
+		}
 	}
 
 	@Override
@@ -980,10 +989,17 @@ public class TournamentManager extends ZUtils implements Tournament {
 				return;
 
 			team.message(Message.TOURNAMENT_JOIN_SUCCESS_INFO, "%player%", player.getName());
-			player.teleport(getLocation());
 			clearPlayer(player, ClearReason.JOIN);
 
 			message(player, Message.TITLE_JOIN_SUCCESS, "%team%", name);
+			
+			if (Config.enableTeleportDelay) {
+				Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+					player.teleport(getLocation());
+				}, 20 * Config.teleportDelayInSeconds);
+			} else {
+				player.teleport(getLocation());
+			}
 		}
 	}
 
@@ -1039,7 +1055,7 @@ public class TournamentManager extends ZUtils implements Tournament {
 
 		TextComponent component = buildTextComponent(
 				Message.TOURNAMENT_INVITE_INFO_JSON.replace("%team%", team.getName()));
-		setClickAction(component, Action.RUN_COMMAND, "/tournois join " + team.getName());
+		setClickAction(component, Action.RUN_COMMAND, "/ztournament join " + team.getName());
 		setHoverMessage(component, Message.TOURNAMENT_INVITE_INFO_JSON_HOVER.replace("%team%", team.getName()));
 
 		target.spigot().sendMessage(component);

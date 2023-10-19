@@ -2,7 +2,6 @@ package fr.maxlego08.ztournament.zcore;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -241,8 +240,8 @@ public abstract class ZPlugin extends JavaPlugin {
 	 * @param vCommand
 	 * @param aliases
 	 */
-	protected void registerCommand(String command, VCommand vCommand, String... aliases) {
-		this.commandManager.registerCommand(command, vCommand, Arrays.asList(aliases));
+	protected void registerCommand(String command, VCommand vCommand, List<String> aliases) {
+		this.commandManager.registerCommand(command, vCommand, aliases);
 	}
 
 	/**
