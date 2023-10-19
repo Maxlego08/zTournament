@@ -22,6 +22,8 @@ public class Config implements Saveable {
 	public static boolean enableDebug = false;
 	public static boolean enableAutoUpdate = false;
 	public static boolean enableEliminationOfThePlayerWhoMadeTheFewestDamage = false;
+	public static boolean enableTeleportDelay = false;
+	public static int teleportDelayInSeconds = 10;
 
 	public static List<String> commandAliases = Arrays.asList("tournois", "tournament");
 	

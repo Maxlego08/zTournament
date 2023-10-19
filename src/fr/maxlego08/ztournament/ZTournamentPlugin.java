@@ -96,7 +96,7 @@ public class ZTournamentPlugin extends ZPlugin {
 
 		}
 
-		registerCommand("ztournament", new CommandTournament(this));
+		registerCommand("ztournament", new CommandTournament(this), Config.commandAliases);
 		
 		new Metrics(this);
 
